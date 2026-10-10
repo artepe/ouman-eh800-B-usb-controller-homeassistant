@@ -1,5 +1,11 @@
 # DEVELOPER USB LAB — unsafe research version
 
+> [!IMPORTANT]
+> **Recommended "hardcore" edition for USB reverse engineers:** this Developer USB Lab exposes the complete **raw responses returned by the supported service commands**, including HEX and binary `TYPE objects.dat` capture tools. It intentionally does **not** claim to decode every measurement or expose all 269 controller properties live. **Do not use this developer branch as an unattended Home Assistant heating controller.**
+>
+> The newer HA v0.2.2 prototype caused `unavailable` sensor states in the project's actual EH-800B hardware trial (2026-10-10); therefore **v0.2.2 is a non-production experiment ("dummy/prototype")**, not a usable upgrade. It is real USB code, **not a simulated data generator**. The observed failure's root cause remains unverified. For a known-working HA setup, use the earlier local v0.1.2 backup.
+
+
 This directory/branch is specifically for **bench research, NOT production
 Home Assistant**. Source code is open and usable without Home Assistant.
 All 269 known property IDs can be investigated with the standalone
