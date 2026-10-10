@@ -1,5 +1,17 @@
 # Ouman EH-800B / EH-800 USB Home Assistant — open USB protocol
 
+> [!CAUTION]
+> **VERSION STATUS — 2026-10-10 / reported hardware regression**
+>
+> **v0.2.2 = experimental "dummy / prototype" release, NOT recommended for production.** "Dummy" here means **unfinished/test version**, **NOT simulated or fake measurements**: it connects to real USB hardware. On the author's actual EH-800B/Home Assistant installation, installing v0.2.2 was followed by `unavailable` states for the outdoor temperature, supply temperature and other Ouman sensors, including in Developer Tools → States. Home Assistant's configuration check passed, but the live measurements did **not** work reliably. Root cause is **not yet established**. Do not use v0.2.2 as a reliable heating-control integration.
+>
+> **For ordinary Home Assistant use:** prefer the earlier **v0.1.2 installation verified working on the tested controller**, or restore a verified local backup. Note that v0.1.2's PID controls can be writable: avoid PID changes.
+>
+> **For hardcore developers / full raw-data research:** use the **[Developer USB Lab branch](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/tree/developer/usb-unrestricted-lab)** and the [original low-level USB tool](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/blob/developer/usb-unrestricted-lab/research/eh800b_usb_tool_original.py). They expose the **available raw USB responses and HEX bytes** (`MEASUREMENTS`, `TYPE objects.dat`, etc.) independently of Home Assistant, and a separate lab CLI can investigate property IDs with explicit write confirmations. This is the recommended version **for reverse-engineering on a controlled test bench**, **not** for unattended heating. All 28 channels may be captured raw; that does **not** mean every channel or all 269 properties have verified meanings or that the full property set is live-readable.
+>
+> **Suomeksi:** Uusin **v0.2.2 on keskeneräinen kokeiluversio ("dummy")**: oikealla EH-800B:llä moni anturi jäi `unavailable`-tilaan. Toimivaan lämmitysohjaukseen suositellaan aiempaa testattua v0.1.2-asennusta. **Edistyneille USB-protokollan tutkijoille** suosittelemme erillistä Developer USB Lab -versiota, josta raakavastaukset ja HEX-data ovat tutkittavissa. Se ei ole turvallinen tuotantoversio.
+
+
 Independent reverse-engineering project for the **Ouman EH-800 and EH-800B USB protocol**, providing local USB CDC communication directly between the heating controller and Home Assistant.
 
 **Home Assistant reads the Ouman directly through the Raspberry Pi USB port** using a USB Mini-B cable — no Ethernet interface, Modbus gateway, cloud connection, or separate protocol converter is required.
@@ -14,7 +26,7 @@ Not affiliated with or endorsed by Ouman Oy.
 >
 > **Raw USB protocol:** [ASCII commands & HEX](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/blob/feat/usb-async-safe-config-20261010/docs/USB_PROTOCOL_RESEARCH.md) · [standalone Python library](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/blob/feat/usb-async-safe-config-20261010/docs/STANDALONE_LIBRARY.md) · [original USB research script](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/blob/developer/usb-unrestricted-lab/research/eh800b_usb_tool_original.py) · [recovery](https://github.com/artepe/ouman-eh800-B-usb-homeassistant/blob/feat/usb-async-safe-config-20261010/docs/RESTORE_AND_BACKUPS.md).
 >
-> **Physical display refresh:** USB writes can take effect without immediately refreshing an already-open EH-800B menu. Press **ESC once**, then reopen the heating-curve settings. The P/I/D settings were linked to abnormal valve behaviour in one installation; production v0.2.2 blocks PID writes in the ordinary UI. Other USB-equipped Ouman models **may** share the protocol, but this is unverified.
+> **Physical display refresh:** USB writes can take effect without immediately refreshing an already-open EH-800B menu. Press **ESC once**, then reopen the heating-curve settings. The P/I/D settings were linked to abnormal valve behaviour in one installation; experimental v0.2.2 blocks PID writes in the ordinary UI. Other USB-equipped Ouman models **may** share the protocol, but this is unverified.
 
 ## Project status / significance
 
