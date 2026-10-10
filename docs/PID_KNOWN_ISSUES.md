@@ -37,3 +37,25 @@ branch is **not** intended for a running heating installation, and its
 CLI includes deliberate safeguards against accidental writes.
 Stop testing immediately if valve movement or water temperature
 deviates from expectations.
+
+## v0.2.2 Home Assistant regression (2026-10-10)
+
+During installation of the 0.2.2 experimental USB integration on the
+project author's EH-800B, Home Assistant started successfully and the
+manifest showed version 0.2.2. However, outdoor temperature, supply
+water and multiple other named Ouman entities became `unavailable` even
+under Developer Tools → States. The older Lovelace graph still contained
+historical values; its history does not prove current readings are valid.
+
+**Severity:** non-production / unreliable live monitoring. The root cause
+has not been proven (potential serial transport and/or polling regressions
+remain unconfirmed hypotheses). A configuration check and synthetic tests
+are insufficient to demonstrate a working hardware integration. Avoid
+installing v0.2.2 as a replacement for a working v0.1.2 until its readings
+and writes have passed physical hardware acceptance tests.
+
+**Recommendation:** v0.1.2 was the last known working local HA installation;
+for comprehensive RAW/HEX protocol exploration use the separate
+`developer/usb-unrestricted-lab` branch on a controlled bench. It does not
+promise decoded names for every `MEASUREMENTS` channel or real-time GET
+access to all 269 snapshot properties.
