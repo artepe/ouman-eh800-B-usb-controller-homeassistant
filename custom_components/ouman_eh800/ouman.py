@@ -24,16 +24,30 @@ class OumanUSB:
         self.port = port
         self.lock = _port_lock(port)
 
+    def _open_port(self):
+        """Open either the tested local USB port or an opt-in raw TCP bridge.
+
+        The ESP32-S3 serves one USB CDC-ACM device over an IP-restricted
+        socket:// endpoint. Do not use RFC2217 URLs: the bridge is raw TCP.
+        """
+        if self.port.startswith("socket://"):
+            return serial.serial_for_url(
+                self.port,
+                timeout=0.22,
+                write_timeout=1.0,
+            )
+        return serial.Serial(
+            self.port,
+            timeout=0.22,
+            write_timeout=1.0,
+            exclusive=True,
+        )
+
     def _command(self, command: str, wait: float = 0.18, retries: int = 3) -> str:
         last = ""
         with self.lock:
             for attempt in range(1, retries + 1):
-                with serial.Serial(
-                    self.port,
-                    timeout=0.22,
-                    write_timeout=1.0,
-                    exclusive=True,
-                ) as s:
+                with self._open_port() as s:
                     time.sleep(0.06)
                     s.reset_input_buffer()
                     s.write((command + "\n").encode("ascii"))

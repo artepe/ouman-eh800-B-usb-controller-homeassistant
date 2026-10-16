@@ -1,0 +1,36 @@
+name: Experimental ESP32-S3 transport checks
+
+on:
+  push:
+    branches:
+      - feature/esp32-s3-usb-wifi-bridge
+    paths:
+      - 'esp32_s3/**'
+      - 'custom_components/ouman_eh800/ouman.py'
+      - '.github/workflows/esp32-s3-bridge-check.yml'
+  pull_request:
+    paths:
+      - 'esp32_s3/**'
+      - 'custom_components/ouman_eh800/ouman.py'
+      - '.github/workflows/esp32-s3-bridge-check.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  python-transport:
+    name: Python transport regression tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m unittest discover -s esp32_s3/tests -v
+      - run: python -m py_compile custom_components/ouman_eh800/ouman.py esp32_s3/test_ouman_tcp.py
+
+# ESPHome firmware compilation and physical USB Host compatibility are
+# deliberately NOT claimed by this transport-only test workflow.
