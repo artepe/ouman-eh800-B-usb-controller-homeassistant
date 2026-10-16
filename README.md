@@ -53,6 +53,17 @@ Validate the configuration with `ha core check` and restart Home Assistant if it
 
 Detailed instructions and release status: [**Official stable release v0.1.2**](docs/STABLE_RELEASE_v0.1.2.md).
 
+## Optional ESP32-S3 Wi-Fi dashboard (experimental)
+
+Prefer a standalone ESP32-S3 instead of a Raspberry Pi? See the **[ESP32-S3 Arduino project and setup guide](esp32_s3/README.md)** or the **[Finnish ESP32-S3 instructions](esp32_s3/README.fi.md)**.
+
+- Independent Wi-Fi access point **`OUMAN-ESP32`** and browser dashboard at **http://192.168.4.1/** (local connection only).
+- Optional MQTT Home Assistant sensor discovery; attempts to read the USB service port through USB OTG Host.
+- **Firmware and Wi-Fi have been user-tested, but physical ESP32-S3 ↔ EH-800B USB readings and curve writes are not yet verified end-to-end.** Heating-curve writes are disabled by default; do not use unverified controls on live heating systems.
+- The existing stable **v0.1.2** Home Assistant USB integration is unchanged. The ESP32-S3 alternative is not a replacement stable release.
+
+Quick links: [Arduino sketch](esp32_s3/Ouman_EH800_S3_Dashboard/Ouman_EH800_S3_Dashboard.ino) · [English guide](esp32_s3/README.md) · [Suomenkielinen ohje](esp32_s3/README.fi.md)
+
 ## Safety and known limitations
 
 > [!WARNING]
