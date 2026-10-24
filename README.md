@@ -74,6 +74,21 @@ Quick links: [Arduino sketch](esp32_s3/Ouman_EH800_S3_Dashboard/Ouman_EH800_S3_D
 - The official `main` branch keeps the tested v0.1.2 integration code. A later prototype caused multiple `unavailable` readings on the author's real installation and was not merged into `main`.
 - Back up your existing HA configuration and your own controller-specific settings before any changes.
 
+## Ouman behaves abnormally? / Oumanin saadin sekoilee?
+
+If Ouman settings have demonstrably become corrupted, **supervised
+manual recovery from a verified backup of the same controller may be
+recommended as a last-resort repair**. See
+[controller recovery and backups](docs/RESTORE_AND_BACKUPS.md).
+
+Jos saadin toimii poikkeavasti ja asetusten vioittuminen on varmistettu,
+tarkistetusta oman laitteen varmuuskopiosta palautus voi olla perusteltu
+korjaustoimenpide. **Pelkkä menoveden ja pyynnin ero ei osoita
+saativikaa:** tarkista ensin lammonlahde, virtaus, venttiili ja
+anturit. Tahan on valmis [kerran paivassa tarkistava ilmoitusautomaatio](examples/automation-ouman-l1-daily-deviation-alert.yaml),
+joka **ei tee palautusta automaattisesti**. Kokeellinen
+`ouman_eh800.restore_original` ei sisally viralliseen v0.1.2-versioon.
+
 ## Development and research
 
 Additional low-level protocol notes and historical research are in [docs/](docs/), including [USB protocol research](docs/USB_PROTOCOL_RESEARCH.md) and [PID observations](docs/PID_KNOWN_ISSUES.md). These are research material, **not a second officially supported Home Assistant version**. For reverse engineering, isolate hardware testing from a live heating system; never use unverified property writes as a discovery method.
