@@ -1,0 +1,62 @@
+# Daily Ouman EH-800 L1 target deviation check
+#
+# Paste this automation into Home Assistant automation YAML editor.
+# Check the two entity IDs in Developer Tools > States.
+#
+# This example ONLY creates a persistent notification.
+# Never call ouman_eh800.restore_original automatically just because
+# the measured water temperature is below its calculated target.
+# A heating system can legitimately lag behind the target during
+# warm-up, defrost or insufficient heat production.
+#
+# Checks once per day at noon. If the measured supply is at least
+# 3 C below the calculated target at 12:00, watches for recovery
+# over the next 30 minutes. If no recovery occurs, notifies once.
+#
+alias: "Ouman EH-800 - daily L1 deviation alert"
+description: "Once-daily notification if L1 supply is 3 C below target for 30 min."
+triggers:
+  - trigger: time
+    at: "12:00:00"
+
+conditions:
+  - condition: template
+    value_template: >-
+      {% set target = states('sensor.ouman_l1_calculated_supply_target') %}
+      {% set actual = states('sensor.ouman_l1_supply_water_temperature') %}
+      {{ is_number(target) and is_number(actual)
+         and (target | float - actual | float) >= 3 }}
+
+actions:
+  - wait_template: >-
+      {% set target = states('sensor.ouman_l1_calculated_supply_target') %}
+      {% set actual = states('sensor.ouman_l1_supply_water_temperature') %}
+      {{ not is_number(target) or not is_number(actual)
+         or (target | float - actual | float) < 3 }}
+    timeout: "00:30:00"
+    continue_on_timeout: true
+
+  - condition: template
+    value_template: >-
+      {% set target = states('sensor.ouman_l1_calculated_supply_target') %}
+      {% set actual = states('sensor.ouman_l1_supply_water_temperature') %}
+      {{ not wait.completed
+         and is_number(target)
+         and is_number(actual)
+         and (target | float - actual | float) >= 3 }}
+
+  - action: persistent_notification.create
+    data:
+      title: "Ouman EH-800: L1 supply target not reached"
+      notification_id: "ouman_l1_daily_deviation"
+      message: >-
+        L1 supply has been at least 3 C below its calculated target
+        for 30 minutes (daily check).
+        Current supply: {{ states('sensor.ouman_l1_supply_water_temperature') }} C;
+        calculated target: {{ states('sensor.ouman_l1_calculated_supply_target') }} C.
+        Check sensor readings, heat source, circulation, valve operation,
+        heating curve and USB communications before considering recovery.
+        See docs/RESTORE_AND_BACKUPS.md. Do not automatically execute
+        ouman_eh800.restore_original.
+
+mode: single
