@@ -88,7 +88,7 @@ An optional Home Assistant automation is provided at
 
 **Status:** The production-tested v0.1.2 and the default `main` branch do
 not include the new restore action. The implementation is available in the
-[protected manual restore feature branch](../tree/feature/manual-restore-protected-20261024)
+[protected manual restore feature branch](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/feature/manual-restore-protected-20261024)
 and has **not yet been verified on physical EH-800B hardware**.
 
 The feature reproduces the original `ouman_eh800.restore_original` action
