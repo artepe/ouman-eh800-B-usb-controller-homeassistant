@@ -89,6 +89,23 @@ anturit. Tahan on valmis [kerran paivassa tarkistava ilmoitusautomaatio](example
 joka **ei tee palautusta automaattisesti**. Kokeellinen
 `ouman_eh800.restore_original` ei sisally viralliseen v0.1.2-versioon.
 
+## Protected manual restore action (experimental, opt-in)
+
+A [protected restore implementation](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/feature/manual-restore-protected-20261024) adds
+`ouman_eh800.restore_original` for manually recovering confirmed controller
+configuration corruption from a **verified backup of the same EH-800B**.
+It is **not part of the tested v0.1.2 / main release** and has not been
+validated on real hardware in this version. The service is unavailable
+unless `ouman_eh800: enable_manual_restore: true` is set in YAML. Its default
+mode only validates the backup and logs its SHA-256 without writing to USB;
+a real restore requires a matching SHA-256, explicit confirmation and
+`dry_run: false`.
+
+See [full backup and restore instructions](docs/RESTORE_AND_BACKUPS.md).
+**Never use it as an unattended daily reset merely because the supply target
+has not been reached.** The [daily deviation example](examples/automation-ouman-l1-daily-deviation-alert.yaml)
+stays notification-only.
+
 ## Development and research
 
 Additional low-level protocol notes and historical research are in [docs/](docs/), including [USB protocol research](docs/USB_PROTOCOL_RESEARCH.md) and [PID observations](docs/PID_KNOWN_ISSUES.md). These are research material, **not a second officially supported Home Assistant version**. For reverse engineering, isolate hardware testing from a live heating system; never use unverified property writes as a discovery method.

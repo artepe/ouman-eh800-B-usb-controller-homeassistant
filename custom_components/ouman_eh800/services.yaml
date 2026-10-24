@@ -1,0 +1,30 @@
+restore_original:
+  name: Restore EH-800 settings (experimental)
+  description: >-
+    Emergency recovery from a known-good backup of the SAME controller.
+    Potentially overwrites PID and safety settings. A dry run is the default.
+    NEVER schedule an unattended restore based on supply temperature alone.
+  fields:
+    dry_run:
+      name: Dry run only
+      description: Validate backup and log its SHA-256; no USB writes.
+      required: false
+      default: true
+      selector:
+        boolean:
+    confirm:
+      name: Explicit write confirmation
+      description: >-
+        For a real restore use exactly RESTORE EH800 SETTINGS.
+        Leave blank for dry runs.
+      required: false
+      selector:
+        text:
+    backup_sha256:
+      name: Exact verified backup SHA-256
+      description: >-
+        For a real restore use the SHA-256 reported by the dry run,
+        after independently verifying the file belongs to this controller.
+      required: false
+      selector:
+        text:

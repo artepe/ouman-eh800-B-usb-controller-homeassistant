@@ -84,28 +84,68 @@ An optional Home Assistant automation is provided at
   pattern may not be captured by this daily spot-check.
 - This is only monitoring; it does not diagnose why the target was missed.
 
-### Manual restore (experimental installations only)
+### Protected manual restore (experimental branch)
 
-**Important:** The official stable v0.1.2 / `main` integration does
-**not** ship `ouman_eh800.restore_original`. The action below is only
-for installations that **already expose it** through the experimental
-restore implementation. Do not install a different version solely to
-make the action available.
+**Status:** The production-tested v0.1.2 and the default `main` branch do
+not include the new restore action. The implementation is available in the
+[protected manual restore feature branch](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/feature/manual-restore-protected-20261024)
+and has **not yet been verified on physical EH-800B hardware**.
 
-When prerequisites are satisfied, with a qualified person at the
-controller and a verified backup from that exact unit, use
-**Developer Tools -> Actions** in Home Assistant:
+The feature reproduces the original `ouman_eh800.restore_original` action
+but adds explicit opt-in, a read-only backup preflight, a matching checksum,
+a mandatory write confirmation and response checks. It never restores
+automatically. A failed write stops the restore, but earlier writes cannot
+be rolled back.
+
+1. Before using the feature branch, back up Home Assistant and verify a
+   controller-specific **known-good** `/config/ouman_properties.txt`.
+2. Install the feature branch files on an isolated or supervised system.
+   Keep existing `sensor:` and `number:` configuration unchanged.
+3. Explicitly enable the restore action in `configuration.yaml`:
+
+```yaml
+ouman_eh800:
+  port: /dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
+  enable_manual_restore: true
+```
+
+4. Validate YAML, restart Home Assistant, then open **Developer Tools ->
+   Actions** and choose `ouman_eh800.restore_original`.
+5. First run only a dry run (default) to validate the backup without touching
+   the controller:
 
 ```yaml
 action: ouman_eh800.restore_original
-data: {}
+data:
+  dry_run: true
 ```
 
-Do **not** place that action in the daily deviation example. The
-original operation can overwrite **PID and other device settings**
-and is not transactional. If the valve or heating process becomes
-abnormal, stop the procedure and recover using the local controller
-and a qualified technician.
+6. In Home Assistant logs, locate `OUMAN RESTORE DRY RUN` and copy the
+   recorded `sha256`. Independently verify that the backup is a known-good
+   snapshot from the *same controller*. SHA-256 proves which file was selected,
+   **not** whether its values are correct or safe.
+7. **Only if manual recovery is necessary**, while supervising the controller
+   locally, execute the following action with the exact verified checksum:
+
+```yaml
+action: ouman_eh800.restore_original
+data:
+  dry_run: false
+  confirm: "RESTORE EH800 SETTINGS"
+  backup_sha256: "REPLACE_WITH_EXACT_64_CHARACTER_SHA256"
+```
+
+8. Watch `OUMAN RESTORE` log messages and verify the physical controller
+   display, valve movement, heat curve and safety limits afterwards.
+   No automated proof of success or safe rollback is available.
+
+**Do not add the write-enabled restore command to the daily target deviation
+automation.** A persistent 3 C shortfall can be caused by heat pump output,
+flow or defrost rather than corrupted Ouman configuration.
+
+**Do not interrupt power/USB during a restore.** The heating system must be
+safe and supervised. Restore operations may overwrite PID and other sensitive
+controller parameters. Do not repeat a partially completed restore blindly.
 
 ## Open data vs per-device settings
 
