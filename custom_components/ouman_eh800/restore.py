@@ -132,6 +132,10 @@ async def async_setup_restore(hass: HomeAssistant, port: str) -> None:
         except (OSError, ValueError, UnicodeError) as err:
             raise HomeAssistantError(f"Cannot use Ouman backup: {err}") from err
 
+        # Re-check after async disk I/O to prevent simultaneous restore calls.
+        if active_task is not None and not active_task.done():
+            raise HomeAssistantError("Ouman restore is already running")
+
         if call.data.get("dry_run", True):
             _LOGGER.warning(
                 "OUMAN RESTORE DRY RUN: %d properties; sha256=%s; "
