@@ -1,6 +1,7 @@
 from __future__ import annotations
 import voluptuous as vol
 from homeassistant.components.number import PLATFORM_SCHEMA, NumberEntity
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity import DeviceInfo
 import homeassistant.helpers.config_validation as cv
 from .const import DEFAULT_PORT, DOMAIN
@@ -59,7 +60,14 @@ class OumanNumber(NumberEntity):
         )
 
     async def async_set_native_value(self, value):
-        raw = int(round(float(value) * self.scale))
+        value = float(value)
+        # Defence in depth: never send an out-of-range value to the controller,
+        # even if a caller bypasses Home Assistant's service validation.
+        if not self.native_min_value <= value <= self.native_max_value:
+            raise HomeAssistantError(
+                f"{self.name}: {value} is outside {self.native_min_value}..{self.native_max_value}"
+            )
+        raw = int(round(value * self.scale))
         wire_raw = raw & 0xFFFF
         _, _, _, _, returned = await self.hass.async_add_executor_job(self.hub.property, self.pid, wire_raw)
         signed_returned = returned - 65536 if returned >= 32768 else returned
