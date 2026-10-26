@@ -10,6 +10,8 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <Preferences.h>
+#include <esp_random.h>
 #include <PubSubClient.h>
 #include <USBHost.h>
 #include <USBHostSerial.h>
@@ -20,9 +22,12 @@
 #include <ctype.h>
 // Enter your own details before uploading. Do not share filled-in credentials.
 // Direct MacBook connection: join this ESP32 access point.
-// Change the AP password before using this outside a private test setup.
+// AP password: set your own 8-63 characters, or leave "Ouman12345" unchanged
+// and the board generates a random password on first boot, stores it in flash
+// and prints it on the Serial Monitor (115200) at every boot.
 static const char *AP_SSID = "OUMAN-ESP32";
-static const char *AP_PASSWORD = "Ouman12345"; // CHANGE before real use!
+static const char *AP_PASSWORD = "Ouman12345";
+static const char *SHIPPED_AP_PASSWORD = "Ouman12345"; // public default, never used as-is
 // Optional: set your home Wi-Fi values to also connect via router/MQTT.
 // Leave placeholders unchanged for direct MacBook -> ESP32 AP testing.
 static const char *WIFI_SSID = "YOUR_WIFI_NAME";
@@ -332,6 +337,38 @@ const CurveOption* findCurve(int prop) {
   return nullptr;
 }
 
+// Compare a received secret without an early exit (no timing hint).
+bool secretEquals(const String &given, const char *expected) {
+  const size_t expectedLength = strlen(expected);
+  uint8_t diff = given.length() == expectedLength ? 0 : 1;
+  for (size_t i = 0; i < expectedLength; ++i) {
+    const char received = i < given.length() ? given[i] : 0;
+    diff |= static_cast<uint8_t>(received ^ expected[i]);
+  }
+  return diff == 0;
+}
+
+// Never broadcast the public default Wi-Fi password. If AP_PASSWORD is left
+// unchanged, create a random 16-character password once (hardware RNG, call
+// after WiFi.mode()), keep it in NVS flash and reuse it on every boot.
+String resolveApPassword() {
+  const size_t configuredLength = strlen(AP_PASSWORD);
+  if (strcmp(AP_PASSWORD, SHIPPED_AP_PASSWORD) != 0 && configuredLength >= 8 && configuredLength <= 63) {
+    return String(AP_PASSWORD);
+  }
+  Preferences prefs;
+  prefs.begin("ouman_s3", false);
+  String password = prefs.getString("ap_password", "");
+  if (password.length() != 16) {
+    static const char ALPHABET[] = "abcdefghjkmnpqrstuvwxyz23456789";  // no 0/o/1/l/i
+    password = "";
+    for (int i = 0; i < 16; ++i) password += ALPHABET[esp_random() % (sizeof(ALPHABET) - 1)];
+    prefs.putString("ap_password", password);
+  }
+  prefs.end();
+  return password;
+}
+
 void handleRoot() {
   sendNoCache();
   server.send_P(200, "text/html; charset=utf-8", DASHBOARD_HTML);
@@ -349,7 +386,7 @@ void handleWrite() {
   if (!ENABLE_CURVE_WRITES || strcmp(WRITE_PASSWORD,"CHANGE_ME_BEFORE_ENABLING")==0 || strlen(WRITE_PASSWORD)<12) {
     server.send(403,"text/plain", "Setpoint writing disabled in firmware"); return;
   }
-  if (server.header("X-Ouman-Key") != String(WRITE_PASSWORD)) {
+  if (!secretEquals(server.header("X-Ouman-Key"), WRITE_PASSWORD)) {
     server.send(403,"text/plain", "Invalid separate write password"); return;
   }
   if (server.hasHeader("Origin") && server.header("Origin") != String("http://")+server.hostHeader()) {
@@ -571,10 +608,12 @@ void setup() {
   bool useStation = (WIFI_SSID[0] != '\0' && strcmp(WIFI_SSID, "YOUR_WIFI_NAME") != 0);
   WiFi.mode(useStation ? WIFI_AP_STA : WIFI_AP);
   WiFi.softAPConfig(IPAddress(192, 168, 4, 1), IPAddress(192, 168, 4, 1), IPAddress(255, 255, 255, 0));
-  if (!WiFi.softAP(AP_SSID, AP_PASSWORD)) {
+  const String apPassword = resolveApPassword();
+  if (!WiFi.softAP(AP_SSID, apPassword.c_str())) {
     Serial.println("ERROR: Wi-Fi access point could not start");
   } else {
     Serial.print("MacBook Wi-Fi SSID: "); Serial.println(AP_SSID);
+    Serial.print("Wi-Fi password: "); Serial.println(apPassword);
     Serial.print("Open http://"); Serial.print(WiFi.softAPIP()); Serial.println("/status");
   }
   if (useStation) {
