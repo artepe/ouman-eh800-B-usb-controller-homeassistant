@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.3.0-beta.1; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.4.0-beta.1; NOT hardware validated.** Maintained in the repository
 [OpenLVIBridge-homeassistant](https://github.com/artepe/OpenLVIBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
@@ -109,3 +109,7 @@ JSON-supplied registers can never become writable.
   entities, coil/discrete support, more complete point maps and restart tests.
 - See the [BACnet/M-Bus/SCADA extension guide](OPENLVI_EXTENSIONS.md)
   for adapter requirements and the 2.5D monitoring dashboard.
+
+## Optional English AI guidance
+
+This beta includes a read-only English setup guide on the device page, a review button, the `openlvi.ask_assistant` Home Assistant action, and optional local Ollama/Qwen2.5 0.5B. It uses named, verified readings. The AI does **not** apply any controller setting. See [OpenLVI AI Guide](OPENLVI_AI_GUIDE.md).

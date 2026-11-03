@@ -50,5 +50,21 @@
     "abort": {
       "already_configured": "Laite on jo lisätty"
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Paikallinen englanninkielinen AI-opas",
+        "description": "Syötä valinnainen paikallisen Ollaman IP. Ilman sitä toimii englanninkielinen perusopas. AI ei muuta säätimen asetuksia.",
+        "data": {
+          "ai_url": "Ollaman paikallinen osoite (esim. http://192.168.10.5:11434)",
+          "ai_model": "Pieni paikallinen malli",
+          "ai_auto_review": "Tee AI-arvio käynnistyksessä ja noin 6 tunnin välein"
+        }
+      }
+    },
+    "error": {
+      "invalid_ai_connection": "Vain paikallinen http://IPv4:11434 on sallittu"
+    }
   }
 }
