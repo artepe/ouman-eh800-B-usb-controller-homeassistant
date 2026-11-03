@@ -61,12 +61,26 @@ class AdvisorTests(unittest.TestCase):
         self.assertEqual(points["Calculated L1 supply-water target (°C)"],55.3)
 
 class FakeResponse:
-    status=200
-    content_length=100
-    async def __aenter__(self): return self
-    async def __aexit__(self, *args): return None
-    async def json(self, content_type=None):
-        return {"response": '{"answer":"Check the measured water temperature before changing the curve."}'}
+    status = 200
+    content_length = 100
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, *args):
+        return None
+
+    class Content:
+        async def read(self, max_size):
+            import json
+            response = {
+                "response": json.dumps({
+                    "answer": "Check the measured water temperature before changing the curve."
+                })
+            }
+            return json.dumps(response).encode()
+
+    content = Content()
 
 class FakeSession:
     def __init__(self): self.calls=[]
