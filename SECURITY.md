@@ -1,15 +1,45 @@
 # Security policy
 
-## Reporting a vulnerability
+## Reporting
 
-Please do not report security problems in public issues. Use GitHub's private vulnerability reporting (**Security → Report a vulnerability** on this repository) or contact the maintainer privately through the GitHub profile [@artepe](https://github.com/artepe). Please allow time for a fix before publishing details.
+Please do **not** disclose controller credentials or a vulnerability in a
+public issue. Use this repository's **Security → Report a vulnerability**
+(private vulnerability reporting, when enabled), or privately contact the
+maintainer via [@artepe](https://github.com/artepe).
 
-## Supported versions
+## Release/support status
 
-Security fixes are made to the latest release and the `main` branch only.
+- `custom_components/ouman_eh800` **v0.1.2**: last version reported working
+  with one real EH-800B. It is **not** a safety-certified control system.
+- `custom_components/openlvi` **v0.2.0-beta.1**: experimental. The CI tests
+  do not establish compatibility with physical HVAC/metering equipment.
+- No promise of a vulnerability-remediation SLA is made.
 
-## Security design
+## Security boundaries
 
-- The integration talks to the controller over a local USB serial port only. Number entities refuse values outside each property's range before anything is sent to the controller.
-- ESP32-S3 firmware: setpoint writes are disabled by default and need a separate 12+ character write password, a same-origin request, an allowlisted property and a cooldown. The Wi-Fi access point never uses the public default password; if `AP_PASSWORD` is left unchanged, a random per-board password is generated and printed on the serial monitor.
-- Never commit filled-in Wi-Fi, MQTT or write passwords.
+- **Transport isolation:** Modbus TCP (normally 502) and BACnet/IP (normally
+  UDP 47808) generally have no per-command authentication. Device HTTP may
+  use unencrypted credentials. Never publish these services to the internet.
+  Use a trusted LAN/VLAN, firewall and secure remote access.
+- **Safe-by-default configuration:** the new OpenLVI configuration wizard
+  starts with writes disabled. User-supplied point maps are read-only; remote
+  BACnet and wired M-Bus are read-only in the current implementation. Built-in
+  model writes must be explicitly enabled and limited to reviewed ranges.
+- **Physical safeguards:** an HA failure must never disable a manufacturer's
+  local frost, overheating, pressure, pump or ventilation safety controls.
+  Before production use, test sensor meaning, scaling, serial settings and
+  any write effects on isolated hardware.
+- **Legacy EH-800B warning:** the stable v0.1.2 legacy component has writable
+  PID parameters 56/57/58 and manual valve property 92; changes to PID
+  parameters coincided with abnormal valve behaviour in earlier experiments.
+  **Never use these writable entities for exploratory testing on a live plant.**
+- **ESP32-S3 experimental project:** Wi-Fi AP password is device-specific
+  when the example default is left unchanged, and setpoint writes require a
+  separate password and explicit permission. This does not replace external
+  network protection.
+- Do not commit credentials, Wi-Fi or MQTT passwords, site addresses,
+  customer-specific register exports containing private data or HA storage
+  secrets. Sanitize diagnostic logs and screenshots before sharing.
+
+The project does not claim automatic discovery of every device, automatic
+safety validation or AI-based fault diagnosis.

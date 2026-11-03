@@ -12,11 +12,14 @@ Copy `custom_components/openlvi` to
 **Settings → Devices & services → Add integration → OpenLVI Bridge**.
 
 The interactive wizard asks:
-1. **Manufacturer**: Ouman, Danfoss, Regin, Swegon, Enervent, Vallox,
-   Fidelix, Siemens, Produal, Koja or NIBE.
+1. **Manufacturer**: Ouman, Danfoss, Regin, Swegon, Kamstrup,
+   Enervent, Vallox, Fidelix, Siemens, Schneider Electric, Grundfos,
+   Wilo, Belimo, Produal, Koja or NIBE.
 2. **Model**, installed **firmware**, and for Danfoss the **ECL application key**.
-3. **Transport**: HTTP (EH-800), USB (EH-800B), Modbus TCP or RS-485 RTU.
-4. IP/USB details, unit ID, parity or a site-specific JSON register map.
+3. **Transport**: HTTP (EH-800), USB (EH-800B), Modbus TCP/RTU,
+   read-only BACnet/IP, or wired M-Bus for Kamstrup.
+4. IP/USB details, unit ID, serial parity, BACnet device instance
+   or an exact site-specific read-only point list.
 
 The setup probe is *read-only*. Automatic writable entity creation is
 disabled by default and exposed only for narrowly allowlisted registers.
@@ -33,7 +36,9 @@ their exact, site-specific, read-only register map.
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
 | Swegon CASA Genius SW4.x with SEM/SEC | Modbus RTU or gateway | fan RPM and %, temperature setpoint, mode, CO2 thresholds, heat recovery | selected operating modes 1/2/3 only, optional |
-| Regin Corrigo 5, Exigo; Swegon Smart/GOLD; Enervent eAir/eWind; Vallox MyVallox; Fidelix FX-series; Siemens Climatix; Produal Proxima; Koja KojaControl; NIBE S-series; other Ouman models | model-dependent Modbus TCP/RTU | **requires exported point map** | custom profiles always read only |
+| BACnet/IP (e.g. Siemens, Schneider, Belimo) | Private local network, UDP 47808 | Explicit read-only object list or bounded discovery on one selected device (up to 32 objects) | read only |
+| Kamstrup MULTICAL 403/603/803 | Powered wired M-Bus master with serial interface | Telegram records and transmitted units | read only |
+| Regin Corrigo 5, Exigo; Swegon Smart/GOLD; Enervent eAir/eWind; Vallox MyVallox; Fidelix FX-series; Siemens Climatix/Desigo; Produal Proxima; Koja KojaControl; NIBE S-series; Grundfos, Wilo, Belimo and other Ouman models | Hardware/firmware-dependent Modbus or BACnet | **requires exact site-specific point map** | custom profiles always read only |
 
 The model list is not a claim that all these controllers offer Modbus
 without accessories. Confirm physical interface availability, interface
@@ -92,5 +97,9 @@ JSON-supplied registers can never become writable.
 - For real installations: test with read-only access first, verify sensor
   scaling against the controller's own display, then validate any permitted
   setpoint on an isolated bench.
-- Follow-up: add dedicated select/switch for safe modes, robust coil/discrete
-  handling, full vendor profiles, device discovery and physical test fixtures.
+- The experimental BACnet/IP adapter already offers **selected-device** object
+  discovery; general network discovery remains unimplemented.
+- Follow-up: physically validate device access, then add safe select/switch
+  entities, coil/discrete support, more complete point maps and restart tests.
+- See the [BACnet/M-Bus/SCADA extension guide](OPENLVI_EXTENSIONS.md)
+  for adapter requirements and the 2.5D monitoring dashboard.

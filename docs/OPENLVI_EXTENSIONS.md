@@ -10,7 +10,7 @@ was physically connected during authoring. The existing
 |---|---|
 | BACnet/IP | Read-only driver via BACpypes3 0.0.110; binds on user-supplied local IPv4/CIDR; reads explicit profile or discovers up to 32 **objects on one selected device** via its object-list |
 | Kamstrup MULTICAL 403/603/803 | Wired M-Bus primary-address polling via pyMeterBus 0.8.5 and an **active** M-Bus master / USB interface; creates dynamic read-only records with the meter's actual units |
-| Additional brands | Manufacturer/model options for Grundfos, Wilo, Belimo, Schneider, Siemens; sites need **actual device-specific** Modbus or BACnet point maps |
+| Additional brands | Manufacturer/model options for Grundfos, Wilo, Belimo, Schneider and Siemens; **not plug-and-play** until the exact installed firmware/physical interface and site point map are verified |
 | Site-specific register import | `tools/openlvi_pointmap_import.py` converts reviewed CSV/XML into **read-only** JSON maps with strict key/address/type validation |
 | BACnet object discovery | Targeted one-device object-list read (max 32 objects), no network-wide broadcast scan, no writes |
 | Diagnostics | Temperature differences, optional water-only thermal power, rules to flag suspicious measurement values; advisory, not autonomous control |
@@ -20,7 +20,7 @@ was physically connected during authoring. The existing
 
 ## Installation for evaluation
 
-From the repo's development branch, copy `custom_components/openlvi` into
+From the repository's `main` branch, copy `custom_components/openlvi` into
 `/config/custom_components/openlvi`; restart HA. In
 **Settings → Devices & Services → Add Integration → OpenLVI Bridge**,
 select the manufacturer and model. In the next step, choose the actual
@@ -130,7 +130,7 @@ not a guaranteed fault detector, and it never commands a controller.
 - Grundfos CIM 500 Modbus/BACnet interfaces:
   https://www.grundfos-eica.com/magna3/bacnet-ip.html
 
-**Before production:** validate the HA config-flow and third-party libraries,
+**Before production:** validate the HA config flow and third-party libraries,
 verify BACnet local bind and responses on a separate test network, verify
 M-Bus frame parsing and physical polarity/termination with an active master,
 compare readings against a real controller, then test HA restarts and recovery.

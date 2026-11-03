@@ -1,6 +1,8 @@
 # Stable release v0.1.2 — Ouman EH-800B / EH-800 USB for Home Assistant
 
-**Official stable source:** `main` and the pinned `stable/v0.1.2` branch.
+**Verified legacy source:** `custom_components/ouman_eh800` in `main`,
+or the pinned `stable/v0.1.2` branch. The `main` branch also contains
+a separate **experimental** `custom_components/openlvi` component.
 
 **Status (12 October 2026):** v0.1.2 is the last version reported working with the project's physical EH-800B controller. This designation is based on that installation, **not** a multi-device compatibility certification. Newer experimental code has not been promoted to the stable integration.
 
@@ -21,7 +23,11 @@ The 28 data channels are not all fully decoded. The stable version has no `ouman
 
 ## Installation
 
-1. Copy `custom_components/ouman_eh800` from the **main** branch (or the pinned **stable/v0.1.2** branch) into `/config/custom_components/ouman_eh800` on Home Assistant.
+1. Copy **only** `custom_components/ouman_eh800` from the `main`
+   branch (or pinned `stable/v0.1.2` branch) into
+   `/config/custom_components/ouman_eh800` on Home Assistant.
+   Do not replace it with `custom_components/openlvi` when retaining
+   your working USB integration.
 2. Confirm the connected USB serial path in your installation. The tested path was `/dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00`.
 3. Add these platforms to `configuration.yaml` (merge with any existing `sensor:` / `number:` definitions instead of duplicating the YAML keys):
 
@@ -41,13 +47,16 @@ number:
 ## Version policy
 
 - **v0.1.2:** official stable Home Assistant integration for the tested device.
-- **Experimental / developer branches:** unsupported for unattended heating control. A later experimental build caused multiple `unavailable` sensors on real hardware and was **not merged into main**.
+- **Experimental OpenLVI component:** included separately in `main`
+  but **not** validated on physical controllers.
+  Earlier experimental USB drivers caused multiple `unavailable`
+  sensors and were **not merged into the legacy `ouman_eh800` directory**.
 - Research notes remain accessible under `docs/`, but experimental functionality should not be mistaken for included stable features.
 
 ## Project links
 
-- [Repository](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant)
-- [Stable branch](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/stable/v0.1.2)
+- [Repository](https://github.com/artepe/OpenLVIBridge-homeassistant)
+- [Stable branch](https://github.com/artepe/OpenLVIBridge-homeassistant/tree/stable/v0.1.2)
 - [Known PID issues](PID_KNOWN_ISSUES.md)
 - [Lovelace example](../examples/lovelace-ouman-l1-dashboard.yaml)
 
