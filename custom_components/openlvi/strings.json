@@ -9,34 +9,37 @@
         }
       },
       "model": {
-        "title": "Choose model",
+        "title": "Choose controller model",
         "description": "Use exact model, firmware and application key. Remote writes are off by default.",
         "data": {
-          "model": "Controller model",
-          "firmware": "Firmware version",
-          "application_key": "Danfoss ECL application key (optional)",
-          "allow_writes": "Enable verified writes (experimental)"
+          "model": "Model",
+          "firmware": "Firmware",
+          "application_key": "Application key",
+          "allow_writes": "Enable documented setpoint writes"
         }
       },
       "transport": {
-        "title": "Connection type",
+        "title": "Protocol",
         "data": {
-          "transport": "Transport"
+          "transport": "Connection type"
         }
       },
       "connection": {
         "title": "Local connection",
         "description": "Unknown firmware and site-programmed controllers need a read-only JSON Modbus register map. No registers are guessed.",
         "data": {
-          "host": "IP address",
-          "port": "TCP port / serial port",
+          "host": "Remote IP address",
+          "port": "Serial path or TCP port",
           "baudrate": "Baud rate",
           "parity": "Parity",
-          "unit_id": "Modbus unit ID",
-          "profile_json": "Read-only JSON point map",
-          "url": "EH-800 HTTP URL",
+          "unit_id": "Modbus unit or M-Bus primary address",
+          "profile_json": "Modbus profile or BACnet object list JSON",
+          "url": "EH-800 URL",
           "username": "Username",
-          "password": "Password"
+          "password": "Password",
+          "bacnet_device_id": "Remote BACnet device instance",
+          "bacnet_local_address": "Local bind IP/CIDR e.g. 192.168.1.50/24",
+          "bacnet_local_instance": "Local client device instance"
         }
       }
     },

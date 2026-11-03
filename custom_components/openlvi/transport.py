@@ -183,6 +183,12 @@ def make_transport(hass, data):
         return HttpDriver(hass, data)
     if protocol == "usb":
         return UsbDriver(hass, data)
+    if protocol == "bacnet_ip":
+        from .extended_transports import BacnetDriver
+        return BacnetDriver(hass, data)
+    if protocol == "mbus_serial":
+        from .extended_transports import MbusDriver
+        return MbusDriver(hass, data)
     if protocol in ("modbus_tcp", "modbus_rtu"):
         return ModbusDriver(data)
-    raise ValueError(f"Unsupported Ouman protocol: {protocol}")
+    raise ValueError(f"Unsupported OpenLVI protocol: {protocol}")

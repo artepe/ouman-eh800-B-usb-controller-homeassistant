@@ -8,6 +8,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import DOMAIN
 from .transport import make_transport
+from .diagnostics import derive_plant_metrics, diagnostic_notes
 
 _LOGGER = logging.getLogger(__name__)
 PLATFORMS = ["sensor", "number"]
@@ -15,7 +16,8 @@ PLATFORMS = ["sensor", "number"]
 class OumanCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, driver, entry):
         super().__init__(hass, _LOGGER, name=f"OpenLVI {entry.data['vendor']} {entry.data['model']}",
-                         update_interval=timedelta(seconds=15 if entry.data['transport']=="usb" else 60))
+                         update_interval=timedelta(seconds=15 if entry.data['transport']=="usb" else 120 if entry.data["transport"]=="mbus_serial" else 60))
+        self.diagnostic_messages = []
         self.driver = driver
         self.config_entry = entry
 
@@ -24,9 +26,11 @@ class OumanCoordinator(DataUpdateCoordinator):
             values = await self.driver.async_read()
             if not values:
                 raise ValueError("No points responded")
+            values.update(derive_plant_metrics(values))
+            self.diagnostic_messages = diagnostic_notes(values)
             return values
         except Exception as err:
-            raise UpdateFailed(f"Ouman local read failed: {err}") from err
+            raise UpdateFailed(f"OpenLVI local read failed: {err}") from err
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     driver = make_transport(hass, entry.data)

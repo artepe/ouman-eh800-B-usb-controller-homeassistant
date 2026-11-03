@@ -1,0 +1,25 @@
+# Home Assistant dashboard sketch. Replace ALL entity IDs with actual IDs.
+# Add manually as Lovelace YAML; these names are only examples.
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## OpenLVI Bridge // Valvomo
+      **Paikalliset säätimet, mittaukset ja huoltotiedot**
+  - type: entities
+    title: L1 lämmitys
+    entities:
+      - entity: sensor.openlvi_l1_supply
+        name: Menovesi
+      - entity: sensor.openlvi_l1_return
+        name: Paluuvesi
+      - entity: sensor.openlvi_l1_delta_t
+        name: Delta-T
+      - entity: sensor.openlvi_l1_thermal_power_kw
+        name: Laskettu lämpöteho
+  - type: history-graph
+    title: Lämmityksen trendit
+    hours_to_show: 24
+    entities:
+      - entity: sensor.openlvi_l1_supply
+      - entity: sensor.openlvi_l1_return

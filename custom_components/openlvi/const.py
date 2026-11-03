@@ -37,3 +37,13 @@ VENDOR_MODELS = {
     "Koja": ("KojaControl",),
     "NIBE": ("S-series",),
 }
+
+CONF_BACNET_LOCAL_ADDRESS = "bacnet_local_address"
+CONF_BACNET_DEVICE_ID = "bacnet_device_id"
+CONF_BACNET_LOCAL_INSTANCE = "bacnet_local_instance"
+VENDOR_MODELS["Kamstrup"] = ("MULTICAL 403", "MULTICAL 603", "MULTICAL 803")
+VENDOR_MODELS["Grundfos"] = ("MAGNA3 CIM500", "CIM500 / CIU500")
+VENDOR_MODELS["Wilo"] = ("Stratos MAXO", "Stratos GIGA")
+VENDOR_MODELS["Belimo"] = ("Modbus actuator", "Modbus VAV", "BACnet actuator")
+VENDOR_MODELS["Schneider Electric"] = ("SpaceLogic MP-C",)
+VENDOR_MODELS["Siemens"] += ("Desigo PXC4", "Desigo PXC5", "Desigo PXC7")
