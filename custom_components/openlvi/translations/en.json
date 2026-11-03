@@ -10,12 +10,12 @@
       },
       "model": {
         "title": "Choose controller model",
-        "description": "Use exact model, firmware and application key. Remote writes are off by default.",
+        "description": "Choose model/firmware. EH-800B USB safe L1 controls appear automatically; other models require explicit write permission.",
         "data": {
           "model": "Model",
           "firmware": "Firmware",
           "application_key": "Application key",
-          "allow_writes": "Enable documented setpoint writes"
+          "allow_writes": "Enable verified writes for other models (EH-800B USB safe controls are automatic)"
         }
       },
       "transport": {
