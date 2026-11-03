@@ -12,31 +12,34 @@
         "title": "Valitse säädinmalli",
         "description": "Syötä tarkka malli, versio ja tarvittaessa sovellusavain. Kirjoitukset ovat oletuksena pois.",
         "data": {
-          "model": "Säädinmalli",
+          "model": "Malli",
           "firmware": "Ohjelmistoversio",
-          "application_key": "Danfoss ECL -sovellusavain (tarvittaessa)",
-          "allow_writes": "Salli tarkistetut kirjoitukset (kokeellinen)"
+          "application_key": "Sovellusavain",
+          "allow_writes": "Salli dokumentoidut kirjoitukset"
         }
       },
       "transport": {
-        "title": "Yhteystapa",
+        "title": "Protokolla",
         "data": {
-          "transport": "Tiedonsiirto"
+          "transport": "Yhteystapa"
         }
       },
       "connection": {
         "title": "Paikallinen yhteys",
         "description": "Tuntemattomat ja kohteessa ohjelmoidut säätimet vaativat oman vain-luku JSON-pisteluettelon.",
         "data": {
-          "host": "IP-osoite",
-          "port": "TCP-portti tai sarjaportti",
-          "baudrate": "Sarjanopeus",
+          "host": "Kohdelaitteen IP-osoite",
+          "port": "Sarjaportti tai TCP-portti",
+          "baudrate": "Siirtonopeus",
           "parity": "Pariteetti",
-          "unit_id": "Modbus-laiteosoite",
-          "profile_json": "Vain-luku JSON-rekisterikartta",
-          "url": "EH-800 HTTP-osoite",
+          "unit_id": "Modbus/M-Bus-laiteosoite",
+          "profile_json": "Modbus- tai BACnet-JSON-pisteluettelo",
+          "url": "EH-800 URL",
           "username": "Käyttäjätunnus",
-          "password": "Salasana"
+          "password": "Salasana",
+          "bacnet_device_id": "BACnet-kohdelaitteen instanssi",
+          "bacnet_local_address": "Paikallinen BACnet-IP/verkkomaski esim. 192.168.1.50/24",
+          "bacnet_local_instance": "BACnet-lukuasiakkaan oma instanssi"
         }
       }
     },

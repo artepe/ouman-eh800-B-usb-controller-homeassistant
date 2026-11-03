@@ -1,3 +1,9 @@
+> **2026-11 development:** BACnet/IP selected-device read-only discovery,
+> Kamstrup wired M-Bus meter polling, isometric live SCADA example,
+> CSV/XML Modbus pointmap import, and rule-based energy diagnostics.
+> See [OpenLVI extensions guide](docs/OPENLVI_EXTENSIONS.md). These
+> extensions remain experimental until physical-hardware validation.
+>
 # OpenLVI Bridge — Multi-vendor HVAC Home Assistant integration
 
 **NEW EXPERIMENTAL INTEGRATION:** [OpenLVI Bridge setup and tested/documented model coverage](docs/OPENLVI_BRIDGE.md).
