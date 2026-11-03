@@ -11,9 +11,15 @@ from .const import (
 )
 from .profiles import profile_for
 from .transport import make_transport
+from .ai_guide import (CONF_AI_URL, CONF_AI_MODEL, CONF_AI_AUTO,
+                       DEFAULT_MODEL, validate_local_ai_url, validate_model)
 
 class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    def async_get_options_flow(config_entry):
+        return OpenLVIAIOptionsFlow()
 
     def __init__(self):
         self._data = {}
@@ -147,4 +153,34 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             }
         return self.async_show_form(
             step_id="connection", data_schema=vol.Schema(schema), errors=errors,
+        )
+
+
+class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
+    """Configure only the local AI advisor, without re-adding the controller."""
+
+    async def async_step_init(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            try:
+                url = validate_local_ai_url(user_input.get(CONF_AI_URL, ""))
+                model = validate_model(user_input.get(CONF_AI_MODEL, DEFAULT_MODEL))
+                return self.async_create_entry(
+                    title="", data={
+                        CONF_AI_URL: url,
+                        CONF_AI_MODEL: model,
+                        CONF_AI_AUTO: bool(user_input.get(CONF_AI_AUTO, False)),
+                    }
+                )
+            except ValueError:
+                errors["base"] = "invalid_ai_connection"
+        current = self.config_entry.options
+        return self.async_show_form(
+            step_id="init",
+            data_schema=vol.Schema({
+                vol.Optional(CONF_AI_URL, default=current.get(CONF_AI_URL, "")): str,
+                vol.Required(CONF_AI_MODEL, default=current.get(CONF_AI_MODEL, DEFAULT_MODEL)): str,
+                vol.Optional(CONF_AI_AUTO, default=current.get(CONF_AI_AUTO, False)): bool,
+            }),
+            errors=errors,
         )

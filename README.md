@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.3.0-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.4.0-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -32,9 +32,12 @@ requiring a vendor cloud service for supported interfaces.
   validated command. Other models require their separate write opt-in.
   PID 56/57/58, manual valve 92 and unknown properties remain excluded.
   Never bypass native controller safety interlocks.
+- **English AI guide:** automatic read-only baseline, on-device review button
+  and optional local Ollama Qwen2.5 0.5B to explain settings. The AI does
+  **not** write heating controller settings. [Guide](docs/OPENLVI_AI_GUIDE.md).
 - **Työkalut:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
   2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
-  **No AI fault-diagnosis model or full 3D digital twin is included.**
+  **No autonomous AI equipment control or full 3D digital twin is included.**
 
 ## Toteutuksen tila / Current coverage
 
@@ -101,6 +104,7 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 | [CSV/XML point-map importer](tools/openlvi_pointmap_import.py) | Converts reviewed vendor point tables to read-only JSON |
 | [Stable EH-800B v0.1.2](docs/STABLE_RELEASE_v0.1.2.md) | USB integration with real-device test history |
 | [PID/valve caution](docs/PID_KNOWN_ISSUES.md) | Known risks of legacy writable PID properties |
+| [English AI advisor and Ollama setup](docs/OPENLVI_AI_GUIDE.md) | Optional small model, button, sensor and `openlvi.ask_assistant` action |
 | [Changelog](CHANGELOG.md) and [contributing](CONTRIBUTING.md) | Development status and safe additions |
 
 ### Tärkeät turvallisuusrajat / Safety
@@ -120,7 +124,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.3.0-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.0-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

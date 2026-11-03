@@ -4,6 +4,16 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.4.0-beta.1 — 2026-11-04 (experimental)
+
+- English setting explanations: on-device guide sensor, manual review button
+  and `openlvi.ask_assistant` action with response data.
+- Optional local Qwen2.5 0.5B via private LAN Ollama and configurable
+  periodic advice every six hours (off by default).
+- Automatic initial setup report is offline and read-only; no cloud service
+  or model download is required.
+- **No AI autonomous equipment setpoint changes, PID writes or valve actions**.
+
 ## OpenLVI Bridge 0.3.0-beta.1 — 2026-11-04 (experimental)
 
 - Automatically exposes EH-800B USB heating-curve and approved L1

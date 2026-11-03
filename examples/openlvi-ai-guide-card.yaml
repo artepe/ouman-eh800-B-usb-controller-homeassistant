@@ -1,0 +1,15 @@
+# Example dashboard for an OpenLVI EH-800B; update the entity IDs.
+# Press the review button to generate a local English explanation.
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## OpenLVI // English AI guide
+      Read-only setup assistance • No automatic equipment writes.
+      Tap the sensor to see the latest explanation.
+  - type: entities
+    entities:
+      - entity: sensor.bedroom_ouman_eh_800b_openlvi_english_ai_guide
+        name: Latest English guidance
+      - entity: button.bedroom_ouman_eh_800b_review_settings_in_english
+        name: Review settings now
