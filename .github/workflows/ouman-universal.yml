@@ -1,0 +1,31 @@
+name: OpenLVI Bridge checks
+on:
+  push:
+    branches: ['feature/ouman-universal-*']
+  pull_request:
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests/test_ouman_universal_profiles.py'
+      - 'tests/test_openlvi_vendor_profiles.py'
+      - '.github/workflows/ouman-universal.yml'
+jobs:
+  pure-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile integration files
+        run: python -m compileall -q custom_components/openlvi
+      - name: Test register decoding and write allowlist
+        run: python -m unittest discover -s tests -p 'test_*profiles.py' -v
+      - name: Validate Modbus client keyword against pinned library
+        run: |
+          python -m pip install pymodbus==3.13.1
+          python - <<'PY'
+          import inspect
+          from pymodbus.client import AsyncModbusTcpClient
+          sig = inspect.signature(AsyncModbusTcpClient.read_holding_registers)
+          assert 'device_id' in sig.parameters, str(sig)
+          PY

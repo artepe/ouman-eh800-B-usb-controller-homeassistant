@@ -1,0 +1,51 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Valitse valmistaja",
+        "description": "OpenLVI Bridge: paikallinen LVI-säätimien liityntä.",
+        "data": {
+          "vendor": "Valmistaja"
+        }
+      },
+      "model": {
+        "title": "Valitse säädinmalli",
+        "description": "Syötä tarkka malli, versio ja tarvittaessa sovellusavain. Kirjoitukset ovat oletuksena pois.",
+        "data": {
+          "model": "Säädinmalli",
+          "firmware": "Ohjelmistoversio",
+          "application_key": "Danfoss ECL -sovellusavain (tarvittaessa)",
+          "allow_writes": "Salli tarkistetut kirjoitukset (kokeellinen)"
+        }
+      },
+      "transport": {
+        "title": "Yhteystapa",
+        "data": {
+          "transport": "Tiedonsiirto"
+        }
+      },
+      "connection": {
+        "title": "Paikallinen yhteys",
+        "description": "Tuntemattomat ja kohteessa ohjelmoidut säätimet vaativat oman vain-luku JSON-pisteluettelon.",
+        "data": {
+          "host": "IP-osoite",
+          "port": "TCP-portti tai sarjaportti",
+          "baudrate": "Sarjanopeus",
+          "parity": "Pariteetti",
+          "unit_id": "Modbus-laiteosoite",
+          "profile_json": "Vain-luku JSON-rekisterikartta",
+          "url": "EH-800 HTTP-osoite",
+          "username": "Käyttäjätunnus",
+          "password": "Salasana"
+        }
+      }
+    },
+    "error": {
+      "invalid_profile": "Versio, sovellusavain tai rekisterilista virheellinen tai puuttuu",
+      "cannot_connect": "Yhteys tai mittausten luku epäonnistui"
+    },
+    "abort": {
+      "already_configured": "Laite on jo lisätty"
+    }
+  }
+}
