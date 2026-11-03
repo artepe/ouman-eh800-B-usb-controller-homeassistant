@@ -4,7 +4,7 @@ from pathlib import Path
 import sys
 import unittest
 
-MODULE = Path(__file__).resolve().parents[1] / "custom_components" / "ouman_universal" / "profiles.py"
+MODULE = Path(__file__).resolve().parents[1] / "custom_components" / "openlvi" / "profiles.py"
 spec = importlib.util.spec_from_file_location("openlvi_vendor_profiles", MODULE)
 mod = importlib.util.module_from_spec(spec)
 sys.modules[spec.name] = mod
