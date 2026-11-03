@@ -113,7 +113,7 @@ def offline_answer(model: str, question: str, values: dict, notes: list[str]) ->
             "Select a setting by name. Actual current EH-800B USB setpoints are unknown without a verified read-only GET PROPERTY command."),
     ]
     if notes:
-        overview.append("Review: " + "; ".join(str(n)[:150] for n in notes[:3]))
+        overview.append(f"Review: {len(notes)} rule-based diagnostic flag(s) need checking against the physical controller.")
     overview.append("Initial suggestions: confirm sensor readings on the controller, record current settings and observe the system before tuning. Ask for a specific setting to get more detail.")
     overview.append("Any physical setpoint change requires a separate explicit action by the operator.")
     return "\n".join(overview)[:2600]
@@ -161,7 +161,10 @@ async def query_local_ollama(session, url: str, model: str, prompt: str) -> str:
                 raise RuntimeError(f"Local Ollama HTTP {resp.status}")
             if resp.content_length and resp.content_length > 65536:
                 raise RuntimeError("Local model response is too large")
-            data = await resp.json(content_type=None)
+            raw = await resp.content.read(65537)
+            if len(raw) > 65536:
+                raise RuntimeError("Local model response exceeded 64 KiB")
+            data = json.loads(raw)
     text = data.get("response", "")
     if not isinstance(text, str) or len(text) > 16000:
         raise ValueError("Invalid local AI response")
