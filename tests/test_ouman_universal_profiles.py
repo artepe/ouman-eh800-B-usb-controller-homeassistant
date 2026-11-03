@@ -23,6 +23,21 @@ class ProfileTests(unittest.TestCase):
         p = mod.Register("x", "x", 305, "s32", 1)
         self.assertEqual(mod.decode([0xffff, 0xff9c], p), -10.0)
 
+    def test_documented_model_specific_room_setpoints(self):
+        expected = {
+            "A203": ("2.0.2", 818, 905, 50),
+            "S203": ("3.0.10", 793, 713, 50),
+            "C203": ("3.0.10", 585, 751, 50),
+            "H23": ("4.0.5", 432, 453, 35),
+        }
+        for model, (firmware, l1, l2, maximum) in expected.items():
+            with self.subTest(model=model):
+                points = mod.profile_for(model, firmware, "")
+                targets = {p.key: p for p in points if p.writable}
+                self.assertEqual(targets["l1_room_target"].address, l1)
+                self.assertEqual(targets["l2_room_target"].address, l2)
+                self.assertEqual(targets["l1_room_target"].maximum, maximum)
+
     def test_unknown_fw_requires_profile(self):
         with self.assertRaises(ValueError):
             mod.profile_for("S203", "3.0.11", "")
