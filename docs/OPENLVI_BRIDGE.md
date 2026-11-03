@@ -7,8 +7,8 @@ v0.1.2) remains unchanged. Do not replace a live controller's working setup.
 
 ## Install (development testers only)
 
-Copy `custom_components/ouman_universal` to
-`/config/custom_components/ouman_universal`. Restart Home Assistant, then:
+Copy `custom_components/openlvi` to
+`/config/custom_components/openlvi`. Restart Home Assistant, then:
 **Settings → Devices & services → Add integration → OpenLVI Bridge**.
 
 The interactive wizard asks:

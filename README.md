@@ -1,3 +1,17 @@
+# OpenLVI Bridge — Multi-vendor HVAC Home Assistant integration
+
+**NEW EXPERIMENTAL INTEGRATION:** [OpenLVI Bridge setup and tested/documented model coverage](docs/OPENLVI_BRIDGE.md).
+Choose **manufacturer → model → firmware → transport**. Includes Ouman, Danfoss ECL,
+Swegon CASA Genius and Regin Corrigo E starter profiles. Other vendors can use
+a site-specific read-only Modbus register map. This experimental integration is
+installed under `custom_components/openlvi`; never replace a live Ouman installation
+until the new drivers have been hardware validated.
+
+**Stable legacy component:** Ouman EH-800B USB v0.1.2 remains in
+`custom_components/ouman_eh800`, unchanged by the OpenLVI work.
+
+---
+
 # Ouman EH-800B / EH-800 USB → Home Assistant
 
 **Official stable version: v0.1.2** · **GitHub default branch: `main`** · **Tested on a physical EH-800B**

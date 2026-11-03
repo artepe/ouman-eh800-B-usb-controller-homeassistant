@@ -4,7 +4,7 @@ on:
     branches: ['feature/ouman-universal-*']
   pull_request:
     paths:
-      - 'custom_components/ouman_universal/**'
+      - 'custom_components/openlvi/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
       - '.github/workflows/ouman-universal.yml'
@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.13'
       - name: Compile integration files
-        run: python -m compileall -q custom_components/ouman_universal
+        run: python -m compileall -q custom_components/openlvi
       - name: Test register decoding and write allowlist
         run: python -m unittest discover -s tests -p 'test_*profiles.py' -v
       - name: Validate Modbus client keyword against pinned library

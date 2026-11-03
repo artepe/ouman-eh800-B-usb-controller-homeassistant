@@ -1,5 +1,5 @@
 """Ouman Universal configuration constants."""
-DOMAIN = "ouman_universal"
+DOMAIN = "openlvi"
 CONF_MODEL = "model"
 CONF_FIRMWARE = "firmware"
 CONF_TRANSPORT = "transport"

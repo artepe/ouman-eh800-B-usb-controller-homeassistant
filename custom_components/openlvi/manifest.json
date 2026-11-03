@@ -1,5 +1,5 @@
 {
-  "domain": "ouman_universal",
+  "domain": "openlvi",
   "name": "OpenLVI Bridge (experimental)",
   "version": "0.1.0-beta.1",
   "documentation": "https://github.com/artepe/OpenLVIBridge-homeassistant/blob/feature/ouman-universal-modbus-http-20261103/docs/OPENLVI_BRIDGE.md",
