@@ -6,7 +6,7 @@ from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from .const import (
     CONF_MODEL, CONF_TRANSPORT, CONF_HOST, CONF_PORT, CONF_BAUDRATE,
     CONF_UNIT_ID, CONF_FIRMWARE, CONF_PROFILE, CONF_ALLOW_WRITES,
-    CONF_URL, CONF_USERNAME, CONF_PASSWORD,
+    CONF_URL, CONF_USERNAME, CONF_PASSWORD, CONF_APPLICATION, CONF_PARITY,
 )
 from .profiles import Register, profile_for, decode, encode
 
@@ -16,7 +16,7 @@ class ModbusDriver:
     def __init__(self, data):
         self.data = data
         self.points = profile_for(
-            data[CONF_MODEL], data.get(CONF_FIRMWARE, ""), data.get(CONF_PROFILE, "")
+            data[CONF_MODEL], data.get(CONF_FIRMWARE, ""), data.get(CONF_PROFILE, ""), data.get(CONF_APPLICATION, "")
         )
         self.client = None
 
@@ -29,7 +29,7 @@ class ModbusDriver:
         else:
             self.client = AsyncModbusSerialClient(
                 port=self.data[CONF_PORT], baudrate=self.data[CONF_BAUDRATE],
-                parity="N", stopbits=1, bytesize=8, timeout=4, retries=1
+                parity=self.data.get(CONF_PARITY, "N"), stopbits=1, bytesize=8, timeout=4, retries=1
             )
         await self.client.connect()
         if not self.client.connected:
@@ -39,7 +39,9 @@ class ModbusDriver:
         if self.client is None or not self.client.connected:
             raise ConnectionError("Modbus disconnected")
         # Ouman PDFs use 1-based address notation, pymodbus uses 0-based.
-        result = await self.client.read_holding_registers(
+        reader = (self.client.read_input_registers if point.area == "input"
+                  else self.client.read_holding_registers)
+        result = await reader(
             address=point.address - 1, count=point.count,
             device_id=self.data[CONF_UNIT_ID],
         )
@@ -59,6 +61,8 @@ class ModbusDriver:
     async def async_write(self, point: Register, value: float):
         if not self.data.get(CONF_ALLOW_WRITES, False):
             raise ValueError("Writes were not enabled during configuration")
+        if point.area != "holding":
+            raise ValueError("Input registers cannot be written")
         # encode enforces the fixed, model-verified register write allowlist.
         raw = encode(float(value), point)
         if self.client is None or not self.client.connected:
