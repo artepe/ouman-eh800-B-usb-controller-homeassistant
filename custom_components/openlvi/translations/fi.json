@@ -10,12 +10,12 @@
       },
       "model": {
         "title": "Valitse säädinmalli",
-        "description": "Syötä tarkka malli, versio ja tarvittaessa sovellusavain. Kirjoitukset ovat oletuksena pois.",
+        "description": "Valitse malli ja ohjelmistoversio. EH-800B USB:n hyväksytyt L1-säädöt lisätään automaattisesti. Muiden mallien kirjoitukset vaativat luvan.",
         "data": {
           "model": "Malli",
           "firmware": "Ohjelmistoversio",
           "application_key": "Sovellusavain",
-          "allow_writes": "Salli dokumentoidut kirjoitukset"
+          "allow_writes": "Salli muiden mallien tarkistetut kirjoitukset (EH-800B USB:n L1-säädöt tulevat automaattisesti)"
         }
       },
       "transport": {
