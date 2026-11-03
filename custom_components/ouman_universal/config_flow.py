@@ -74,7 +74,7 @@ class OumanUniversalConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 finally:
                     await transport.async_close()
                 identity = ":".join(str(trial.get(k,"")) for k in
-                                    (CONF_MODEL, CONF_TRANSPORT, CONF_HOST, CONF_PORT, CONF_URL))
+                                    (CONF_MODEL, CONF_TRANSPORT, CONF_HOST, CONF_PORT, CONF_UNIT_ID, CONF_URL))
                 await self.async_set_unique_id(identity)
                 self._abort_if_unique_id_configured()
                 return self.async_create_entry(title=f"Ouman {model}", data=trial)
