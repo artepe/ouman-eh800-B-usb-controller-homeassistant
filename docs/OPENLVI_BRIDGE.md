@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.3.0-beta.1; NOT hardware validated.** Maintained in the repository
 [OpenLVIBridge-homeassistant](https://github.com/artepe/OpenLVIBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
@@ -21,8 +21,14 @@ The interactive wizard asks:
 4. IP/USB details, unit ID, serial parity, BACnet device instance
    or an exact site-specific read-only point list.
 
-The setup probe is *read-only*. Automatic writable entity creation is
-disabled by default and exposed only for narrowly allowlisted registers.
+The setup probe is *read-only*. On **EH-800B USB**, 11 guarded L1
+Number controls now appear automatically (also on previously configured
+OpenLVI entries). **No SET PROPERTY is sent on startup or polling.**
+Their actual initial values are unknown until a user manually submits
+a new target because a side-effect-free USB GET PROPERTY is not verified.
+PID, direct valve position and undocumented properties are not exposed.
+Other models retain opt-in writes on only narrowly reviewed registers.
+See [EH-800B controls](EH800B_CONTROLS.md).
 Other selected manufacturers are **not fully automatic yet**: supply
 their exact, site-specific, read-only register map.
 
@@ -31,7 +37,7 @@ their exact, site-specific, read-only register map.
 | Vendor/model | Interface | Included points | Writes |
 |---|---|---|---|
 | Ouman EH-800 | local HTTP | detected active HTTP API endpoints | limited numeric setpoints, optional |
-| Ouman EH-800B | local USB Mini-B | up to 28 read-only measurement values | none in this new integration |
+| Ouman EH-800B | local USB Mini-B | up to 28 measurements + 11 L1 setup controls | explicitly entered and bounded setpoints only; PID and direct valve position blocked |
 | Ouman A203/S203/C203/H23 | Modbus RTU/TCP | temperature subsets, version-specific room targets | limited room targets, optional |
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
