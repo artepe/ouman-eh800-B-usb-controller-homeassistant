@@ -5,7 +5,9 @@ from .const import DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_ALLOW_WRITES
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = entry.runtime_data
-    editable = entry.data.get(CONF_ALLOW_WRITES, False)
+    editable = (entry.data.get(CONF_ALLOW_WRITES, False) or
+                (entry.data.get(CONF_MODEL) == "EH-800B"
+                 and entry.data.get("transport") == "usb"))
     entities = [
         OumanSensor(coordinator, point)
         for point in coordinator.driver.points
