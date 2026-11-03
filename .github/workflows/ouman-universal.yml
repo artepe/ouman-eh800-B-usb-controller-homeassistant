@@ -1,4 +1,4 @@
-name: Ouman Universal checks
+name: OpenLVI Bridge checks
 on:
   push:
     branches: ['feature/ouman-universal-*']
@@ -6,6 +6,7 @@ on:
     paths:
       - 'custom_components/ouman_universal/**'
       - 'tests/test_ouman_universal_profiles.py'
+      - 'tests/test_openlvi_vendor_profiles.py'
       - '.github/workflows/ouman-universal.yml'
 jobs:
   pure-tests:
@@ -18,7 +19,7 @@ jobs:
       - name: Compile integration files
         run: python -m compileall -q custom_components/ouman_universal
       - name: Test register decoding and write allowlist
-        run: python -m unittest discover -s tests -p 'test_ouman_universal_profiles.py' -v
+        run: python -m unittest discover -s tests -p 'test_*profiles.py' -v
       - name: Validate Modbus client keyword against pinned library
         run: |
           python -m pip install pymodbus==3.13.1
