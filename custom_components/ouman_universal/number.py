@@ -2,7 +2,7 @@
 from homeassistant.components.number import NumberEntity
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
-from .const import DOMAIN, CONF_MODEL, CONF_ALLOW_WRITES
+from .const import DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_ALLOW_WRITES
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = entry.runtime_data
@@ -18,7 +18,7 @@ class OumanNumber(CoordinatorEntity, NumberEntity):
     def __init__(self, coordinator, point):
         super().__init__(coordinator)
         self.point = point
-        self._attr_name = f"Ouman {point.name}"
+        self._attr_name = point.name
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{point.key}_number"
         self._attr_native_min_value = point.minimum
         self._attr_native_max_value = point.maximum
@@ -34,8 +34,8 @@ class OumanNumber(CoordinatorEntity, NumberEntity):
         entry = self.coordinator.config_entry
         return {
             "identifiers": {(DOMAIN, entry.entry_id)},
-            "name": f"Ouman {entry.data[CONF_MODEL]}",
-            "manufacturer": "Ouman",
+            "name": f"{entry.data[CONF_VENDOR]} {entry.data[CONF_MODEL]}",
+            "manufacturer": entry.data[CONF_VENDOR],
             "model": entry.data[CONF_MODEL],
         }
 
