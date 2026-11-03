@@ -1,4 +1,4 @@
-"""Ouman Universal - experimental model-driven Home Assistant integration."""
+"""OpenLVI Bridge - multi-vendor heating and ventilation (experimental)."""
 from datetime import timedelta
 import logging
 
@@ -14,7 +14,7 @@ PLATFORMS = ["sensor", "number"]
 
 class OumanCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, driver, entry):
-        super().__init__(hass, _LOGGER, name=f"Ouman {entry.data['model']}",
+        super().__init__(hass, _LOGGER, name=f"OpenLVI {entry.data['vendor']} {entry.data['model']}",
                          update_interval=timedelta(seconds=15 if entry.data['transport']=="usb" else 60))
         self.driver = driver
         self.config_entry = entry
