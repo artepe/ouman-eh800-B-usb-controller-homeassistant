@@ -8,7 +8,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.2.0-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.3.0-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -26,8 +26,12 @@ requiring a vendor cloud service for supported interfaces.
   **BACnet/IP (read-only)** and **wired M-Bus (read-only)**.
 - **Mittaukset:** documented temperatures, fan data, valve/setpoint values,
   M-Bus telegram records and BACnet objects, according to model and site.
-- **Ohjaukset:** selected, explicitly allowlisted setpoints only; off by
-  default. Never write unknown registers or bypass safety interlocks.
+- **Ohjaukset:** EH-800B USB: 11 documented L1 setpoint Number entities
+  appear on the device automatically, including on existing OpenLVI entries.
+  They perform **no write during setup**; a manual value entry sends one
+  validated command. Other models require their separate write opt-in.
+  PID 56/57/58, manual valve 92 and unknown properties remain excluded.
+  Never bypass native controller safety interlocks.
 - **Työkalut:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
   2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
   **No AI fault-diagnosis model or full 3D digital twin is included.**
@@ -37,7 +41,7 @@ requiring a vendor cloud service for supported interfaces.
 | Manufacturer / hardware | Included implementation | Validation status |
 |---|---|---|
 | **Ouman EH-800** | HTTP API through `ouman-eh-800-api` | Experimental OpenLVI driver; official HA integration also exists |
-| **Ouman EH-800B** | 28 USB measurement channels reused from legacy driver; new bridge read-only | Legacy v0.1.2 physically tested; new bridge not |
+| **Ouman EH-800B** | 28 USB measurements **and 11 on-device L1 setpoint controls** with single-shot writes | Legacy v0.1.2 physically tested; new controls not yet tested |
 | **Ouman A203, S203, C203, H23** | Small firmware-specific Modbus register subsets | Automated tests only |
 | **Danfoss ECL Comfort 210 / 296 / 310 / 310B** | Modbus PNU read subset; application-key-aware sample | Automated tests only |
 | **Swegon CASA Genius 4.x** | SEM/SEC Modbus subset (fan RPM/%, settings, selected modes) | Automated tests only |
@@ -65,6 +69,14 @@ map, licensing and communications hardware for the exact installation.
 4. Confirm live sensor values in **Developer Tools → States** and compare
    with the physical controller display. Dashboard history alone is not proof
    that polling works.
+
+**EH-800B USB controls:** after updating, open the device page and find the
+number controls (L1 curve points, supply limits, setpoint and fine adjustment).
+No additional `number:` YAML is needed. Since a side-effect-free USB
+`GET PROPERTY` is unverified, these Number entities display **unknown**
+until you manually enter and confirm a value. A reported value after a
+write is the **last confirmed write**, not a fresh independent read.
+See [the USB setpoint usage guide](docs/EH800B_CONTROLS.md).
 
 For Ouman EH-800B USB via the new bridge, the legacy
 `custom_components/ouman_eh800` directory is also required as its protocol
@@ -108,7 +120,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.2.0-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.3.0-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.
