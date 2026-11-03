@@ -144,35 +144,80 @@ class HttpDriver:
             self.client = None
 
 class UsbDriver:
-    """Read-only EH-800B adapter reusing the existing stable protocol reader."""
+    """EH-800B: shared locked USB reader and explicit manual setpoint writes.
+
+    The legacy serial hub owns one port-level lock across read/write calls.
+    No SET PROPERTY is sent on setup, refresh, reconnect or discovery.
+    """
+
     def __init__(self, hass, data):
+        from custom_components.ouman_eh800.ouman import OumanUSB
+        from .usb_setpoints import USB_SAFE_SETPOINTS
+
         self.hass = hass
         self.data = data
-        self.hub = None
-        try:
-            from custom_components.ouman_eh800.ouman import OumanUSB
-        except ImportError as err:
-            raise RuntimeError("Install the original ouman_eh800 component alongside this one") from err
         self.hub = OumanUSB(data[CONF_PORT])
-        names = {1:"L1 laskettu menovesipyynti", 9:"L1 menovesi", 10:"Ulkolämpötila",
-                 11:"Korjattu ulkolämpötila",15:"L1 laskettu venttiiliasento",
-                 16:"L1 venttiiliasento",21:"Hidastettu ulkolämpötila"}
-        self.points = [
-            Register(f"measurement_{i}", names.get(i, f"Mittaus {i}"), i,
-                     "s16", 0, "%" if i in (15,16) else "°C" if i in (1,9,10,11,21) else None)
-            for i in range(1,29)
-        ]
+        self.last_confirmed_writes = {}
+        self.points = []
+        names = {
+            1: "L1 laskettu menovesipyynti",
+            9: "L1 menovesi",
+            10: "Ulkolämpötila",
+            11: "Korjattu ulkolämpötila",
+            15: "L1 laskettu venttiiliasento",
+            16: "L1 venttiiliasento",
+            21: "Hidastettu ulkolämpötila",
+        }
+        for i in range(1, 29):
+            unit = "%" if i in (15, 16) else "°C" if i in (1, 9, 10, 11, 21) else None
+            self.points.append(Register(
+                f"measurement_{i}", names.get(i, f"Mittaus {i}"), i,
+                "s16", 0, unit,
+            ))
+        # Only confirmed/allowlisted properties get Number entities. Their
+        # CURRENT value cannot be read by a safe GET command on this model.
+        # Do NOT synthesize defaults or use SET PROPERTY to discover values.
+        for spec in USB_SAFE_SETPOINTS:
+            self.points.append(Register(
+                spec.key, spec.name, spec.property_id, "s16",
+                spec.decimals, spec.unit, spec.minimum, spec.maximum, True,
+            ))
 
     async def async_connect(self):
-        # No command is sent until async_read.
+        # Read-only connection check performed by async_read.
         return
 
     async def async_read(self):
-        result = await self.hass.async_add_executor_job(self.hub.measurements)
-        return {f"measurement_{i}": row[0] for i, row in enumerate(result, start=1)}
+        measurements = await self.hass.async_add_executor_job(self.hub.measurements)
+        result = {f"measurement_{i}": row[0]
+                  for i, row in enumerate(measurements, start=1)}
+        return {**result, **self.last_confirmed_writes}
 
-    async def async_write(self, point, value):
-        raise ValueError("USB write operations remain in the original EH-800B integration")
+    def _write_once(self, prop_id: int, wire_raw: int):
+        from .usb_setpoints import confirm_property_reply
+
+        # The legacy hub's _command takes the same per-port RLock as its
+        # measurements() call. Explicit retries=1 prevents repeat writes
+        # after a missing/garbled response. A failed response is ambiguous.
+        response = self.hub._command(
+            f"SET PROPERTY {prop_id} {wire_raw}", wait=0.18, retries=1
+        )
+        confirm_property_reply(prop_id, wire_raw, response)
+
+    async def async_write(self, point: Register, value: float):
+        from .usb_setpoints import USB_BY_KEY, raw_from_value
+
+        spec = USB_BY_KEY.get(point.key)
+        if spec is None or not point.writable or point.address != spec.property_id:
+            raise ValueError("Unknown or prohibited EH-800B property")
+        if self.data.get(CONF_MODEL) != "EH-800B":
+            raise ValueError("EH-800B write adapter used with wrong device")
+        raw = raw_from_value(spec, value)
+        await self.hass.async_add_executor_job(self._write_once, spec.property_id,
+                                               raw & 0xFFFF)
+        # Report only last acknowledged user command. This is NOT a
+        # side-effect-free live read; remains unknown before first write.
+        self.last_confirmed_writes[spec.key] = raw / spec.scale
 
     async def async_close(self):
         return

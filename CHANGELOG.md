@@ -4,6 +4,21 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.3.0-beta.1 — 2026-11-04 (experimental)
+
+- Automatically exposes EH-800B USB heating-curve and approved L1
+  parameter Number entities after adding the model in Home Assistant,
+  including entries configured in prior OpenLVI versions.
+- Uses the legacy USB hub's shared per-port serial lock for measurements and
+  writes; rejects unknown/PID/manual-valve properties and invalid increments.
+- Sends **one** SET PROPERTY on an explicit manual adjustment, checks the
+  property ID and echoed raw value, and does not retry ambiguous writes.
+- Never writes anything on installation, reconnect or normal sensor polling.
+  Initial setpoint values are *unknown* because safe GET PROPERTY has not
+  been verified. No dummy defaults are displayed.
+- Added offline protocol/mock tests and a user guide.
+- This new USB write path still needs real-controller acceptance testing.
+
 ## OpenLVI Bridge 0.2.0-beta.1 — 2026-11-03 (experimental)
 
 - Renamed the new multi-vendor integration to `openlvi` / OpenLVI Bridge.
