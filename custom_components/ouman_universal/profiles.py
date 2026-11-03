@@ -51,8 +51,14 @@ PROFILE_MAPS = {
         Register("l1_room_target", "L1 huoneasetus", 793, "s16", 1, "°C", 5, 50, True),
         Register("l2_room_target", "L2 huoneasetus", 713, "s16", 1, "°C", 5, 50, True),
     ],
-    "C203": BASE,
-    "H23": BASE,
+    "C203": BASE + [
+        Register("l1_room_target", "L1 huoneasetus", 585, "s16", 1, "°C", 5, 50, True),
+        Register("l2_room_target", "L2 huoneasetus", 751, "s16", 1, "°C", 5, 50, True),
+    ],
+    "H23": BASE + [
+        Register("l1_room_target", "L1 huoneasetus", 432, "s16", 1, "°C", 5, 35, True),
+        Register("l2_room_target", "L2 huoneasetus", 453, "s16", 1, "°C", 5, 35, True),
+    ],
 }
 SUPPORTED_TYPES = frozenset(("s16", "u16", "s32", "u32"))
 
