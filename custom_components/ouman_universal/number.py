@@ -22,7 +22,7 @@ class OumanNumber(CoordinatorEntity, NumberEntity):
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{point.key}_number"
         self._attr_native_min_value = point.minimum
         self._attr_native_max_value = point.maximum
-        self._attr_native_step = 0.1 if point.unit == "°C" else 1
+        self._attr_native_step = 10 ** (-point.decimals)
         self._attr_native_unit_of_measurement = point.unit
 
     @property
