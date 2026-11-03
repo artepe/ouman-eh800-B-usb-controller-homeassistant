@@ -2,41 +2,50 @@
   "config": {
     "step": {
       "user": {
-        "title": "Valitse Ouman-säätimen malli",
-        "description": "Valitse tarkka malli ja ohjelmistoversio. Kirjoitusohjaus on kokeellinen ja oletuksena pois.",
+        "title": "Valitse valmistaja",
+        "description": "OpenLVI Bridge: paikallinen LVI-säätimien liityntä.",
         "data": {
-          "model": "Säätimen malli",
-          "firmware": "Ohjelmistoversio (Modbus-karttoja varten)",
-          "allow_writes": "Salli dokumentoidut asetusarvojen kirjoitukset"
+          "vendor": "Valmistaja"
+        }
+      },
+      "model": {
+        "title": "Valitse säädinmalli",
+        "description": "Syötä tarkka malli, versio ja tarvittaessa sovellusavain. Kirjoitukset ovat oletuksena pois.",
+        "data": {
+          "model": "Säädinmalli",
+          "firmware": "Ohjelmistoversio",
+          "application_key": "Danfoss ECL -sovellusavain (tarvittaessa)",
+          "allow_writes": "Salli tarkistetut kirjoitukset (kokeellinen)"
         }
       },
       "transport": {
-        "title": "Valitse tiedonsiirto",
+        "title": "Yhteystapa",
         "data": {
-          "transport": "Yhteystapa"
+          "transport": "Tiedonsiirto"
         }
       },
       "connection": {
-        "title": "Yhteysasetukset",
-        "description": "Ouflex ja tuntemattomat laiteversiot tarvitsevat kohdekohtaisen vain-luku JSON-pisteluettelon.",
+        "title": "Paikallinen yhteys",
+        "description": "Tuntemattomat ja kohteessa ohjelmoidut säätimet vaativat oman vain-luku JSON-pisteluettelon.",
         "data": {
-          "host": "IP-osoite tai nimi",
+          "host": "IP-osoite",
           "port": "TCP-portti tai sarjaportti",
           "baudrate": "Sarjanopeus",
+          "parity": "Pariteetti",
           "unit_id": "Modbus-laiteosoite",
-          "profile_json": "JSON-rekisterilista (tarvittaessa)",
-          "url": "EH-800:n paikallinen HTTP-osoite",
+          "profile_json": "Vain-luku JSON-rekisterikartta",
+          "url": "EH-800 HTTP-osoite",
           "username": "Käyttäjätunnus",
           "password": "Salasana"
         }
       }
     },
     "error": {
-      "invalid_profile": "Virheellinen tai puuttuva rekisterilista / ohjelmistoversio",
-      "cannot_connect": "Yhteyttä ei saada tai mittauksia ei voitu lukea"
+      "invalid_profile": "Versio, sovellusavain tai rekisterilista virheellinen tai puuttuu",
+      "cannot_connect": "Yhteys tai mittausten luku epäonnistui"
     },
     "abort": {
-      "already_configured": "Säädin on jo lisätty"
+      "already_configured": "Laite on jo lisätty"
     }
   }
 }
