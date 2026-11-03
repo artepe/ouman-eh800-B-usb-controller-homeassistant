@@ -85,7 +85,7 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:
     async def ask_assistant(call):
         entries = [
             e for e in hass.config_entries.async_entries(DOMAIN)
-            if e.runtime_data is not None and getattr(e.runtime_data, "guide", None)
+            if getattr(e, "runtime_data", None) is not None and getattr(e.runtime_data, "guide", None)
         ]
         requested = call.data.get("config_entry_id", "")
         if requested:
