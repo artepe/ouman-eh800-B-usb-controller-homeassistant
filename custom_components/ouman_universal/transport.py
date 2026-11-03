@@ -52,7 +52,7 @@ class ModbusDriver:
         for point in self.points:
             try:
                 values[point.key] = await self._read_point(point)
-            except (ValueError, OSError, ConnectionError) as err:
+            except Exception as err:
                 _LOGGER.warning("Ouman point %s unavailable: %s", point.key, err)
         return values
 
@@ -111,7 +111,7 @@ class HttpDriver:
             can_write = is_number and ep.name.startswith(writable_prefixes)
             self.points.append(Register(
                 key=ep.name, name=ep.name.replace("_", " ").capitalize(),
-                address=0, kind="s16", decimals=1,
+                address=0, kind="s16", decimals=0 if isinstance(ep, IntControlOumanEndpoint) else 1,
                 unit=str(ep.unit) if ep.unit else None,
                 minimum=ep.min_val if can_write else None,
                 maximum=ep.max_val if can_write else None,
