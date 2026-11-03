@@ -1,7 +1,12 @@
 name: OpenLVI extension checks
 on:
   push:
-    branches: ['feature/bacnet-mbus-*']
+    branches: [main]
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests/test_openlvi_extended.py'
+      - 'tools/openlvi_pointmap_import.py'
+      - '.github/workflows/openlvi-extensions.yml'
   pull_request:
     paths:
       - 'custom_components/openlvi/**'

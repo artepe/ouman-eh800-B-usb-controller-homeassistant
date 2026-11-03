@@ -1,13 +1,18 @@
 name: OpenLVI Bridge checks
 on:
   push:
-    branches: ['feature/ouman-universal-*']
+    branches: [main]
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests/test_ouman_universal_profiles.py'
+      - 'tests/test_openlvi_vendor_profiles.py'
+      - '.github/workflows/openlvi-core.yml'
   pull_request:
     paths:
       - 'custom_components/openlvi/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
-      - '.github/workflows/ouman-universal.yml'
+      - '.github/workflows/openlvi-core.yml'
 jobs:
   pure-tests:
     runs-on: ubuntu-latest

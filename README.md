@@ -1,122 +1,118 @@
-> **2026-11 development:** BACnet/IP selected-device read-only discovery,
-> Kamstrup wired M-Bus meter polling, isometric live SCADA example,
-> CSV/XML Modbus pointmap import, and rule-based energy diagnostics.
-> See [OpenLVI extensions guide](docs/OPENLVI_EXTENSIONS.md). These
-> extensions remain experimental until physical-hardware validation.
->
-# OpenLVI Bridge — Multi-vendor HVAC Home Assistant integration
+# OpenLVI Bridge
 
-**NEW EXPERIMENTAL INTEGRATION:** [OpenLVI Bridge setup and tested/documented model coverage](docs/OPENLVI_BRIDGE.md).
-Choose **manufacturer → model → firmware → transport**. Includes Ouman, Danfoss ECL,
-Swegon CASA Genius and Regin Corrigo E starter profiles. Other vendors can use
-a site-specific read-only Modbus register map. This experimental integration is
-installed under `custom_components/openlvi`; never replace a live Ouman installation
-until the new drivers have been hardware validated.
+**Avoimen lähdekoodin Home Assistant -integraatio LVI- ja kiinteistöautomaatioon.**  
+*An open-source Home Assistant integration for local HVAC and building automation.*
 
-**Stable legacy component:** Ouman EH-800B USB v0.1.2 remains in
-`custom_components/ouman_eh800`, unchanged by the OpenLVI work.
+[![OpenLVI core checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml)
+[![OpenLVI extension checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
----
+> [!IMPORTANT]
+> **OpenLVI Bridge is experimental (0.2.0-beta.1).** Automated tests have passed, but
+> the multi-vendor drivers **have not been validated on physical controllers**.
+> The separate **Ouman EH-800B USB v0.1.2** integration is the last version
+> reported working on the project's actual EH-800B. Do not replace a working
+> heating installation with unverified drivers.
 
-# Ouman EH-800B / EH-800 USB → Home Assistant
+## Mitä projekti tekee? / What does it do?
 
-**Official stable version: v0.1.2** · **GitHub default branch: `main`** · **Tested on a physical EH-800B**
+OpenLVI Bridge links compatible heating, ventilation, metering and building
+automation equipment to **Home Assistant over a local connection**, without
+requiring a vendor cloud service for supported interfaces.
 
-[Stable v0.1.2 installation](docs/STABLE_RELEASE_v0.1.2.md) · [Stable source branch](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/stable/v0.1.2) · [Lovelace dashboard](examples/lovelace-ouman-l1-dashboard.yaml) · [Known PID issues](docs/PID_KNOWN_ISSUES.md)
+- **Asennusvalikko:** valitse valmistaja → malli → ohjelmistoversio →
+  tiedonsiirto → IP-osoite / sarjaportti. *Manufacturer-first setup wizard.*
+- **Protokollat:** Modbus TCP/RTU, Ouman EH-800 HTTP, EH-800B USB,
+  **BACnet/IP (read-only)** and **wired M-Bus (read-only)**.
+- **Mittaukset:** documented temperatures, fan data, valve/setpoint values,
+  M-Bus telegram records and BACnet objects, according to model and site.
+- **Ohjaukset:** selected, explicitly allowlisted setpoints only; off by
+  default. Never write unknown registers or bypass safety interlocks.
+- **Työkalut:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
+  2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
+  **No AI fault-diagnosis model or full 3D digital twin is included.**
 
-> **SUOMEKSI:** Projektin virallinen ja aiemmin oikealla Ouman EH-800B -laitteella toimivaksi todettu versio on **v0.1.2**. Asenna `main`- tai `stable/v0.1.2`-haarasta. Keskeneräisiä kokeiluversioita **ei julkaista virallisina asennuksina**. Kaikkien anturien merkitystä ei ole tunnistettu. **Älä muuta PID-arvoja 56/57/58** toimivassa lämmitysjärjestelmässä: niiden muokkaamisen yhteydessä havaittiin poikkeavaa venttiilitoimintaa. Varmista asennuksen jälkeen mittausten *tuoreet* arvot kohdasta Developer Tools → States.
+## Toteutuksen tila / Current coverage
 
-> **ENGLISH:** The official stable Home Assistant integration is **v0.1.2**, the last version reported working with the project's physical EH-800B. Experimental versions are not supported for live heating control. Avoid changing PID properties 56/57/58 because abnormal valve behaviour was observed during testing. Check fresh live measurements after installation.
+| Manufacturer / hardware | Included implementation | Validation status |
+|---|---|---|
+| **Ouman EH-800** | HTTP API through `ouman-eh-800-api` | Experimental OpenLVI driver; official HA integration also exists |
+| **Ouman EH-800B** | 28 USB measurement channels reused from legacy driver; new bridge read-only | Legacy v0.1.2 physically tested; new bridge not |
+| **Ouman A203, S203, C203, H23** | Small firmware-specific Modbus register subsets | Automated tests only |
+| **Danfoss ECL Comfort 210 / 296 / 310 / 310B** | Modbus PNU read subset; application-key-aware sample | Automated tests only |
+| **Swegon CASA Genius 4.x** | SEM/SEC Modbus subset (fan RPM/%, settings, selected modes) | Automated tests only |
+| **Regin Corrigo E Ventilation 3.2** | Read-only Modbus temperature/airflow subset | Automated tests only |
+| **BACnet/IP equipment** | Read-only target-device object discovery (up to 32 points) or supplied point list | Not yet verified on a real BACnet controller |
+| **Kamstrup MULTICAL 403/603/803** | Wired serial M-Bus telegram decoding through powered M-Bus master | Not yet verified on a real meter |
+| **Grundfos, Wilo, Belimo, Schneider, Siemens, Fidelix, Produal, Koja, Enervent, Vallox, NIBE and others** | Model selections, generic Modbus/BACnet connection with a *site-specific read-only point map* | **Not plug-and-play**; hardware/options vary |
 
-## What is this?
+**A name in the setup wizard does not mean that every model is fully
+integrated.** Verify the device firmware, Modbus point list, BACnet object
+map, licensing and communications hardware for the exact installation.
 
-An independent, open-source Home Assistant integration communicating with the **Ouman EH-800 / EH-800B USB service protocol** directly over a **USB Mini-B cable** from a Raspberry Pi / Home Assistant host. No cloud or separate Ethernet/Modbus gateway is required.
+## Asennus Home Assistant OS:ään / Installation
 
-**Author:** Petteri Miikkael Arte · © 2026 · **License:** MIT  
-Not affiliated with or endorsed by Ouman Oy.
+**OpenLVI Bridge — experimental:**
 
-## Official v0.1.2 features
+1. Copy [`custom_components/openlvi`](custom_components/openlvi) into
+   `/config/custom_components/openlvi` on Home Assistant OS. The
+   *source files* are copied, not just a repository ZIP inside the folder.
+2. Restart Home Assistant and open **Settings → Devices & services →
+   Add integration → OpenLVI Bridge**.
+3. Select the manufacturer/model and the *actual* connection protocol.
+   Confirm the correct firmware and device-specific register map. Keep
+   writable settings **disabled** on your first test.
+4. Confirm live sensor values in **Developer Tools → States** and compare
+   with the physical controller display. Dashboard history alone is not proof
+   that polling works.
 
-- Direct USB CDC-ACM service-port communication (tested USB VID:PID `eb03:0920`).
-- A set of **28 sensor entities** created from a single `MEASUREMENTS` response, polled every **15 seconds**. Some channels remain generically named because their meanings are not verified.
-- L1 heating configuration exposed through Number entities; property writes use `SET PROPERTY` and serialized access to the USB port.
-- An example Lovelace L1 dashboard.
-- Simple manual Home Assistant installation through YAML. **This stable version is not a HACS/config-flow installation.**
+For Ouman EH-800B USB via the new bridge, the legacy
+`custom_components/ouman_eh800` directory is also required as its protocol
+reader. **Never configure both integrations to poll the same USB port
+simultaneously.** For a live heating installation, keep the known-working
+legacy driver.
 
-### Home Assistant installation
+**Stable legacy EH-800B v0.1.2** is installed separately using
+[its YAML instructions](docs/STABLE_RELEASE_v0.1.2.md). It does **not** have
+the OpenLVI setup wizard.
 
-Copy the folder `custom_components/ouman_eh800` from the [official stable source](https://github.com/artepe/ouman-eh800-B-usb-controller-homeassistant/tree/stable/v0.1.2/custom_components/ouman_eh800) into:
+**HACS / automatic discovery:** this release documents manual installation.
+Do not assume HACS compatibility or automatic detection of every manufacturer.
 
-```text
-/config/custom_components/ouman_eh800
-```
+## Dashboards, data and developer documentation
 
-Confirm the correct path for your USB-connected Ouman. The path used on the tested controller was:
+| Resource | Purpose |
+|---|---|
+| [OpenLVI model/Modbus/HTTP guide](docs/OPENLVI_BRIDGE.md) | Exact model subsets, Modbus maps, connection instructions and limitations |
+| [BACnet, wired M-Bus, SCADA and diagnostics](docs/OPENLVI_EXTENSIONS.md) | Hardware setup, BACnet object lists, M-Bus master and energy formulas |
+| [Isometric SCADA card](www/openlvi-scada-card.js) and [example](examples/lovelace-openlvi-scada.yaml) | Read-only live Lovelace schematic with example entity IDs |
+| [CSV/XML point-map importer](tools/openlvi_pointmap_import.py) | Converts reviewed vendor point tables to read-only JSON |
+| [Stable EH-800B v0.1.2](docs/STABLE_RELEASE_v0.1.2.md) | USB integration with real-device test history |
+| [PID/valve caution](docs/PID_KNOWN_ISSUES.md) | Known risks of legacy writable PID properties |
+| [Changelog](CHANGELOG.md) and [contributing](CONTRIBUTING.md) | Development status and safe additions |
 
-```text
-/dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
-```
+### Tärkeät turvallisuusrajat / Safety
 
-In `configuration.yaml`, add the following to any existing `sensor:` and `number:` sections (do **not** duplicate top-level YAML keys):
+OpenLVI is **not a safety-rated building management controller**.
+Maintain the manufacturer's native frost, overheating, pump and valve safety
+functions. Do not expose Modbus TCP, BACnet/IP or unencrypted device HTTP
+directly to the internet. Use a segmented, trusted local network.
 
-```yaml
-sensor:
-  - platform: ouman_eh800
-    port: /dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
+The stable legacy **EH-800B v0.1.2** exposes writable properties 56/57/58
+(PID) and 92 (manual valve position). **Do not change those on a live system**
+without an independently verified safe procedure.
 
-number:
-  - platform: ouman_eh800
-    port: /dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
-```
+The diagnostics are only threshold-based observations, not a substitute for
+professional troubleshooting. Calculated thermal power assumes **water**,
+correct sensor placement, and a separately decoded volume-flow measurement.
 
-Validate the configuration with `ha core check` and restart Home Assistant if it succeeds. Verify current readings in **Developer Tools → States**; old graphs can still show history after a sensor has stopped reporting.
+## Status and license
 
-Detailed instructions and release status: [**Official stable release v0.1.2**](docs/STABLE_RELEASE_v0.1.2.md).
-
-## Optional ESP32-S3 Wi-Fi dashboard (experimental)
-
-Prefer a standalone ESP32-S3 instead of a Raspberry Pi? See the **[ESP32-S3 Arduino project and setup guide](esp32_s3/README.md)** or the **[Finnish ESP32-S3 instructions](esp32_s3/README.fi.md)**.
-
-- Independent Wi-Fi access point **`OUMAN-ESP32`** and browser dashboard at **http://192.168.4.1/** (local connection only).
-- Optional MQTT Home Assistant sensor discovery; attempts to read the USB service port through USB OTG Host.
-- **Firmware and Wi-Fi have been user-tested, but physical ESP32-S3 ↔ EH-800B USB readings and curve writes are not yet verified end-to-end.** Heating-curve writes are disabled by default; do not use unverified controls on live heating systems.
-- The existing stable **v0.1.2** Home Assistant USB integration is unchanged. The ESP32-S3 alternative is not a replacement stable release.
-
-Quick links: [Arduino sketch](esp32_s3/Ouman_EH800_S3_Dashboard/Ouman_EH800_S3_Dashboard.ino) · [English guide](esp32_s3/README.md) · [Suomenkielinen ohje](esp32_s3/README.fi.md)
-
-## Safety and known limitations
-
-> [!WARNING]
-> The stable version has **writable** PID entities for properties **56 (P), 57 (I), 58 (D)**. Abnormal valve/controller behaviour was observed after PID experimentation on one EH-800B. **Do not modify these properties on a live system.** Property **92** controls the real valve position and also requires care. This software is not a safety-rated heating controller.
-
-- The original v0.1.2 implementation does **not** include the experimental `ouman_eh800.restore_original` service. Do not assume that later experimental restore tools are available in this stable release.
-- The stable implementation does **not** claim all 28 measurement channels are semantically identified or all saved controller properties can be queried live.
-- The official `main` branch keeps the tested v0.1.2 integration code. A later prototype caused multiple `unavailable` readings on the author's real installation and was not merged into `main`.
-- Back up your existing HA configuration and your own controller-specific settings before any changes.
-
-## Ouman behaves abnormally? / Oumanin saadin sekoilee?
-
-If Ouman settings have demonstrably become corrupted, **supervised
-manual recovery from a verified backup of the same controller may be
-recommended as a last-resort repair**. See
-[controller recovery and backups](docs/RESTORE_AND_BACKUPS.md).
-
-Jos saadin toimii poikkeavasti ja asetusten vioittuminen on varmistettu,
-tarkistetusta oman laitteen varmuuskopiosta palautus voi olla perusteltu
-korjaustoimenpide. **Pelkkä menoveden ja pyynnin ero ei osoita
-saativikaa:** tarkista ensin lammonlahde, virtaus, venttiili ja
-anturit. Tahan on valmis [kerran paivassa tarkistava ilmoitusautomaatio](examples/automation-ouman-l1-daily-deviation-alert.yaml),
-joka **ei tee palautusta automaattisesti**. Kokeellinen
-`ouman_eh800.restore_original` ei sisally viralliseen v0.1.2-versioon.
-
-## Development and research
-
-Additional low-level protocol notes and historical research are in [docs/](docs/), including [USB protocol research](docs/USB_PROTOCOL_RESEARCH.md) and [PID observations](docs/PID_KNOWN_ISSUES.md). These are research material, **not a second officially supported Home Assistant version**. For reverse engineering, isolate hardware testing from a live heating system; never use unverified property writes as a discovery method.
-
-## Dashboard
-
-A manual-card example is available at [examples/lovelace-ouman-l1-dashboard.yaml](examples/lovelace-ouman-l1-dashboard.yaml). Confirm entity IDs on your installation, as Home Assistant may add suffixes to conflicting names.
-
----
-
-**Release policy:** `main` and `stable/v0.1.2` represent the official stable Home Assistant integration. New experimental work must pass real-hardware sensor and control tests before being considered for a new stable release.
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.2.0-beta.1**,
+  experimental, in the main branch; real-hardware acceptance tests pending.
+- **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
+  last physically tested installation version. Both remain separate.
+- Contributions and verified register maps are welcome; see
+  [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
+- MIT licensed, independent community project. No affiliation with or
+  endorsement by Ouman, Danfoss, Swegon, Regin, Kamstrup or other vendors.
