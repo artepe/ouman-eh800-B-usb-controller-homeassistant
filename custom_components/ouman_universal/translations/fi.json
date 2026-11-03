@@ -1,0 +1,42 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Valitse Ouman-säätimen malli",
+        "description": "Valitse tarkka malli ja ohjelmistoversio. Kirjoitusohjaus on kokeellinen ja oletuksena pois.",
+        "data": {
+          "model": "Säätimen malli",
+          "firmware": "Ohjelmistoversio (Modbus-karttoja varten)",
+          "allow_writes": "Salli dokumentoidut asetusarvojen kirjoitukset"
+        }
+      },
+      "transport": {
+        "title": "Valitse tiedonsiirto",
+        "data": {
+          "transport": "Yhteystapa"
+        }
+      },
+      "connection": {
+        "title": "Yhteysasetukset",
+        "description": "Ouflex ja tuntemattomat laiteversiot tarvitsevat kohdekohtaisen vain-luku JSON-pisteluettelon.",
+        "data": {
+          "host": "IP-osoite tai nimi",
+          "port": "TCP-portti tai sarjaportti",
+          "baudrate": "Sarjanopeus",
+          "unit_id": "Modbus-laiteosoite",
+          "profile_json": "JSON-rekisterilista (tarvittaessa)",
+          "url": "EH-800:n paikallinen HTTP-osoite",
+          "username": "Käyttäjätunnus",
+          "password": "Salasana"
+        }
+      }
+    },
+    "error": {
+      "invalid_profile": "Virheellinen tai puuttuva rekisterilista / ohjelmistoversio",
+      "cannot_connect": "Yhteyttä ei saada tai mittauksia ei voitu lukea"
+    },
+    "abort": {
+      "already_configured": "Säädin on jo lisätty"
+    }
+  }
+}

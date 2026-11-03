@@ -1,0 +1,43 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Choose Ouman controller",
+        "description": "Start by selecting the exact model and firmware. Writes are opt-in; keep disabled during initial testing.",
+        "data": {
+          "model": "Controller model",
+          "firmware": "Firmware version (required for built-in Modbus maps)",
+          "allow_writes": "Enable verified setpoint writes (experimental)"
+        }
+      },
+      "transport": {
+        "title": "Choose connection",
+        "description": "Select direct Modbus TCP (or TCP gateway), or RS-485 Modbus RTU.",
+        "data": {
+          "transport": "Connection type"
+        }
+      },
+      "connection": {
+        "title": "Connection details",
+        "description": "For freely programmed Ouflex and unsupported firmware versions, supply a site-specific JSON point profile. No registers are guessed.",
+        "data": {
+          "host": "IP address or hostname",
+          "port": "TCP port or serial device",
+          "baudrate": "Baud rate",
+          "unit_id": "Modbus device address",
+          "profile_json": "Read-only JSON point profile (optional for verified firmware)",
+          "url": "EH-800 local HTTP URL",
+          "username": "Username",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_profile": "Unsupported firmware or missing/invalid register profile",
+      "cannot_connect": "Cannot connect or no readings returned"
+    },
+    "abort": {
+      "already_configured": "This controller is already configured"
+    }
+  }
+}
