@@ -17,6 +17,7 @@ class Register:
     minimum: float | None = None
     maximum: float | None = None
     writable: bool = False
+    area: str = "holding"  # holding (FC03) or input (FC04)
 
     @property
     def count(self):
@@ -95,7 +96,10 @@ def parse_profile(raw: str) -> list[Register]:
             raise ValueError("Decimals must be between 0 and 5")
         keys.add(key)
         # Never honor "writable":true from untrusted or user-supplied templates.
-        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False))
+        area = item.get("area", "holding")
+        if area not in ("holding", "input"):
+            raise ValueError("Use holding or input register area")
+        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area))
     return points
 
 def profile_for(model: str, firmware: str, profile_json: str) -> list[Register]:
@@ -131,3 +135,64 @@ def encode(value: float, point: Register) -> list[int]:
         raise ValueError("Setpoint overflows its register")
     raw = scaled & ((1 << bits) - 1)
     return [(raw >> 16) & 0xffff, raw & 0xffff] if bits == 32 else [raw]
+
+
+# OpenLVI Bridge: multi-vendor point maps (all addresses are vendor 1-based).
+# Danfoss ECL examples: A266.1 application; PNU 10202 is sensor S2 (scale 100).
+DANFOSS_MODELS = ("ECL Comfort 210", "ECL Comfort 296", "ECL Comfort 310", "ECL Comfort 310B")
+DANFOSS_PNU_SOURCE = "https://assets.danfoss.com/documents/198690/AQ074886472234en-010601.pdf"
+SWEGON_SOURCE = "https://www.swegon.com/globalassets/digizuite/18172-en-casa_modbusregisters_en.pdf"
+REGIN_SOURCE = "https://www.regincontrols.com/globalassets/pimmediafiles/documents/corrigo_e_ventilation_variables_for_exoline_and_modbus_3.2_manu_en.pdf"
+
+# Swegon CASA Genius: SEM/SEC connection, software 4.x, vendor SCB4.3 list.
+# 3x = input, 4x = holding. Emergency stop deliberately excluded.
+SWEGON_GENIUS = [
+    Register("operation_mode", "Käyttötila 1=poissa 2=kotona 3=tehostus", 5001, "u16", 0, None, 1, 3, True, "holding"),
+    Register("co2_auto", "CO2 automatiikka", 5009, "u16", 0, None, area="holding"),
+    Register("co2_home_limit", "Kotona CO2 raja", 5114, "u16", 0, "ppm", area="holding"),
+    Register("co2_away_limit", "Poissa CO2 raja", 5115, "u16", 0, "ppm", area="holding"),
+    Register("unit_state", "Koneen tila", 6301, "u16", 0, None, area="input"),
+    Register("supply_fan_percent", "Tulopuhallin ohjaus", 6303, "u16", 0, "%", area="input"),
+    Register("extract_fan_percent", "Poistopuhallin ohjaus", 6304, "u16", 0, "%", area="input"),
+    Register("supply_fan_rpm", "Tulopuhallin kierrokset", 6305, "u16", 0, "rpm", area="input"),
+    Register("extract_fan_rpm", "Poistopuhallin kierrokset", 6306, "u16", 0, "rpm", area="input"),
+    Register("supply_temp_target", "Tulolämpötilan pyynti", 6320, "s16", 1, "°C", area="input"),
+    Register("heating_state", "Lämmityksen ja LTO:n tila", 6370, "u16", 0, None, area="input"),
+    Register("exchanger_bypass", "LTO ohituspelti", 6348, "u16", 0, "%", area="input"),
+]
+# Regin Corrigo E ventilation, software 3.2 (real signals scaled /10).
+REGIN_CORRIGO_E = [
+    Register("outdoor_temp", "Ulkolämpötila", 1, "s16", 1, "°C", area="input"),
+    Register("unit_mode", "Käyntitila", 3, "u16", 0, None, area="input"),
+    Register("supply_temp", "Tuloilma", 7, "s16", 1, "°C", area="input"),
+    Register("supply_target", "Tulopyynti", 8, "s16", 1, "°C", area="input"),
+    Register("extract_temp", "Poistoilma", 9, "s16", 1, "°C", area="input"),
+    Register("supply_flow", "Tuloilmavirta", 15, "u16", 0, "m³/h", area="input"),
+    Register("extract_flow", "Poistoilmavirta", 16, "u16", 0, "m³/h", area="input"),
+]
+
+_ouman_profile_for = profile_for
+
+def profile_for(model: str, firmware: str, profile_json: str, application_key: str = "") -> list[Register]:
+    """Select only matching vendor registers; custom JSON stays read-only."""
+    if profile_json.strip():
+        return parse_profile(profile_json)
+    if model in PROFILE_MAPS:
+        return _ouman_profile_for(model, firmware, "")
+    if model in DANFOSS_MODELS:
+        # Globally documented PNU read; application-specific points enabled
+        # only after exact installed application key is entered by operator.
+        points = [Register("sensor_s2", "Anturi S2", 10202, "s16", 2, "°C")]
+        if application_key.strip().upper() == "A266.1":
+            points.append(Register("comfort_target", "Piiri 1 mukavuuslämpötila", 11180,
+                                   "s16", 1, "°C"))
+        return points
+    if model == "CASA Genius":
+        if not firmware.strip().startswith("4."):
+            raise ValueError("CASA Genius requires confirmed 4.x firmware and SEM/SEC")
+        return list(SWEGON_GENIUS)
+    if model == "Corrigo E Ventilation":
+        if not firmware.strip().startswith("3.2"):
+            raise ValueError("Corrigo E ventilation requires confirmed 3.2 firmware")
+        return list(REGIN_CORRIGO_E)
+    raise ValueError("This controller requires an exact read-only JSON Modbus register map")
