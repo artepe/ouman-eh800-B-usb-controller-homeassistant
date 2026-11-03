@@ -1,0 +1,15 @@
+name: OpenLVI SCADA syntax
+on:
+  push:
+    branches: ['feature/bacnet-mbus-*']
+  pull_request:
+    paths:
+      - 'www/openlvi-scada-card.js'
+      - '.github/workflows/openlvi-scada.yml'
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check www/openlvi-scada-card.js
