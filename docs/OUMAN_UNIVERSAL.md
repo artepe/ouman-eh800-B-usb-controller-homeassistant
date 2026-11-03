@@ -27,8 +27,8 @@ verify the folder's `manifest.json` and Python dependencies.
 | EH-800B / EH-800 USB | USB Mini-B via original `ouman_eh800` reader | 28 MEASUREMENTS (some unnamed) | **No** new driver writes; continue using v0.1.2 if needed |
 | A203 / A203XL fw **2.0.2** | Modbus TCP or RTU | Verified temperature inputs and two room setpoint registers | Room setpoint only, **opt-in** |
 | S203 16MB fw **3.0.10** | Modbus RTU / TCP gateway | Same subset, model-specific registers | Room setpoint only, **opt-in** |
-| C203 16MB fw **3.0.10** | Modbus RTU / TCP gateway | Verified temperature subset | No |
-| H23 8MB fw **4.0.5** | Modbus RTU / TCP gateway | Verified temperature subset | No |
+| C203 16MB fw **3.0.10** | Modbus RTU / TCP gateway | Temperature subset and room setpoints | Room setpoint only, **opt-in** |
+| H23 8MB fw **4.0.5** | Modbus RTU / TCP gateway | Temperature subset and room setpoints | Room setpoint only, **opt-in** |
 | Ouflex, Ouflex A / A XL / AX, M / M BA / C | TCP / RTU as supported by device or gateway | **Requires site-specific point map** from BA Tool/Ounet | No |
 | H21, S105, EH-203/105/686, RU23, EC-104, FLEX I/O | Modbus, hardware adapter/gateway where required | **Requires exact firmware and register profile** | No |
 
