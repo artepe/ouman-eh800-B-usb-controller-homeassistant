@@ -8,10 +8,12 @@ on:
       - 'tools/openlvi_lab_server.py'
       - 'tests/test_openlvi_lab.py'
       - 'tests/test_openlvi_local_first.py'
+      - 'tests/test_openlvi_tosibox.py'
       - 'www/openlvi-digital-twin-card.js'
       - 'examples/openlvi-lab/**'
       - 'docs/OPENLVI_LAB.md'
       - 'docs/LOCAL_FIRST_HEATPUMPS.md'
+      - 'docs/TOSIBOX_INTEGRATION.md'
       - '.github/workflows/openlvi-lab.yml'
   push:
     branches:
@@ -23,6 +25,7 @@ on:
       - 'tools/openlvi_lab_server.py'
       - 'tests/test_openlvi_lab.py'
       - 'tests/test_openlvi_local_first.py'
+      - 'tests/test_openlvi_tosibox.py'
       - 'www/openlvi-digital-twin-card.js'
       - 'examples/openlvi-lab/**'
       - '.github/workflows/openlvi-lab.yml'
@@ -41,6 +44,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_openlvi_lab.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_local_first.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_tosibox.py' -v
       - name: Validate Digital Twin JavaScript syntax
         run: node --check www/openlvi-digital-twin-card.js
       - name: Smoke-check the command line
@@ -50,3 +54,4 @@ jobs:
           python tools/openlvi_lab_cli.py local-hvac-path --path panasonic_split_esphome
           python tools/openlvi_lab_cli.py local-heatpump-readings --input examples/openlvi-lab/local-heatpump.json
           python tools/openlvi_lab_cli.py zigbee-audit --input examples/openlvi-lab/zigbee-mesh.json
+          python tools/openlvi_lab_cli.py tosibox-status --input examples/openlvi-lab/tosibox-snapshot.json

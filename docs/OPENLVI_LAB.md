@@ -158,3 +158,20 @@ already-captured local sensor data is normalized.
 
 Do **not** clone Zigbee2MQTT/ZHA as a second stack. Add upstream quirks
 and external converters by exact fingerprint, and reuse their HA entities.
+
+## Tosibox / Tosi secure site connectivity
+
+Read the [dedicated Tosibox integration guide](TOSIBOX_INTEGRATION.md).
+The live OpenLVI driver already supports **read-only** Modbus TCP
+FC03 status points for selected Tosibox gateways. This is distinct
+from using a Tosi Key/Client, Gateway-to-Gateway VPN, or licensed
+Tosi Hub for routable access to other HVAC controllers.
+
+New offline diagnostics:
+
+    python3 tools/openlvi_lab_cli.py tosibox-status --input examples/openlvi-lab/tosibox-snapshot.json
+    python3 tools/openlvi_lab_cli.py tosibox-plan --deployment few_sites --gateway-mode lock --monitoring-location on_site
+
+This cannot create a Tosi Key, match a gateway, bypass VPN permissions
+or promise an internet-independent remote-control plane. The module
+does not open network sockets or issue Modbus write commands.

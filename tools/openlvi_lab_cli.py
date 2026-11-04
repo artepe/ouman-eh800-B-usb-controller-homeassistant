@@ -25,6 +25,7 @@ from openlvi_lab.refrigerant import log_ph_svg
 from openlvi_lab.multisite import SiteStore
 from openlvi_lab.local_hvac import plan_local_path, normalize_heatpump_entities
 from openlvi_lab.zigbee import zigbee_mesh_audit
+from openlvi_lab.tosibox import interpret_gateway_registers, design_connection
 
 
 def _read(path, *, limit=2_000_000):
@@ -42,9 +43,13 @@ def run(argv=None):
         "register-explorer", "validate-profile", "commissioning",
         "refrigerant-svg", "multi-site-import", "multi-site-summary",
         "local-hvac-path", "local-heatpump-readings", "zigbee-audit",
+        "tosibox-status", "tosibox-plan",
     ))
     p.add_argument("--input", help="Source JSON, CSV, extracted text or PDF")
     p.add_argument("--path", help="Known local HVAC catalog path ID")
+    p.add_argument("--deployment", choices=("single_site", "few_sites", "multi_site"))
+    p.add_argument("--gateway-mode", choices=("lock", "client"))
+    p.add_argument("--monitoring-location", choices=("on_site", "central"))
     p.add_argument("--format", choices=("text", "csv", "pdf"), default="text")
     p.add_argument("--source", default="unknown_document",
                    help="Original document name for register exploration")
@@ -54,7 +59,13 @@ def run(argv=None):
                    help="Local SQLite site summary database")
     args = p.parse_args(argv)
 
-    if args.command == "local-hvac-path":
+    if args.command == "tosibox-plan":
+        if not (args.deployment and args.gateway_mode and args.monitoring_location):
+            raise ValueError("--deployment, --gateway-mode and --monitoring-location required")
+        data = design_connection(deployment=args.deployment,
+                                 gateway_mode=args.gateway_mode,
+                                 monitoring_location=args.monitoring_location)
+    elif args.command == "local-hvac-path":
         if not args.path:
             raise ValueError("--path is required for local-hvac-path")
         data = plan_local_path(args.path)
@@ -73,7 +84,13 @@ def run(argv=None):
         if not args.input:
             raise ValueError("--input is required")
         payload = json.loads(_read(args.input))
-        if args.command == "local-heatpump-readings":
+        if args.command == "tosibox-status":
+            data = interpret_gateway_registers(
+                payload["registers"], gateway_model=payload["gateway_model"],
+                firmware=payload["firmware"],
+                observed_at=payload["observed_at"], now=payload.get("now"),
+                target_reachable=payload.get("target_reachable"))
+        elif args.command == "local-heatpump-readings":
             data = normalize_heatpump_entities(
                 payload["path"], states=payload["states"],
                 mapping=payload["mapping"], now=payload["now"])

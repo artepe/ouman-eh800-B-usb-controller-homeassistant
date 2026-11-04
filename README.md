@@ -4,6 +4,8 @@
 
 **Open-source Home Assistant integration for HVAC and building automation.**
 
+**Tosibox gateways:** [Local FC03 gateway monitoring and authenticated VPN/site routing](docs/TOSIBOX_INTEGRATION.md) — exact model/firmware, no Internet/VPN state writes, separate plant reachability checks. Includes an offline status decoder and a multi-site connection plan.
+
 **Primary language: English.** Optional Home Assistant translations: Finnish,
 Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 
