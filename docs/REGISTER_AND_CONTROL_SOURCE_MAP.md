@@ -1,4 +1,4 @@
-# OpenLVI manufacturer register and control research (2026-11-04)
+# OpenHVAC manufacturer register and control research (2026-11-04)
 
 This is a **source-backed engineering backlog**, not a claim of working hardware.
 The sources are published manufacturer manuals or upstream protocol docs.
@@ -27,7 +27,7 @@ https://www.nibe.eu/download/18.42a6470a1963dded290bb1/1746538843623/Technical%2
 - Manufacturer also lists FC03 writable registers. **Do not enable writes
   automatically**: mode and manual pump registers can affect real equipment.
 - **Missing:** a dedicated NIBE model/firmware-specific driver and safe
-  addressing test. Current OpenLVI generic driver subtracts one from
+  addressing test. Current OpenHVAC generic driver subtracts one from
   configured 1-based addresses; verify the manufacturer ID-to-PDU offset
   on actual equipment before using this data in a live configuration.
 - The S-series can export installed-register CSV from menu 7.5.9; use
@@ -52,7 +52,7 @@ https://www.vallox.com/en/support-and-instructions/frequently-asked-questions/
   temperature °C = raw / 100 - 273.15, not raw / 10.
 - Documented controls (reference only): 4609 basic Home/Away mode,
   4612 Boost timer, 4613 Fireplace timer, 4614 custom timer,
-  4610 operating override/off. These are **NOT enabled** in OpenLVI;
+  4610 operating override/off. These are **NOT enabled** in OpenHVAC;
   a mistaken write can interrupt ventilation.
 - **New in this research:** the generic read-only profile accepts a finite
   engineering-unit 'offset' and an experimental example is provided at
@@ -64,7 +64,7 @@ https://www.vallox.com/en/support-and-instructions/frequently-asked-questions/
 Manufacturer SCB4.3 register list, revised 2025-09-10:
 https://www.swegon.com/globalassets/digizuite/18172-en-casa_modbusregisters_en.pdf
 
-- Existing OpenLVI profile: selected 3x6301/6303/6304/6305/6306,
+- Existing OpenHVAC profile: selected 3x6301/6303/6304/6305/6306,
   3x6320, 3x6348, 3x6370, 4x5001, 4x5009 and 4x5114/5115.
 - Additional **documented register candidates**:
   - 4x5102 boost timer (0 continuous; 1=30min, 2=60min, etc.).
@@ -78,7 +78,7 @@ https://www.swegon.com/globalassets/digizuite/18172-en-casa_modbusregisters_en.p
 - **Do not expose** 4x5018 emergency stop/overpressure, alarm reset
   4x5401–5408 or commissioning mode 4x5029 as generic writes.
 - Operating mode 4x5001 also documents 0 Shutdown, 4 Travelling and
-  5 Home+; current OpenLVI deliberately allows only 1 Away, 2 Home,
+  5 Home+; current OpenHVAC deliberately allows only 1 Away, 2 Home,
   3 Boost as test-bounded writes. Do NOT widen without physical tests.
 - Firmware-dependent values and Celsius/Fahrenheit variants need
   exact SW version and SEM/SEC hardware confirmation.
@@ -93,7 +93,7 @@ https://assets.danfoss.com/documents/latest/550090/AI155886469487en-010802.pdf
 - ECL Modbus PNU interface can expose S1–S10 temperatures, heating
   curve, room setpoints, schedules, alarms, M-Bus energy meter readings
   and modes. Data may be application-key- and circuit-specific.
-- Existing OpenLVI uses generic sensor S2 PNU 10202 (/100) and
+- Existing OpenHVAC uses generic sensor S2 PNU 10202 (/100) and
   A266.1 circuit-1 comfort target PNU 11180 (/10).
 - More documented candidates (application-specific): 11174 motor
   protection, 11175 heating curve, 11176 shift, 11177 supply min,
@@ -149,7 +149,7 @@ https://github.com/emsesp/EMS-ESP32
 - EMS, EMS+, EMS2/Heatronic communicate over a **dedicated electrical
   interface**, not bare ESP32 UART or Modbus RS-485 without hardware.
 - Best integration path: a properly interfaced EMS-ESP gateway with
-  Home Assistant/MQTT discovery; OpenLVI can read the resulting sensors.
+  Home Assistant/MQTT discovery; OpenHVAC can read the resulting sensors.
 - Do not duplicate or relicense GPL-3 firmware without reviewing the
   license. Do not auto-transmit undocumented boiler controls.
 
@@ -166,7 +166,7 @@ https://github.com/HeishaMon/HeishaMon/blob/main/MQTT-Topics.md
 
 ## Existing versus researched (not yet installed)
 
-Already in OpenLVI: Ouman EH-800 HTTP, EH-800B USB, small
+Already in OpenHVAC: Ouman EH-800 HTTP, EH-800B USB, small
 Ouman A203/S203/C203/H23 firmware maps, minimal Danfoss ECL,
 Swegon CASA Genius, Corrigo E 3.2, selected-device BACnet/IP and
 active-master wired M-Bus.

@@ -1,10 +1,26 @@
 # Changelog
 
-OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
+OpenHVAC Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
-## OpenLVI Bridge 0.4.4-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.5.0-beta.1 — 2026-11-04 (experimental)
+
+**Breaking: the integration is renamed to OpenHVAC Bridge, domain `openhvac`.**
+
+- Folder `custom_components/openhvac`, service `openhvac.ask_assistant`,
+  Lovelace card `custom:openhvac-scada-card` (`/local/openhvac-scada-card.js`),
+  blueprints under `blueprints/automation/openhvac/`.
+- Upgrading from 0.4.x: Home Assistant cannot move a config entry to a new
+  domain. Delete the old integration entry, remove the old
+  `custom_components/openlvi` folder, copy `custom_components/openhvac`,
+  restart and add **OpenHVAC Bridge** again. Update automations, dashboards
+  and blueprints that use the old names. New entities get new entity IDs;
+  rename them to the old IDs if you want their history to continue.
+- No functional changes besides the rename; the legacy EH-800B v0.1.2 driver
+  only gets its documentation link updated.
+
+## OpenHVAC Bridge 0.4.4-beta.1 — 2026-11-04 (experimental)
 
 Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
 
@@ -37,7 +53,7 @@ Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
 - New Home Assistant level tests (`tests_ha/`, CI workflow) with faked
   transports; they fail on 0.4.3 and pass on this version.
 
-## OpenLVI Bridge 0.4.3-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.4.3-beta.1 — 2026-11-04 (experimental)
 
 - Added documented **read-only** Modbus point subsets for
   Uponor Smatrix Base PRO X-148, Roth Touchline SL and Tosibox
@@ -57,7 +73,7 @@ Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
   examples. **No new automatic heating or safety-controller writes**.
 - No physical production acceptance testing on the new device families.
 
-## OpenLVI Bridge 0.4.2-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.4.2-beta.1 — 2026-11-04 (experimental)
 
 - Added manufacturer/source research for NIBE, MyVallox, Swegon CASA,
   Danfoss, Regin, Grundfos, Wilo, EMS-ESP and HeishaMon.
@@ -70,9 +86,9 @@ Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
 - Updated remaining legacy default Modbus point labels to English.
 - No new control writes and no physical field acceptance testing.
 
-## OpenLVI Bridge 0.4.1-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.4.1-beta.1 — 2026-11-04 (experimental)
 
-- English is the canonical/default OpenLVI interface language.
+- English is the canonical/default OpenHVAC interface language.
 - Added complete Home Assistant translations for the Ouman manual's
   six languages: English, Finnish, Swedish, Estonian, Polish, Russian.
 - Localized EH-800B USB measurement names, L1 control names, status/AI
@@ -82,21 +98,21 @@ Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
 - Original tested legacy EH-800B v0.1.2 driver is unchanged.
 - Localized names and terminology require real-user language review.
 
-## OpenLVI Bridge 0.4.0-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.4.0-beta.1 — 2026-11-04 (experimental)
 
 - English setting explanations: on-device guide sensor, manual review button
-  and `openlvi.ask_assistant` action with response data.
+  and `openhvac.ask_assistant` action with response data.
 - Optional local Qwen2.5 0.5B via private LAN Ollama and configurable
   periodic advice every six hours (off by default).
 - Automatic initial setup report is offline and read-only; no cloud service
   or model download is required.
 - **No AI autonomous equipment setpoint changes, PID writes or valve actions**.
 
-## OpenLVI Bridge 0.3.0-beta.1 — 2026-11-04 (experimental)
+## OpenHVAC Bridge 0.3.0-beta.1 — 2026-11-04 (experimental)
 
 - Automatically exposes EH-800B USB heating-curve and approved L1
   parameter Number entities after adding the model in Home Assistant,
-  including entries configured in prior OpenLVI versions.
+  including entries configured in prior OpenHVAC versions.
 - Uses the legacy USB hub's shared per-port serial lock for measurements and
   writes; rejects unknown/PID/manual-valve properties and invalid increments.
 - Sends **one** SET PROPERTY on an explicit manual adjustment, checks the
@@ -107,9 +123,9 @@ Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
 - Added offline protocol/mock tests and a user guide.
 - This new USB write path still needs real-controller acceptance testing.
 
-## OpenLVI Bridge 0.2.0-beta.1 — 2026-11-03 (experimental)
+## OpenHVAC Bridge 0.2.0-beta.1 — 2026-11-03 (experimental)
 
-- Renamed the new multi-vendor integration to `openlvi` / OpenLVI Bridge.
+- Gave the new multi-vendor integration its own domain and name.
 - Manufacturer-first wizard and Modbus RTU/TCP, EH-800 local HTTP and
   EH-800B USB read-only adapters.
 - Documented initial Ouman A203/S203/C203/H23, Danfoss ECL,

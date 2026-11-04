@@ -3,7 +3,7 @@ import importlib.util
 from pathlib import Path
 import unittest
 
-MODULE = Path(__file__).resolve().parents[1] / "custom_components" / "openlvi" / "profiles.py"
+MODULE = Path(__file__).resolve().parents[1] / "custom_components" / "openhvac" / "profiles.py"
 spec = importlib.util.spec_from_file_location("ouman_profiles", MODULE)
 import sys
 mod = importlib.util.module_from_spec(spec)

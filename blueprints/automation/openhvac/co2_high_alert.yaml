@@ -1,0 +1,65 @@
+blueprint:
+  name: "OpenHVAC | Sustained high CO2 ventilation alert"
+  description: >-
+    English-language alert when a chosen indoor CO2 sensor remains above
+    the selected threshold. Monitoring only: does not change fans or
+    ventilation equipment. Use independently of the supplemental fan
+    controller to notify that ventilation needs checking.
+  domain: automation
+  input:
+    co2_sensor:
+      name: Indoor CO2 sensor
+      selector:
+        entity:
+          domain: sensor
+    high_ppm:
+      name: Sustained CO2 alert threshold (ppm)
+      default: 1500
+      selector:
+        number:
+          min: 800
+          max: 5000
+          step: 50
+          unit_of_measurement: ppm
+          mode: box
+    high_for_minutes:
+      name: Minimum time above threshold (minutes)
+      default: 15
+      selector:
+        number:
+          min: 2
+          max: 120
+          step: 1
+          unit_of_measurement: min
+          mode: box
+
+mode: single
+
+triggers:
+  - trigger: numeric_state
+    entity_id: !input co2_sensor
+    above: !input high_ppm
+    for:
+      minutes: !input high_for_minutes
+
+variables:
+  co2_entity: !input co2_sensor
+  alert_threshold: !input high_ppm
+
+conditions:
+  - condition: template
+    value_template: >-
+      {{ is_number(states(co2_entity)) and
+         states(co2_entity) | float > alert_threshold }}
+
+actions:
+  - action: persistent_notification.create
+    data:
+      title: "OpenHVAC: Sustained high indoor CO2"
+      notification_id: "{{ 'openhvac_co2_high_' + co2_entity | replace('.', '_') }}"
+      message: >-
+        CO2 sensor {{ co2_entity }} has stayed above
+        {{ alert_threshold | int }} ppm and currently reports
+        {{ states(co2_entity) }} ppm. Check required ventilation,
+        occupancy, sensor calibration and outdoor air availability.
+        Do not disable essential ventilation or fire/frost protection.

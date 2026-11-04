@@ -1,0 +1,18 @@
+name: OpenHVAC SCADA syntax
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'www/openhvac-scada-card.js'
+      - '.github/workflows/openhvac-scada.yml'
+  pull_request:
+    paths:
+      - 'www/openhvac-scada-card.js'
+      - '.github/workflows/openhvac-scada.yml'
+jobs:
+  syntax:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check www/openhvac-scada-card.js

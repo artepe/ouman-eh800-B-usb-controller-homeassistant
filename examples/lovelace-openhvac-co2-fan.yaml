@@ -1,0 +1,31 @@
+# OpenHVAC CO2 auxiliary fan overview for Home Assistant Lovelace.
+# Replace example CO2/outdoor entity IDs with real HA entities.
+# light.shelly0110dimg3_e4b063e3d434 and input_boolean.co2_fan_auto
+# are examples from an existing installation, not universal IDs.
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## OpenHVAC // CO2 Ventilation
+      Supplemental 0-10 V fan with manual and automatic modes.
+      **Do not control mandatory ventilation with this card.**
+  - type: entities
+    title: Automatic and manual fan controls
+    entities:
+      - entity: input_boolean.co2_fan_auto
+        name: Automatic CO2 control
+      - entity: light.shelly0110dimg3_e4b063e3d434
+        name: Supplemental roof fan (manual output)
+  - type: entities
+    title: Live air measurements
+    entities:
+      - entity: sensor.replace_with_actual_airq_co2
+        name: Indoor CO2
+      - entity: sensor.replace_with_actual_outdoor_temperature
+        name: Outdoor temperature
+  - type: history-graph
+    title: Last 12 hours
+    hours_to_show: 12
+    entities:
+      - sensor.replace_with_actual_airq_co2
+      - light.shelly0110dimg3_e4b063e3d434

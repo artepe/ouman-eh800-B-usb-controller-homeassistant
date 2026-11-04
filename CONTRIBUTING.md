@@ -1,4 +1,4 @@
-# Contributing to OpenLVI Bridge
+# Contributing to OpenHVAC Bridge
 
 Contributions are welcome for local Home Assistant integrations, safe
 device-specific register maps, BACnet object lists and verified diagnostics.
@@ -25,11 +25,11 @@ device-specific register maps, BACnet object lists and verified diagnostics.
 ## Local checks
 
 ```bash
-python3 -m compileall -q custom_components/openlvi tools
+python3 -m compileall -q custom_components/openhvac tools
 python3 -m unittest discover -s tests -p 'test_*profiles.py' -v
-python3 -m unittest discover -s tests -p 'test_openlvi_extended.py' -v
-python3 -m unittest discover -s tests -p 'test_openlvi_robustness.py' -v
-node --check www/openlvi-scada-card.js
+python3 -m unittest discover -s tests -p 'test_openhvac_extended.py' -v
+python3 -m unittest discover -s tests -p 'test_openhvac_robustness.py' -v
+node --check www/openhvac-scada-card.js
 ```
 
 Home Assistant level tests (config flow, setup retry, sensor classes;
@@ -46,7 +46,7 @@ or physical meter/controller interoperability.
 
 ## Project map
 
-- `custom_components/openlvi/`: experimental multi-vendor HA integration.
+- `custom_components/openhvac/`: experimental multi-vendor HA integration.
 - `custom_components/ouman_eh800/`: legacy tested Ouman EH-800B USB.
 - `docs/`: model/firmware references, installation, known limitations.
 - `examples/` and `www/`: Lovelace examples and SCADA card.

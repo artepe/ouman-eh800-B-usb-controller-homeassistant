@@ -23,14 +23,14 @@ import sys
 from pathlib import Path
 
 if __package__:
-    from custom_components.openlvi.engineering import (
+    from custom_components.openhvac.engineering import (
         refrigerant_cycle_heating_cop, refrigerant_heating_power_kw, heating_cop
     )
 else:
     import importlib.util
     _ROOT = Path(__file__).resolve().parents[1]
-    _SOURCE = _ROOT / "custom_components" / "openlvi" / "engineering.py"
-    spec = importlib.util.spec_from_file_location("openlvi_engineering_standalone", _SOURCE)
+    _SOURCE = _ROOT / "custom_components" / "openhvac" / "engineering.py"
+    spec = importlib.util.spec_from_file_location("openhvac_engineering_standalone", _SOURCE)
     eng = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(eng)
     refrigerant_cycle_heating_cop = eng.refrigerant_cycle_heating_cop
@@ -165,7 +165,7 @@ def main(argv=None):
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     except (ValueError, RuntimeError) as exc:
-        print(f"OpenLVI: {exc}", file=sys.stderr)
+        print(f"OpenHVAC: {exc}", file=sys.stderr)
         return 2
 
 

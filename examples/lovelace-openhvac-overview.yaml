@@ -1,0 +1,25 @@
+# Home Assistant dashboard sketch. Replace ALL entity IDs with actual IDs.
+# Add manually as Lovelace YAML; these names are only examples.
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## OpenHVAC Bridge // Control Room
+      **Local HVAC controllers, live measurements and maintenance data**
+  - type: entities
+    title: L1 heating
+    entities:
+      - entity: sensor.openhvac_l1_supply
+        name: Supply water
+      - entity: sensor.openhvac_l1_return
+        name: Return water
+      - entity: sensor.openhvac_l1_delta_t
+        name: Delta-T
+      - entity: sensor.openhvac_l1_thermal_power_kw
+        name: Estimated thermal power
+  - type: history-graph
+    title: Heating trends
+    hours_to_show: 24
+    entities:
+      - entity: sensor.openhvac_l1_supply
+      - entity: sensor.openhvac_l1_return

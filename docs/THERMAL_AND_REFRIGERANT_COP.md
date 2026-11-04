@@ -54,8 +54,8 @@ entire refrigeration performance can be inferred from suction
 superheat alone. No automatic refrigerant EEV/controller writes.
 
 Examples for HA:
-- ../examples/homeassistant/openlvi-water-cop-package.yaml
-- ../examples/homeassistant/openlvi-refrigerant-cop-package.yaml
+- ../examples/homeassistant/openhvac-water-cop-package.yaml
+- ../examples/homeassistant/openhvac-refrigerant-cop-package.yaml
 
 ## Optional R290 property calculator
 
@@ -78,13 +78,13 @@ it does not report actual refrigerant heat power or electrical COP.
 ## CO2 supplemental 0-10 V ventilation fan
 
 HA auxiliary fan blueprint:
-../blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml
+../blueprints/automation/openhvac/co2_supplemental_fan_0_10v.yaml
 
 Separate persistent high-CO2 alert blueprint (no control actions):
-../blueprints/automation/openlvi/co2_high_alert.yaml
+../blueprints/automation/openhvac/co2_high_alert.yaml
 
 Example Lovelace fan/CO2 monitoring card:
-../examples/lovelace-openlvi-co2-fan.yaml
+../examples/lovelace-openhvac-co2-fan.yaml
 
 Configure indoor CO2, outdoor temperature, Shelly dimmable auxiliary fan
 (light entity) and an input_boolean automatic-enable helper.
@@ -101,7 +101,7 @@ EC motor speed floor and code-required minimum ventilation. The
 cutout is meant only for a separately approved auxiliary roof fan.
 
 To install on HA OS:
-    /config/blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml
+    /config/blueprints/automation/openhvac/co2_supplemental_fan_0_10v.yaml
 
 Create a new automation from the blueprint in HA and select the
 actual entities. Committing the example does not install it in HA.

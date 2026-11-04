@@ -1,0 +1,229 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Выберите производителя",
+        "description": "Подключение поддерживаемых контроллеров отопления и вентиляции по локальной сети.",
+        "data": {
+          "vendor": "Производитель"
+        }
+      },
+      "model": {
+        "title": "Выберите модель контроллера",
+        "description": "Выберите точную модель и прошивку. Проверенные настройки L1 EH-800B USB доступны автоматически; другим моделям требуется разрешение на запись.",
+        "data": {
+          "model": "Модель",
+          "firmware": "Прошивка",
+          "application_key": "Ключ приложения",
+          "allow_writes": "Разрешить проверенные команды записи для других моделей"
+        }
+      },
+      "transport": {
+        "title": "Протокол",
+        "data": {
+          "transport": "Тип соединения"
+        }
+      },
+      "connection": {
+        "title": "Локальное соединение",
+        "description": "Для контроллеров с индивидуальной конфигурацией нужна проверенная карта регистров только для чтения.",
+        "data": {
+          "host": "IP-адрес устройства",
+          "port": "Последовательный или TCP-порт",
+          "baudrate": "Скорость передачи",
+          "parity": "Чётность",
+          "unit_id": "Адрес устройства Modbus или первичный адрес M-Bus",
+          "profile_json": "Карта регистров Modbus / список объектов BACnet (JSON)",
+          "url": "URL EH-800",
+          "username": "Имя пользователя",
+          "password": "Пароль",
+          "bacnet_device_id": "Экземпляр устройства BACnet",
+          "bacnet_local_address": "Локальный BACnet IP/CIDR",
+          "bacnet_local_instance": "Локальный экземпляр клиента BACnet"
+        }
+      }
+    },
+    "error": {
+      "invalid_profile": "Недопустимая прошивка, ключ приложения или карта регистров",
+      "cannot_connect": "Не удалось подключиться или прочитать измерения",
+      "invalid_auth": "Неверное имя пользователя или пароль"
+    },
+    "abort": {
+      "already_configured": "Уже настроено"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Локальный ИИ-помощник на английском",
+        "description": "Необязательная локальная Ollama. Английское руководство работает и без неё. ИИ не изменяет настройки контроллера.",
+        "data": {
+          "ai_url": "Локальный адрес Ollama (например, http://192.168.10.5:11434)",
+          "ai_model": "Небольшая локальная модель",
+          "ai_auto_review": "Проверять измерения при запуске и примерно каждые шесть часов"
+        }
+      }
+    },
+    "error": {
+      "invalid_ai_connection": "Поддерживается только частный http://IPv4:11434"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "eh800b_measurement_1": {
+        "name": "L1 расчётная уставка подачи"
+      },
+      "eh800b_measurement_2": {
+        "name": "Измерение 2"
+      },
+      "eh800b_measurement_3": {
+        "name": "Измерение 3"
+      },
+      "eh800b_measurement_4": {
+        "name": "Измерение 4"
+      },
+      "eh800b_measurement_5": {
+        "name": "Измерение 5"
+      },
+      "eh800b_measurement_6": {
+        "name": "Измерение 6"
+      },
+      "eh800b_measurement_7": {
+        "name": "Измерение 7"
+      },
+      "eh800b_measurement_8": {
+        "name": "Измерение 8"
+      },
+      "eh800b_measurement_9": {
+        "name": "L1 температура подающей воды"
+      },
+      "eh800b_measurement_10": {
+        "name": "Наружная температура"
+      },
+      "eh800b_measurement_11": {
+        "name": "Скорректированная наружная температура"
+      },
+      "eh800b_measurement_12": {
+        "name": "Измерение 12"
+      },
+      "eh800b_measurement_13": {
+        "name": "Измерение 13"
+      },
+      "eh800b_measurement_14": {
+        "name": "Измерение 14"
+      },
+      "eh800b_measurement_15": {
+        "name": "L1 расчётное положение клапана"
+      },
+      "eh800b_measurement_16": {
+        "name": "L1 положение клапана"
+      },
+      "eh800b_measurement_17": {
+        "name": "Измерение 17"
+      },
+      "eh800b_measurement_18": {
+        "name": "Измерение 18"
+      },
+      "eh800b_measurement_19": {
+        "name": "Измерение 19"
+      },
+      "eh800b_measurement_20": {
+        "name": "Измерение 20"
+      },
+      "eh800b_measurement_21": {
+        "name": "Сглаженная наружная температура"
+      },
+      "eh800b_measurement_22": {
+        "name": "Измерение 22"
+      },
+      "eh800b_measurement_23": {
+        "name": "Измерение 23"
+      },
+      "eh800b_measurement_24": {
+        "name": "Измерение 24"
+      },
+      "eh800b_measurement_25": {
+        "name": "Измерение 25"
+      },
+      "eh800b_measurement_26": {
+        "name": "Измерение 26"
+      },
+      "eh800b_measurement_27": {
+        "name": "Измерение 27"
+      },
+      "eh800b_measurement_28": {
+        "name": "Измерение 28"
+      },
+      "derived_l1_delta_t": {
+        "name": "L1 разность температур"
+      },
+      "derived_l1_thermal_power_kw": {
+        "name": "L1 расчётная тепловая мощность"
+      },
+      "diagnostics": {
+        "name": "Диагностика OpenHVAC"
+      },
+      "english_ai_guide": {
+        "name": "Англоязычный ИИ-помощник OpenHVAC"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Тепловая мощность водяного контура"
+      },
+      "derived_system_heating_cop": {
+        "name": "COP отопления всей системы"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "COP компрессора по водяному контуру"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Расчётный COP холодильного цикла при нагреве"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Тепловая мощность конденсатора хладагента"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Электрический COP компрессора при нагреве"
+      }
+    },
+    "number": {
+      "eh800b_l1_supply_minimum": {
+        "name": "L1 минимальная температура подачи"
+      },
+      "eh800b_l1_supply_maximum": {
+        "name": "L1 максимальная температура подачи"
+      },
+      "eh800b_l1_curve_minus_20c": {
+        "name": "L1 кривая отопления при −20 °C"
+      },
+      "eh800b_l1_curve_minus_10c": {
+        "name": "L1 кривая отопления при −10 °C"
+      },
+      "eh800b_l1_curve_0c": {
+        "name": "L1 кривая отопления при 0 °C"
+      },
+      "eh800b_l1_curve_plus_10c": {
+        "name": "L1 кривая отопления при +10 °C"
+      },
+      "eh800b_l1_curve_plus_20c": {
+        "name": "L1 кривая отопления при +20 °C"
+      },
+      "eh800b_l1_summer_shutoff": {
+        "name": "L1 настройка летнего отключения"
+      },
+      "eh800b_l1_max_supply_change_rate": {
+        "name": "L1 ограничение скорости изменения подачи"
+      },
+      "eh800b_l1_supply_setpoint": {
+        "name": "L1 уставка температуры подачи"
+      },
+      "eh800b_l1_fine_adjustment": {
+        "name": "L1 точная настройка"
+      }
+    },
+    "button": {
+      "review_settings_en": {
+        "name": "Проверить настройки на английском"
+      }
+    }
+  }
+}
