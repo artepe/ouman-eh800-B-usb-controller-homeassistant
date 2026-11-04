@@ -57,10 +57,34 @@ Examples for HA:
 - ../examples/homeassistant/openlvi-water-cop-package.yaml
 - ../examples/homeassistant/openlvi-refrigerant-cop-package.yaml
 
+## Optional R290 property calculator
+
+If you can measure three simultaneous refrigerant states
+(absolute pressure and line temperature at suction, discharge and
+condenser liquid outlet), use the offline diagnostics script:
+
+    python3 -m pip install CoolProp
+    python3 tools/refrigerant_state_calculator.py --fluid R290 \
+      --suction-bar-a 4 --suction-c 3 \
+      --discharge-bar-a 17 --discharge-c 90 \
+      --liquid-bar-a 17 --liquid-c 45
+
+**Sample numbers are fictitious** and must not be treated as a
+known-good R290 charge, pressure target or heating curve.
+The script does no actuator output, external network traffic or
+Home Assistant state changes. Without measured refrigerant mass flow,
+it does not report actual refrigerant heat power or electrical COP.
+
 ## CO2 supplemental 0-10 V ventilation fan
 
-HA blueprint:
+HA auxiliary fan blueprint:
 ../blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml
+
+Separate persistent high-CO2 alert blueprint (no control actions):
+../blueprints/automation/openlvi/co2_high_alert.yaml
+
+Example Lovelace fan/CO2 monitoring card:
+../examples/lovelace-openlvi-co2-fan.yaml
 
 Configure indoor CO2, outdoor temperature, Shelly dimmable auxiliary fan
 (light entity) and an input_boolean automatic-enable helper.
