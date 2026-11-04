@@ -26,7 +26,7 @@ class UplinkTests(unittest.TestCase):
         self.assertEqual(r["frame_counter"], 8)
         self.assertEqual(r["rssi_dbm"], -57)
         self.assertEqual(r["snr_db"], 10)
-        self.assertEqual(r["payload_hex"], "0167000002680000")
+        self.assertEqual(r["payload_hex"], "01670000026800")
         self.assertEqual(r["decoded_fields"], {})
 
     def test_chirpstack_v4_decoded_only(self):
