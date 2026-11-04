@@ -19,8 +19,8 @@ def analyze_plant(current, history=None):
     if not isinstance(current, dict):
         raise ValueError("Current measurements must be a JSON object")
     history = history or []
-    if not isinstance(history, list):
-        raise ValueError("History must be a list")
+    if not isinstance(history, list) or len(history) > 10000:
+        raise ValueError("History must be a list of at most 10000 samples")
     findings = []
     hints = []
 
