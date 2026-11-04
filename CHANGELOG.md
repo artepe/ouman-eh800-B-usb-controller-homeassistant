@@ -31,6 +31,27 @@ milestones, not compatibility certifications.
 - The Lab lives under `tools/` and does not change the integration
   version until reviewed features are promoted into runtime.
 
+## OpenHVAC Bridge 0.5.1-beta.1 and legacy EH-800B 0.1.3 — 2026-11-04
+
+- **Legacy EH-800B 0.1.3 (safety):** PID 56/57/58 and manual valve
+  position 92 are no longer exposed as writable entities, and the number
+  entities start as *unknown* instead of hard-coded values that looked like
+  live controller settings. Serial code unchanged; the original v0.1.2 stays
+  on the `stable/v0.1.2` branch. Leftover PID/valve entities can be deleted
+  from the entity registry.
+- **EH-800B USB:** OpenHVAC Bridge now carries its own copy of the tested
+  USB framing (`ouman_usb.py`) instead of importing the legacy integration
+  and calling its private `_command`. The legacy folder is no longer
+  required, and HACS (one integration per repository) can install
+  `custom_components/openhvac` on its own; `hacs.json` added.
+- **BACnet/IP:** devices on the same local bind IP share one BACnet client.
+  Before, each device opened its own socket on UDP 47808 with
+  SO_REUSEPORT; Linux then delivered a device's replies to only one of them,
+  so a second device (or the setup wizard's test) could time out.
+- Tests: BACnet socket sharing, the bundled USB client (framing, single-shot
+  writes) and an HA test of the EH-800B USB path (28 sensors, unknown
+  setpoints, exactly one SET PROPERTY per user change).
+
 ## OpenHVAC Bridge 0.5.0-beta.1 — 2026-11-04 (experimental)
 
 **Breaking: the integration is renamed to OpenHVAC Bridge, domain `openhvac`.**

@@ -5,7 +5,7 @@ appropriate native radios and verified gateway codecs. Raw payloads
 and unsafe source-supplied instructions are deliberately ignored.
 """
 from __future__ import annotations
-from .core import iso, number, utc_time, InvalidMeasurement
+from .core import iso, number, utc_time
 
 SOURCES = frozenset({
     "modbus", "bacnet", "mbus", "wireless_mbus", "lorawan",

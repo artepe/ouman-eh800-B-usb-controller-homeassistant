@@ -53,10 +53,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     try:
         driver = make_transport(hass, entry.data)
     except ImportError as err:
-        raise ConfigEntryError(
-            "EH-800B USB needs the custom_components/ouman_eh800 folder "
-            f"(protocol reader) next to openhvac: {err}"
-        ) from err
+        raise ConfigEntryError(f"Missing Python package for this connection: {err}") from err
     except (ValueError, KeyError) as err:
         # A stored profile/firmware/address that no longer validates cannot
         # be fixed by retrying; show it as a configuration error instead.

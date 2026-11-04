@@ -12,7 +12,7 @@ Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenHVAC Bridge is experimental (0.5.0-beta.1).** Automated tests have passed, but
+> **OpenHVAC Bridge is experimental (0.5.1-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -133,9 +133,9 @@ until you manually enter and confirm a value. A reported value after a
 write is the **last confirmed write**, not a fresh independent read.
 See [the USB setpoint usage guide](docs/EH800B_CONTROLS.md).
 
-For Ouman EH-800B USB via the new bridge, the legacy
-`custom_components/ouman_eh800` directory is also required as its protocol
-reader. **Never configure both integrations to poll the same USB port
+OpenHVAC Bridge carries its own copy of the tested EH-800B USB protocol, so
+the legacy `custom_components/ouman_eh800` folder is no longer needed for it.
+**Never configure both integrations to poll the same USB port
 simultaneously.** For a live heating installation, keep the known-working
 legacy driver.
 
@@ -143,8 +143,10 @@ legacy driver.
 [its YAML instructions](docs/STABLE_RELEASE_v0.1.2.md). It does **not** have
 the OpenHVAC setup wizard.
 
-**HACS / automatic discovery:** this release documents manual installation.
-Do not assume HACS compatibility or automatic detection of every manufacturer.
+**HACS:** the repository can be added in HACS as a *custom repository*
+(type Integration); HACS installs `custom_components/openhvac`, which runs on
+its own. The legacy YAML driver is still installed manually. There is no
+automatic detection of every manufacturer.
 
 ## Dashboards, data and developer documentation
 
@@ -175,9 +177,10 @@ Maintain the manufacturer's native frost, overheating, pump and valve safety
 functions. Do not expose Modbus TCP, BACnet/IP or unencrypted device HTTP
 directly to the internet. Use a segmented, trusted local network.
 
-The stable legacy **EH-800B v0.1.2** exposes writable properties 56/57/58
-(PID) and 92 (manual valve position). **Do not change those on a live system**
-without an independently verified safe procedure.
+The legacy **EH-800B** driver no longer exposes PID properties 56/57/58 or
+manual valve position 92 (removed in v0.1.3). The original v0.1.2, which
+still has them, stays on the pinned `stable/v0.1.2` branch: **do not change
+those on a live system** without an independently verified safe procedure.
 
 The diagnostics are only threshold-based observations, not a substitute for
 professional troubleshooting. Calculated thermal power assumes **water**,
@@ -185,10 +188,11 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenHVAC Bridge:** `custom_components/openhvac` — **0.5.0-beta.1**,
+- **OpenHVAC Bridge:** `custom_components/openhvac` — **0.5.1-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
-- **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
-  last physically tested installation version. Both remain separate.
+- **Ouman USB:** `custom_components/ouman_eh800` — **0.1.3**: the
+  physically tested v0.1.2 serial code without the PID/manual-valve
+  controls and placeholder values. Both components remain separate.
 - Contributions and verified register maps are welcome; see
   [CONTRIBUTING.md](CONTRIBUTING.md) and [SECURITY.md](SECURITY.md).
 - MIT licensed, independent community project. No affiliation with or

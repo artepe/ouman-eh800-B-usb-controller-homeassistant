@@ -252,3 +252,69 @@ async def test_kamstrup_records_have_ha_units_and_dates_load(hass):
         assert date.state == "2026-11-04T10:00"
         assert "unit_of_measurement" not in date.attributes
         assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+class FakeUsbHub:
+    """Stands in for the bundled EH-800B USB client (no serial port)."""
+
+    commands: list = []
+
+    def __init__(self, port):
+        self.port = port
+
+    def measurements(self):
+        return [(40.0 + index / 10, "C") for index in range(28)]
+
+    def command(self, command, wait=0.18, retries=3):
+        FakeUsbHub.commands.append((command, retries))
+        _, _, prop_id, raw = command.split()
+        return f"PROPERTY({prop_id}):'TEST'(0-1000) = {raw}"
+
+
+async def test_eh800b_usb_uses_bundled_client_and_writes_once(hass):
+    """No custom_components.ouman_eh800 import; one SET per user action."""
+    FakeUsbHub.commands = []
+    entry = MockConfigEntry(domain=DOMAIN, data={
+        "vendor": "Ouman", "model": "EH-800B", "firmware": "",
+        "application_key": "", "allow_writes": False, "transport": "usb",
+        "port": "/dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00",
+    })
+    entry.add_to_hass(hass)
+    with patch("custom_components.openhvac.ouman_usb.OumanUSB", FakeUsbHub):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        target = sensor_state(hass, entry, "measurement_1_sensor")
+        assert float(target.state) == 40.0
+        assert target.attributes["device_class"] == "temperature"
+        registry = er.async_get(hass)
+        curve = registry.async_get_entity_id(
+            "number", DOMAIN, f"{entry.entry_id}_l1_curve_minus_20c_number")
+        assert hass.states.get(curve).state == "unknown"
+        assert FakeUsbHub.commands == []  # setup and polling never write
+        await hass.services.async_call(
+            "number", "set_value", {"entity_id": curve, "value": 55}, blocking=True)
+        await hass.async_block_till_done()
+        assert FakeUsbHub.commands == [("SET PROPERTY 67 550", 1)]
+        assert float(hass.states.get(curve).state) == 55.0
+        assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_legacy_driver_hides_pid_and_valve_and_starts_unknown(hass):
+    """Legacy ouman_eh800 0.1.3: no PID 56/57/58 or valve 92, no fake values."""
+    from homeassistant.setup import async_setup_component
+
+    class LegacyHub:
+        def __init__(self, port):
+            self.port = port
+
+    with patch("custom_components.ouman_eh800.number.OumanUSB", LegacyHub):
+        assert await async_setup_component(hass, "number", {
+            "number": [{"platform": "ouman_eh800", "port": "/dev/ttyTEST"}]})
+        await hass.async_block_till_done()
+    registry = er.async_get(hass)
+    legacy = [e for e in registry.entities.values() if e.platform == "ouman_eh800"]
+    unique_ids = {e.unique_id for e in legacy}
+    assert len(legacy) == 11
+    for prop_id in (56, 57, 58, 92):
+        assert f"ouman_eh800_property_{prop_id}" not in unique_ids
+    assert all(hass.states.get(e.entity_id).state == "unknown" for e in legacy)

@@ -1,16 +1,16 @@
 # EH-800B USB — L1 controls automatically in OpenHVAC Bridge
 
-**Version:** OpenHVAC Bridge 0.4.0-beta.1 (experimental).
-The legacy Ouman EH-800B v0.1.2 remains unchanged and was the last
-installation version reported working on a physical controller.
+**Version:** OpenHVAC Bridge 0.5.1-beta.1 (experimental).
+The legacy Ouman EH-800B v0.1.2 was the last installation version reported
+working on a physical controller; OpenHVAC uses a copy of its USB framing.
 
 ## No separate YAML number platform
 
 For a single EH-800B connected via USB, install the OpenHVAC component
-in `/config/custom_components/openhvac` and keep the original
-`/config/custom_components/ouman_eh800` **source folder** alongside it.
-OpenHVAC imports its proven serial hub. Do **not** configure both
-`sensor: - platform: ouman_eh800` and the OpenHVAC USB integration
+in `/config/custom_components/openhvac`. It includes its own copy of the
+proven USB serial client (`ouman_usb.py`); the legacy
+`custom_components/ouman_eh800` folder is not needed. Do **not** configure
+both `sensor: - platform: ouman_eh800` and the OpenHVAC USB integration
 against the same serial port: use **one polling owner**.
 
 Restart Home Assistant. Open **Settings → Devices & services → OpenHVAC

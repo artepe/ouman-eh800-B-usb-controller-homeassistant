@@ -3,8 +3,7 @@
 Fault candidates are never presented as confirmed mechanical diagnoses.
 """
 from __future__ import annotations
-from statistics import median
-from .core import baseline, finding, number, optional_number, InvalidMeasurement
+from .core import baseline, finding, optional_number
 
 
 def _valid_series(history, key, minimum=5):

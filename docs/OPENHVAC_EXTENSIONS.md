@@ -1,8 +1,8 @@
 # OpenHVAC Bridge: BACnet/IP, Kamstrup M-Bus, SCADA and diagnostics (beta)
 
 This is an **experimental, read-only-first** multi-vendor extension. No device
-was physically connected during authoring. The existing
-`custom_components/ouman_eh800` stable EH-800B USB driver is not modified.
+was physically connected during authoring. The separate legacy
+`custom_components/ouman_eh800` EH-800B USB driver is not used here.
 
 ## What is implemented
 
@@ -56,8 +56,11 @@ With a known object map, prefer specifying it:
 **These object instance numbers are examples only.** Use the controller's
 actual BACnet object export. If JSON is blank, OpenHVAC tries the first
 32 entries in the selected BACnet device's object-list (not a general network
-discovery sweep). Shared BACnet UDP port ownership is not supported:
-another local BACnet service using the same bind port may conflict.
+discovery sweep). All OpenHVAC BACnet devices on the same local bind IP
+share one BACnet client (one UDP 47808 socket), so several controllers can
+be added; the first device's local client instance is used for all of
+them. Another, non-OpenHVAC BACnet service on the same IP and port may
+still conflict.
 
 Read-only. No BACnet WriteProperty is exposed.
 

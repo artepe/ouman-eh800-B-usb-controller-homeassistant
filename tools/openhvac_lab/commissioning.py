@@ -4,7 +4,6 @@ Not an autonomous acceptance certificate. The operator must explicitly
 sign off the inspection; no device polling, writes, or network access.
 """
 from __future__ import annotations
-from datetime import datetime, timezone
 from pathlib import Path
 from textwrap import wrap
 from .core import utc_time, number, InvalidMeasurement

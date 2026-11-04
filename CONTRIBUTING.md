@@ -19,8 +19,9 @@ device-specific register maps, BACnet object lists and verified diagnostics.
 5. Document hardware wiring, physical communications modules, polling
    limits, firmware compatibility, and measurements *actually* checked
    against the device display. Describe untested behaviour as experimental.
-6. Do not modify `custom_components/ouman_eh800` v0.1.2 in unrelated
-   contributions; it is the separate tested legacy implementation.
+6. Do not modify `custom_components/ouman_eh800` (legacy, serial code of
+   the tested v0.1.2) in unrelated contributions; it is the separate legacy
+   implementation. OpenHVAC Bridge carries its own copy of the USB protocol.
 
 ## Local checks
 

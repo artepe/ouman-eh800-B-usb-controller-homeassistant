@@ -17,6 +17,10 @@ a separate **experimental** `custom_components/openhvac` component.
 
 ## Important safety limits
 
+> **v0.1.3 on `main`** keeps this serial code but removes the PID 56/57/58
+> and manual valve 92 entities and the placeholder start values. This page
+> describes the original v0.1.2 on the pinned `stable/v0.1.2` branch.
+
 **Do not change PID parameters 56 / 57 / 58 (P band, I time, D time)** on a live heating system. These Number entities are *writable* in v0.1.2; testing on one controller coincided with abnormal valve operation. Manual valve position (property 92) also changes the real valve. There is no automatic safety rollback.
 
 The 28 data channels are not all fully decoded. The stable version has no `ouman_eh800.restore_original` action; do not try to invoke it after installing this stable branch. Recovery and protocol research documented elsewhere are **experimental** and not part of the supported stable installation. Always preserve your own controller settings before changing them.

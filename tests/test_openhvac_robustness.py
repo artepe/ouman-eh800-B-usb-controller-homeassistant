@@ -245,6 +245,138 @@ class ModbusCycleTests(unittest.TestCase):
             asyncio.run(driver.async_read())
 
 
+def bacnet_data(host, device_id, local_address="192.168.20.10/24"):
+    return {"profile_json": "", "host": host, "bacnet_device_id": device_id,
+            "bacnet_local_address": local_address, "bacnet_local_instance": 400000}
+
+
+class BacnetSharingTests(unittest.TestCase):
+    """Several BACnet devices on one interface must share one UDP socket."""
+
+    def setUp(self):
+        self.created = []
+
+        class FakeApp:
+            def __init__(self):
+                self.closed = False
+
+            def close(self):
+                self.closed = True
+
+        def factory(local_address, local_instance):
+            app = FakeApp()
+            self.created.append(app)
+            return app
+
+        self._old_factory = drivers._app_factory
+        drivers._app_factory = factory
+
+    def tearDown(self):
+        drivers._app_factory = self._old_factory
+        drivers._SHARED_APPS.clear()
+
+    def test_devices_share_one_application_per_bind_ip(self):
+        first = drivers.BacnetDriver(None, bacnet_data("192.168.20.51", 1001))
+        second = drivers.BacnetDriver(None, bacnet_data("192.168.20.52", 1002))
+        asyncio.run(first.async_connect())
+        asyncio.run(second.async_connect())
+        self.assertEqual(len(self.created), 1)
+        self.assertIs(first.app, second.app)
+        asyncio.run(first.async_close())
+        self.assertFalse(self.created[0].closed)  # still used by the second
+        asyncio.run(second.async_close())
+        self.assertTrue(self.created[0].closed)
+        self.assertEqual(drivers._SHARED_APPS, {})
+
+    def test_other_interface_gets_its_own_socket(self):
+        a = drivers.BacnetDriver(None, bacnet_data("192.168.20.51", 1001))
+        b = drivers.BacnetDriver(None, bacnet_data("192.168.30.51", 1001,
+                                                   local_address="192.168.30.10/24"))
+        asyncio.run(a.async_connect())
+        asyncio.run(b.async_connect())
+        self.assertEqual(len(self.created), 2)
+        asyncio.run(a.async_close())
+        asyncio.run(b.async_close())
+        self.assertTrue(all(app.closed for app in self.created))
+
+
+class FakeSerialPort:
+    """Minimal pyserial stand-in: one scripted reply per opened port."""
+
+    replies: list = []
+    opened: list = []
+
+    def __init__(self, port, timeout, write_timeout, exclusive):
+        assert exclusive is True
+        self.reply = FakeSerialPort.replies.pop(0) if FakeSerialPort.replies else b""
+        self.written = b""
+        FakeSerialPort.opened.append(self)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def reset_input_buffer(self):
+        pass
+
+    def write(self, data):
+        self.written += data
+
+    def flush(self):
+        pass
+
+    def read(self, size):
+        chunk, self.reply = self.reply, b""
+        return chunk
+
+
+class OumanUsbClientTests(unittest.TestCase):
+    """The bundled EH-800B client keeps the tested v0.1.2 behaviour."""
+
+    def setUp(self):
+        from unittest import mock
+        spec = importlib.util.spec_from_file_location(
+            "openhvac_ouman_usb_real", COMPONENT / "ouman_usb.py")
+        self.usb = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.usb)
+        fake_serial = types.ModuleType("serial")
+        fake_serial.Serial = FakeSerialPort
+        FakeSerialPort.replies, FakeSerialPort.opened = [], []
+        clock = iter(range(0, 10**6))  # each monotonic() call = +1 s
+        self.patches = [mock.patch.dict(sys.modules, {"serial": fake_serial}),
+                        mock.patch.object(self.usb.time, "sleep", lambda s: None),
+                        mock.patch.object(self.usb.time, "monotonic", lambda: next(clock))]
+        for patcher in self.patches:
+            patcher.start()
+
+    def tearDown(self):
+        for patcher in reversed(self.patches):
+            patcher.stop()
+
+    def test_measurements_are_parsed_in_order(self):
+        FakeSerialPort.replies = [b"MEASUREMENTS\r\n 1: 45.2 C\r\n15: 37 %\r\n"
+                                  b"bogus line\r\n28: 0 dig\r\n"]
+        rows = self.usb.OumanUSB("/dev/ttyTEST").measurements()
+        self.assertEqual(rows, [(45.2, "C"), (37.0, "%"), (0.0, "dig")])
+        self.assertEqual(FakeSerialPort.opened[0].written, b"MEASUREMENTS\n")
+
+    def test_write_with_single_retry_is_never_repeated(self):
+        FakeSerialPort.replies = [b""]  # no answer: physical state unknown
+        reply = self.usb.OumanUSB("/dev/ttyTEST").command(
+            "SET PROPERTY 67 550", wait=0.18, retries=1)
+        self.assertEqual(reply, "")
+        self.assertEqual(len(FakeSerialPort.opened), 1)
+        self.assertEqual(FakeSerialPort.opened[0].written, b"SET PROPERTY 67 550\n")
+
+    def test_empty_read_replies_are_retried(self):
+        FakeSerialPort.replies = [b"", b"", b"PROPERTY(67):'X'(0-1000) = 550\r\n"]
+        reply = self.usb.OumanUSB("/dev/ttyTEST").command("MEASUREMENTS", retries=3)
+        self.assertIn("PROPERTY(67)", reply)
+        self.assertEqual(len(FakeSerialPort.opened), 3)
+
+
 class RefrigerantPhaseTests(unittest.TestCase):
     @staticmethod
     def tool():

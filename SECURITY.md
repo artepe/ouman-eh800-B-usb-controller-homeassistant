@@ -9,9 +9,10 @@ maintainer via [@artepe](https://github.com/artepe).
 
 ## Release/support status
 
-- `custom_components/ouman_eh800` **v0.1.2**: last version reported working
-  with one real EH-800B. It is **not** a safety-certified control system.
-- `custom_components/openhvac` **v0.5.0-beta.1**: experimental. The CI tests
+- `custom_components/ouman_eh800` **v0.1.3**: the serial code of v0.1.2,
+  the last version reported working with one real EH-800B, without the
+  PID/manual-valve controls. It is **not** a safety-certified control system.
+- `custom_components/openhvac` **v0.5.1-beta.1**: experimental. The CI tests
   do not establish compatibility with physical HVAC/metering equipment.
 - No promise of a vulnerability-remediation SLA is made.
 
@@ -30,10 +31,11 @@ maintainer via [@artepe](https://github.com/artepe).
   local frost, overheating, pressure, pump or ventilation safety controls.
   Before production use, test sensor meaning, scaling, serial settings and
   any write effects on isolated hardware.
-- **Legacy EH-800B warning:** the stable v0.1.2 legacy component has writable
-  PID parameters 56/57/58 and manual valve property 92; changes to PID
-  parameters coincided with abnormal valve behaviour in earlier experiments.
-  **Never use these writable entities for exploratory testing on a live plant.**
+- **Legacy EH-800B warning:** v0.1.2 (pinned `stable/v0.1.2` branch) has
+  writable PID parameters 56/57/58 and manual valve property 92; changes to
+  PID parameters coincided with abnormal valve behaviour in earlier
+  experiments. v0.1.3 removes these entities. **Never use them for
+  exploratory testing on a live plant.**
 - **ESP32-S3 experimental project:** Wi-Fi AP password is device-specific
   when the example default is left unchanged, and setpoint writes require a
   separate password and explicit permission. This does not replace external
