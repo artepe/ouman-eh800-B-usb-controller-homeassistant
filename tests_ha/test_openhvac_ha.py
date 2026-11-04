@@ -299,6 +299,112 @@ async def test_eh800b_usb_uses_bundled_client_and_writes_once(hass):
         assert await hass.config_entries.async_unload(entry.entry_id)
 
 
+
+async def test_derived_sensor_recovers_after_missing_first_poll(hass):
+    """A partial first Modbus read must not permanently hide a COP/delta sensor."""
+    missing_return = dict(A203_REGISTERS)
+    del missing_return[203]
+    fake = modbus_client(registers=missing_return)
+    entry = MockConfigEntry(domain=DOMAIN, data=MODBUS_TCP_ENTRY)
+    entry.add_to_hass(hass)
+    tcp, rtu = patch_modbus(fake)
+    with tcp, rtu:
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        delta = sensor_state(hass, entry, "derived_l1_delta_t")
+        assert delta.state in ("unknown", "unavailable")
+        # The next poll recovers, without re-adding the HA integration.
+        fake.registers = A203_REGISTERS
+        await entry.runtime_data.async_request_refresh()
+        await hass.async_block_till_done()
+        assert float(sensor_state(hass, entry, "derived_l1_delta_t").state) == 5.1
+        assert await hass.config_entries.async_unload(entry.entry_id)
+
+
+async def test_modbus_read_reconnects_after_gateway_reboot(hass):
+    """Reconnection happens on a READ, never by replaying an uncertain write."""
+    from custom_components.openhvac.transport import ModbusDriver
+
+    class ReconnectClient(FakeModbusClient):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.connect_calls = 0
+
+        async def connect(self):
+            self.connect_calls += 1
+            self.connected = True
+            return True
+
+    driver = ModbusDriver(MODBUS_TCP_ENTRY)
+    tcp, rtu = patch_modbus(ReconnectClient)
+    with tcp, rtu:
+        await driver.async_connect()
+        assert driver.client.connect_calls == 1
+        first = await driver.async_read()
+        assert first["l1_supply"] == 45.2
+        driver.client.connected = False
+        recovered = await driver.async_read()
+        assert recovered["l1_supply"] == 45.2
+        assert driver.client.connect_calls == 2
+        await driver.async_close()
+
+
+async def test_modbus_write_does_not_reconnect_or_replay_command(hass):
+    """After a broken connection, writing requires a separate successful read."""
+    from custom_components.openhvac.transport import ModbusDriver
+    from custom_components.openhvac.profiles import Register
+    from unittest.mock import AsyncMock
+
+    data = {**MODBUS_TCP_ENTRY, "allow_writes": True}
+    driver = ModbusDriver(data)
+    client = modbus_client()()
+    client.connected = False
+    client.connect = AsyncMock()
+    client.write_register = AsyncMock()
+    driver.client = client
+    point = Register("test_setpoint", "Test", 201, "u16", 0, "°C",
+                     minimum=0, maximum=80, writable=True)
+    # The range/type encoder itself may reject a synthetic profile, so
+    # fake only its verified conversion while testing transport behavior.
+    with patch("custom_components.openhvac.transport.encode", return_value=[25]):
+        try:
+            await driver.async_write(point, 25)
+        except ConnectionError:
+            pass
+        else:
+            assert False, "Disconnected Modbus write should fail closed"
+    client.connect.assert_not_awaited()
+    client.write_register.assert_not_awaited()
+
+
+async def test_usb_acknowledged_write_survives_unrelated_refresh_failure(hass):
+    """Never tell the operator an ACKed SET failed because MEASUREMENTS timed out."""
+    FakeUsbHub.commands = []
+    entry = MockConfigEntry(domain=DOMAIN, data={
+        "vendor": "Ouman", "model": "EH-800B", "firmware": "",
+        "application_key": "", "allow_writes": False, "transport": "usb",
+        "port": "/dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00",
+    })
+    entry.add_to_hass(hass)
+    with patch("custom_components.openhvac.ouman_usb.OumanUSB", FakeUsbHub):
+        assert await hass.config_entries.async_setup(entry.entry_id)
+        await hass.async_block_till_done()
+        curve = er.async_get(hass).async_get_entity_id(
+            "number", DOMAIN, f"{entry.entry_id}_l1_curve_minus_20c_number")
+        assert hass.states.get(curve).state == "unknown"
+        with patch.object(entry.runtime_data, "async_request_refresh",
+                          side_effect=RuntimeError("USB polling is offline")) as refresh:
+            await hass.services.async_call(
+                "number", "set_value", {"entity_id": curve, "value": 55},
+                blocking=True,
+            )
+            await hass.async_block_till_done()
+            refresh.assert_not_called()
+        assert FakeUsbHub.commands == [("SET PROPERTY 67 550", 1)]
+        assert float(hass.states.get(curve).state) == 55
+        assert hass.states.get(curve).attributes["value_origin"] == "last_confirmed_user_write"
+        assert await hass.config_entries.async_unload(entry.entry_id)
+
 async def test_legacy_driver_hides_pid_and_valve_and_starts_unknown(hass):
     """Legacy ouman_eh800 0.1.3: no PID 56/57/58 or valve 92, no fake values."""
     from homeassistant.setup import async_setup_component

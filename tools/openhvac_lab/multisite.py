@@ -66,20 +66,27 @@ class SiteStore:
 
     def put(self, report):
         safe = validate_site_report(report)
-        received = datetime.now(timezone.utc).isoformat()
+        current = datetime.now(timezone.utc)
+        if (utc_time(safe["observed_at"]) - current).total_seconds() > 120:
+            # Otherwise a gateway with an incorrect future clock can
+            # block all subsequent genuine readings for this site.
+            raise ValueError("Site report timestamp is too far in the future")
+        received = current.isoformat()
         with self._db() as db:
-            prior = db.execute("SELECT observed_at FROM sites WHERE site_id = ?",
-                               (safe["site_id"],)).fetchone()
-            if prior and utc_time(safe["observed_at"]) < utc_time(prior[0]):
-                raise ValueError("Older site report cannot overwrite newer measurements")
-            db.execute(
+            # One atomic upsert prevents two concurrent collectors from
+            # passing a separate stale-check SELECT and then overwriting
+            # the newer snapshot with an older one.
+            cursor = db.execute(
                 "INSERT INTO sites (site_id, observed_at, received_at, status, body_json) "
                 "VALUES (?, ?, ?, ?, ?) ON CONFLICT(site_id) DO UPDATE SET "
                 "observed_at=excluded.observed_at, received_at=excluded.received_at, "
-                "status=excluded.status, body_json=excluded.body_json",
+                "status=excluded.status, body_json=excluded.body_json "
+                "WHERE excluded.observed_at >= sites.observed_at",
                 (safe["site_id"], safe["observed_at"], received, safe["status"],
                  json.dumps(safe, separators=(",", ":"))),
             )
+            if cursor.rowcount == 0:
+                raise ValueError("Older site report cannot overwrite newer measurements")
         return safe
 
     def list(self):

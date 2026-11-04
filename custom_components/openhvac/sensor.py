@@ -36,6 +36,32 @@ async def async_setup_entry(hass, entry, async_add_entities):
         for point in coordinator.driver.points
         if not (editable and point.writable)
     ]
+    # Do not decide existence of calculated entities using ONLY the
+    # first refresh: one missing measurement could otherwise permanently
+    # hide a sensor until the user reloads the entire integration.
+    point_keys = {point.key for point in coordinator.driver.points}
+    source_requirements = {
+        "l1_delta_t": {"l1_supply", "l1_return"},
+        "l1_thermal_power_kw": {"l1_supply", "l1_return", "flow_m3h"},
+        "water_heating_power_kw": {"l1_supply", "l1_return", "flow_m3h"},
+        "system_heating_cop": {"l1_supply", "l1_return", "flow_m3h", "electric_power_kw"},
+        "water_compressor_heating_cop": {
+            "l1_supply", "l1_return", "flow_m3h", "compressor_electric_power_kw"
+        },
+        "refrigerant_cycle_heating_cop_estimate": {
+            "refrigerant_suction_enthalpy_kj_kg",
+            "refrigerant_discharge_enthalpy_kj_kg",
+            "refrigerant_liquid_enthalpy_kj_kg",
+        },
+        "refrigerant_heating_power_kw": {
+            "refrigerant_mass_flow_kg_s", "refrigerant_discharge_enthalpy_kj_kg",
+            "refrigerant_liquid_enthalpy_kj_kg",
+        },
+        "refrigerant_compressor_heating_cop": {
+            "refrigerant_mass_flow_kg_s", "refrigerant_discharge_enthalpy_kj_kg",
+            "refrigerant_liquid_enthalpy_kj_kg", "compressor_electric_power_kw",
+        },
+    }
     for key, name, unit in (
         ("l1_delta_t", "L1 temperature difference", "K"),
         ("l1_thermal_power_kw", "L1 estimated thermal power", "kW"),
@@ -46,7 +72,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
         ("refrigerant_heating_power_kw", "Refrigerant condenser heat output", "kW"),
         ("refrigerant_compressor_heating_cop", "Refrigerant compressor electrical heating COP", None),
     ):
-        if key in (coordinator.data or {}):
+        if key in (coordinator.data or {}) or source_requirements[key].issubset(point_keys):
             entities.append(DerivedSensor(coordinator, key, name, unit))
     entities.append(DiagnosticSensor(coordinator))
     entities.append(AIGuideSensor(coordinator))

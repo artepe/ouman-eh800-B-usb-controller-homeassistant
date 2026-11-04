@@ -1,4 +1,6 @@
 """Number controls: automatically expose allowlisted EH-800B USB setpoints."""
+import logging
+
 from homeassistant.components.number import NumberEntity, NumberMode
 from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
@@ -7,6 +9,8 @@ from .const import (
     DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_TRANSPORT, CONF_ALLOW_WRITES,
 )
 from .usb_setpoints import USB_BY_KEY
+
+_LOGGER = logging.getLogger(__name__)
 
 
 def is_usb_eh800b(data) -> bool:
@@ -65,8 +69,11 @@ class OpenHVACNumber(CoordinatorEntity, NumberEntity):
 
     @property
     def native_value(self):
-        # At startup USB setpoint values are absent (None), never defaults.
-        # After a successful user SET, the driver caches its echoed value.
+        # USB setpoints have no safe device-side GET; a confirmed user
+        # SET is the only known value. Do not conflate stale measurements
+        # from a failed subsequent poll with the write acknowledgement.
+        if self.usb:
+            return self.coordinator.driver.last_confirmed_writes.get(self.point.key)
         return (self.coordinator.data or {}).get(self.point.key)
 
     @property
@@ -77,7 +84,7 @@ class OpenHVACNumber(CoordinatorEntity, NumberEntity):
             "usb_property_id": self.point.address,
             "value_origin": (
                 "last_confirmed_user_write"
-                if self.point.key in (self.coordinator.data or {})
+                if self.point.key in self.coordinator.driver.last_confirmed_writes
                 else "unknown_until_user_write"
             ),
             "live_read_supported": False,
@@ -100,8 +107,25 @@ class OpenHVACNumber(CoordinatorEntity, NumberEntity):
             raise HomeAssistantError("Setpoint outside allowed bounds")
         try:
             await self.coordinator.driver.async_write(self.point, float(value))
-            await self.coordinator.async_request_refresh()
         except Exception as err:
             raise HomeAssistantError(
                 f"OpenHVAC setpoint response could not be confirmed: {err}"
             ) from err
+        if self.usb:
+            # SET PROPERTY was confirmed exactly once by the bundled USB
+            # driver. An unrelated MEASUREMENTS timeout MUST NOT turn this
+            # into a false write failure or tempt the user to repeat it.
+            # The regular 15-second coordinator poll will update sensors.
+            self.async_write_ha_state()
+            return
+        try:
+            await self.coordinator.async_request_refresh()
+        except Exception as err:
+            # A device read can fail *after* a successful write/read-back.
+            # Never report that this physical write was rejected.
+            _LOGGER.warning(
+                "OpenHVAC setpoint command completed, but the later refresh "
+                "failed for %s: %s", self.point.key, err,
+            )
+            self.async_write_ha_state()
+            return

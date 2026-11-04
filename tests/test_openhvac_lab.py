@@ -1,5 +1,6 @@
 """Read-only OpenHVAC Lab feature tests (no HA, physical controller or network)."""
 import json
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import subprocess
 import sys
@@ -225,6 +226,24 @@ class TwinCommissioningMultiSiteTests(unittest.TestCase):
             invalid = {**p, "metrics": {"supply": float("nan")}}
             with self.assertRaises(ValueError):
                 validate_site_report(invalid)
+
+    def test_multi_site_future_timestamp_rejected(self):
+        """A clock-skewed collector must not poison a site's newest snapshot."""
+        with tempfile.TemporaryDirectory() as directory:
+            db = SiteStore(Path(directory) / "sites.sqlite3")
+            p = fixture("site-report.json")
+            db.put(p)
+            future = {**p, "observed_at": (
+                datetime.now(timezone.utc) + timedelta(days=2)).isoformat()}
+            with self.assertRaisesRegex(ValueError, "future"):
+                db.put(future)
+            self.assertEqual(db.get(p["site_id"])["observed_at"],
+                             utc_time(p["observed_at"]).isoformat())
+            # A subsequent newer, genuine reading is still accepted.
+            current = {**p, "observed_at": datetime.now(timezone.utc).isoformat(),
+                       "status": "ok"}
+            self.assertEqual(db.put(current)["status"], "ok")
+            self.assertEqual(db.get(p["site_id"])["status"], "ok")
 
     def test_local_http_api_requires_long_token(self):
         with tempfile.TemporaryDirectory() as directory:
