@@ -1,0 +1,28 @@
+# OpenLVI / Tosibox link-health card (read-only)
+# Replace all example entity IDs with your actual OpenLVI Tosibox entities.
+# These sensors describe the Tosibox gateway, NOT the Ouman/Siemens plant.
+type: vertical-stack
+cards:
+  - type: markdown
+    content: |
+      ## TOSIBOX // Secure OT Link
+      **Gateway monitoring only.** VPN tunnel count does not prove that
+      a PLC or controller behind the VPN is reachable.
+  - type: entities
+    title: Tosibox local Modbus status
+    entities:
+      - entity: sensor.replace_with_tosibox_internet_interface
+        name: Active uplink interface code
+      - entity: sensor.replace_with_tosibox_tosibox_cloud_ok
+        name: Tosi service connection (0/1)
+      - entity: sensor.replace_with_tosibox_vpn_tunnel_count
+        name: VPN tunnel count
+      - entity: sensor.replace_with_tosibox_vpn_enabled
+        name: VPN enabled (read only)
+      - entity: sensor.replace_with_tosibox_cellular_rsrp_raw
+        name: Cellular signal raw
+  - type: history-graph
+    title: VPN activity
+    hours_to_show: 24
+    entities:
+      - entity: sensor.replace_with_tosibox_vpn_tunnel_count

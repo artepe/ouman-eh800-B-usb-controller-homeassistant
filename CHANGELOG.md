@@ -1,5 +1,34 @@
 # Changelog
 
+## Unreleased development branch — OpenLVI Lab 0.5.0-dev
+
+- Expanded the Lab with a local-first Chinese and Panasonic heat pump
+  compatibility registry, strict vendor-cloud exclusion (Comfort Cloud /
+  Aquarea Smart Cloud), read-only normalized Home Assistant telemetry,
+  sample Mango R290 Tuya LAN data, and native Zigbee mesh health audit.
+- Documented existing local alternatives: Panasonic ESPHome/HeishaMon and
+  M-series Modbus, Chinese OEM Tuya LAN/RS485 Modbus, Midea, Gree,
+  Mitsubishi Ecodan and compatible Daikin BRP controllers.
+- Required model/firmware/legitimate local-credential checks; cloud-
+  assisted commissioning does not imply truly offline commissioning.
+- No new heat pump control commands, Tuya key extraction, Zigbee key
+  cloning or radio protocol stack duplication.
+
+
+- Added 12 read-only-first experimental modules for technician diagnostics,
+  register review, digital twin, hydronics, storage optimization,
+  ventilation analysis, thermodynamic diagram, commissioning,
+  normalized sensor networks, building safety and multi-site monitoring.
+- Added safe offline CLI, optional local AI narrative, SQLite site
+  summary storage and 127.0.0.1-only token-protected HTTP prototype.
+- Added Home Assistant isometric digital twin resource and documented
+  third-party integration boundaries.
+- Added automated regression tests and fixtures; no controller
+  modifications or autonomous writes.
+- The OpenLVI integration manifest stays on 0.4.3-beta.1 until the
+  separately reviewed Lab features are promoted into runtime.
+
+
 OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.

@@ -1,6 +1,10 @@
 # OpenLVI Bridge
 
+> **Development branch:** [OpenLVI Lab](docs/OPENLVI_LAB.md) includes 12 experimental building engineering features and a [local-first heat pump and Zigbee extension](docs/LOCAL_FIRST_HEATPUMPS.md). All new adapters are read-only; not a production-grade controller or vendor cloud bypass.
+
 **Open-source Home Assistant integration for HVAC and building automation.**
+
+**Tosibox gateways:** [Local FC03 gateway monitoring and authenticated VPN/site routing](docs/TOSIBOX_INTEGRATION.md) — exact model/firmware, no Internet/VPN state writes, separate plant reachability checks. Includes an offline status decoder and a multi-site connection plan.
 
 **Primary language: English.** Optional Home Assistant translations: Finnish,
 Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
@@ -15,6 +19,19 @@ Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
 > heating installation with unverified drivers.
+
+## Experimental OpenLVI Lab (separate branch)
+
+A new branch adds a tested engineering-toolkit foundation for all 12 proposed
+features: Fault Doctor (optional local Ollama), register/PDF candidate explorer,
+isometric digital twin, hydronic balancing, cost-based heat buffer planner,
+ventilation performance estimates, refrigerant p-h schematic, commissioning
+reports (optional PDF), normalized radio/bus readings, safety monitor,
+localhost-only multi-site reports and a community profile validation library.
+
+**It does not add automatic writes or fully autonomous HVAC control.**
+See [OpenLVI Lab documentation](docs/OPENLVI_LAB.md) and offline
+[example input files](examples/openlvi-lab/).
 
 ## What does OpenLVI Bridge do?
 

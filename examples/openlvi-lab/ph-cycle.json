@@ -1,0 +1,21 @@
+{
+  "refrigerant": "R290",
+  "states": {
+    "suction": {
+      "enthalpy_kj_kg": 420,
+      "pressure_bar_abs": 4
+    },
+    "discharge": {
+      "enthalpy_kj_kg": 475,
+      "pressure_bar_abs": 17
+    },
+    "condenser_outlet": {
+      "enthalpy_kj_kg": 200,
+      "pressure_bar_abs": 17
+    },
+    "expansion_outlet": {
+      "enthalpy_kj_kg": 200,
+      "pressure_bar_abs": 4
+    }
+  }
+}

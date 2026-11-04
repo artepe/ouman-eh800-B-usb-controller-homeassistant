@@ -1,0 +1,20 @@
+# Install /local/openlvi-digital-twin-card.js as a JavaScript resource.
+# Replace every sample ID. No control actions are available.
+type: custom:openlvi-digital-twin-card
+zones:
+  - label: "Living room"
+    floor: 0
+    entity: sensor.example_living_room_temperature
+  - label: "Office"
+    floor: 1
+    entity: sensor.example_office_temperature
+  - label: "Garage"
+    floor: -1
+    entity: sensor.example_garage_temperature
+plant:
+  - label: "Supply water"
+    entity: sensor.example_l1_supply
+  - label: "Heating COP"
+    entity: sensor.example_heating_cop
+  - label: "Ventilation CO2"
+    entity: sensor.example_co2

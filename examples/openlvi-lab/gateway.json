@@ -1,0 +1,32 @@
+{
+  "now": "2026-11-04T09:00:00Z",
+  "readings": [
+    {
+      "source": "lorawan",
+      "device_id": "demo-leak-01",
+      "point_key": "leak",
+      "value": false,
+      "unit": "boolean",
+      "observed_at": "2026-11-04T08:59:00Z",
+      "verified": true
+    },
+    {
+      "source": "modbus",
+      "device_id": "ouman-demo",
+      "point_key": "supply_c",
+      "value": 48.1,
+      "unit": "°C",
+      "observed_at": "2026-11-04T08:59:45Z",
+      "verified": true
+    },
+    {
+      "source": "zigbee",
+      "device_id": "demo-room",
+      "point_key": "temperature_c",
+      "value": 21.3,
+      "unit": "°C",
+      "observed_at": "2026-11-04T06:00:00Z",
+      "verified": false
+    }
+  ]
+}
