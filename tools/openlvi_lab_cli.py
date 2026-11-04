@@ -23,6 +23,8 @@ from openlvi_lab.commissioning import (
     review_commissioning, markdown_report, pdf_report)
 from openlvi_lab.refrigerant import log_ph_svg
 from openlvi_lab.multisite import SiteStore
+from openlvi_lab.local_hvac import plan_local_path, normalize_heatpump_entities
+from openlvi_lab.zigbee import zigbee_mesh_audit
 
 
 def _read(path, *, limit=2_000_000):
@@ -39,8 +41,10 @@ def run(argv=None):
         "ventilation-lab", "safety-monitor", "sensor-gateway",
         "register-explorer", "validate-profile", "commissioning",
         "refrigerant-svg", "multi-site-import", "multi-site-summary",
+        "local-hvac-path", "local-heatpump-readings", "zigbee-audit",
     ))
     p.add_argument("--input", help="Source JSON, CSV, extracted text or PDF")
+    p.add_argument("--path", help="Known local HVAC catalog path ID")
     p.add_argument("--format", choices=("text", "csv", "pdf"), default="text")
     p.add_argument("--source", default="unknown_document",
                    help="Original document name for register exploration")
@@ -50,7 +54,11 @@ def run(argv=None):
                    help="Local SQLite site summary database")
     args = p.parse_args(argv)
 
-    if args.command == "multi-site-summary":
+    if args.command == "local-hvac-path":
+        if not args.path:
+            raise ValueError("--path is required for local-hvac-path")
+        data = plan_local_path(args.path)
+    elif args.command == "multi-site-summary":
         data = {"sites": SiteStore(args.db).list(), "commands_issued": 0}
     elif args.command == "register-explorer":
         if not args.input:
@@ -65,7 +73,13 @@ def run(argv=None):
         if not args.input:
             raise ValueError("--input is required")
         payload = json.loads(_read(args.input))
-        if args.command == "fault-doctor":
+        if args.command == "local-heatpump-readings":
+            data = normalize_heatpump_entities(
+                payload["path"], states=payload["states"],
+                mapping=payload["mapping"], now=payload["now"])
+        elif args.command == "zigbee-audit":
+            data = zigbee_mesh_audit(payload["mesh"], now=payload["now"])
+        elif args.command == "fault-doctor":
             data = analyze_plant(payload["current"], payload.get("history", []))
         elif args.command == "hydronic-balance":
             data = balance_rooms(payload["rooms"])

@@ -135,3 +135,26 @@ claimed.
 All tooling produces outputs in English and has no controller
 write API. Do not use this toolkit to disable mandatory ventilation,
 fire/smoke extraction, frost protection or other safety systems.
+
+## Cloud-independent heat pumps and Zigbee strategy
+
+A new [local-first heat pump / Zigbee guide](LOCAL_FIRST_HEATPUMPS.md)
+documents Panasonic Comfort Cloud cloud dependency, Panasonic
+CN-CNT/CN-WLAN ESPHome replacements, HeishaMon Aquarea and M-series
+Modbus, Chinese R290 Tuya/Modbus, Midea, Gree, Mitsubishi and Daikin.
+The strict-offline catalog and Home Assistant read-only normalizer
+are in `tools/openlvi_lab/local_hvac.py`. The Zigbee2MQTT/ZHA
+network inventory auditor is in `tools/openlvi_lab/zigbee.py`.
+
+    python3 tools/openlvi_lab_cli.py local-hvac-path --path panasonic_comfort_cloud
+    python3 tools/openlvi_lab_cli.py local-hvac-path --path panasonic_split_esphome
+    python3 tools/openlvi_lab_cli.py local-heatpump-readings --input examples/openlvi-lab/local-heatpump.json
+    python3 tools/openlvi_lab_cli.py zigbee-audit --input examples/openlvi-lab/zigbee-mesh.json
+
+These do **not** connect to a device, download cloud credentials, control
+a heat pump or pair Zigbee radios. Each source requires verified hardware,
+firmware, exact device support and WAN-blocked acceptance tests. Only
+already-captured local sensor data is normalized.
+
+Do **not** clone Zigbee2MQTT/ZHA as a second stack. Add upstream quirks
+and external converters by exact fingerprint, and reuse their HA entities.

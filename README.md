@@ -1,6 +1,6 @@
 # OpenLVI Bridge
 
-> **Development branch:** [OpenLVI Lab — 12 experimental features](docs/OPENLVI_LAB.md) contains the read-only research tool suite, digital twin and local multi-site prototype. It is **not** a production-grade controller or public cloud service.
+> **Development branch:** [OpenLVI Lab](docs/OPENLVI_LAB.md) includes 12 experimental building engineering features and a [local-first heat pump and Zigbee extension](docs/LOCAL_FIRST_HEATPUMPS.md). All new adapters are read-only; not a production-grade controller or vendor cloud bypass.
 
 **Open-source Home Assistant integration for HVAC and building automation.**
 

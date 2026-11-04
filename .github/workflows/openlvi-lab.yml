@@ -7,9 +7,11 @@ on:
       - 'tools/openlvi_lab_cli.py'
       - 'tools/openlvi_lab_server.py'
       - 'tests/test_openlvi_lab.py'
+      - 'tests/test_openlvi_local_first.py'
       - 'www/openlvi-digital-twin-card.js'
       - 'examples/openlvi-lab/**'
       - 'docs/OPENLVI_LAB.md'
+      - 'docs/LOCAL_FIRST_HEATPUMPS.md'
       - '.github/workflows/openlvi-lab.yml'
   push:
     branches:
@@ -20,6 +22,7 @@ on:
       - 'tools/openlvi_lab_cli.py'
       - 'tools/openlvi_lab_server.py'
       - 'tests/test_openlvi_lab.py'
+      - 'tests/test_openlvi_local_first.py'
       - 'www/openlvi-digital-twin-card.js'
       - 'examples/openlvi-lab/**'
       - '.github/workflows/openlvi-lab.yml'
@@ -35,10 +38,15 @@ jobs:
       - name: Compile pure Python Lab code
         run: python -m compileall -q tools/openlvi_lab tools/openlvi_lab_cli.py tools/openlvi_lab_server.py
       - name: Run all 12-feature regression tests
-        run: python -m unittest discover -s tests -p 'test_openlvi_lab.py' -v
+        run: |
+          python -m unittest discover -s tests -p 'test_openlvi_lab.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_local_first.py' -v
       - name: Validate Digital Twin JavaScript syntax
         run: node --check www/openlvi-digital-twin-card.js
       - name: Smoke-check the command line
         run: |
           python tools/openlvi_lab_cli.py validate-profile --input examples/openlvi-lab/profile-candidate.json
           python tools/openlvi_lab_cli.py ventilation-lab --input examples/openlvi-lab/ventilation.json
+          python tools/openlvi_lab_cli.py local-hvac-path --path panasonic_split_esphome
+          python tools/openlvi_lab_cli.py local-heatpump-readings --input examples/openlvi-lab/local-heatpump.json
+          python tools/openlvi_lab_cli.py zigbee-audit --input examples/openlvi-lab/zigbee-mesh.json
