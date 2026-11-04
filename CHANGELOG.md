@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased development branch — OpenLVI Lab 0.5.0-dev
+
+- Added 12 read-only-first experimental modules for technician diagnostics,
+  register review, digital twin, hydronics, storage optimization,
+  ventilation analysis, thermodynamic diagram, commissioning,
+  normalized sensor networks, building safety and multi-site monitoring.
+- Added safe offline CLI, optional local AI narrative, SQLite site
+  summary storage and 127.0.0.1-only token-protected HTTP prototype.
+- Added Home Assistant isometric digital twin resource and documented
+  third-party integration boundaries.
+- Added automated regression tests and fixtures; no controller
+  modifications or autonomous writes.
+- The OpenLVI integration manifest stays on 0.4.3-beta.1 until the
+  separately reviewed Lab features are promoted into runtime.
+
+
 OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.

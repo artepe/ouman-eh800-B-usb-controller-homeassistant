@@ -1,0 +1,14 @@
+{
+  "site_id": "demo-building-01",
+  "name": "Demo Building",
+  "observed_at": "2026-11-04T08:58:00Z",
+  "status": "warning",
+  "metrics": {
+    "co2_ppm": 1300,
+    "heating_cop": 3.9,
+    "water_supply_c": 49
+  },
+  "alarm_codes": [
+    "filter_pressure"
+  ]
+}
