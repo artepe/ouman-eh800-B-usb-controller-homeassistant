@@ -4,6 +4,20 @@ OpenHVAC Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## Reliability audit — unreleased, stacked on OpenHVAC 0.5.1-beta.1
+
+- Recover Modbus client connectivity during **read** cycles after gateway
+  restart; serialize reads with writes and verified readbacks. Never auto-replay
+  an uncertain write.
+- Create derived COP and thermal sensors from known point metadata so a
+  missing first reading cannot permanently hide them.
+- USB: display an acknowledged setpoint command without requiring a
+  second unrelated sensor poll; this remains last confirmed write, not
+  an independent live read.
+- Reject far-future site timestamps and use an atomic conditional SQLite
+  upsert to protect newest snapshots.
+- Mocked-device regression tests added; no real equipment tested.
+
 ## OpenHVAC Lab — unreleased tools (experimental)
 
 - Expanded the Lab with a local-first Chinese and Panasonic heat pump
