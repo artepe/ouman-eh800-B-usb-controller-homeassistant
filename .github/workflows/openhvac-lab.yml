@@ -1,0 +1,51 @@
+name: OpenHVAC Lab prototypes
+
+on:
+  pull_request:
+    paths:
+      - 'tools/openhvac_lab/**'
+      - 'tools/openhvac_lab_cli.py'
+      - 'tools/openhvac_lab_server.py'
+      - 'tests/test_openhvac_lab.py'
+      - 'tests/test_openhvac_local_first.py'
+      - 'www/openhvac-digital-twin-card.js'
+      - 'examples/openhvac-lab/**'
+      - 'docs/OPENHVAC_LAB.md'
+      - 'docs/LOCAL_FIRST_HEATPUMPS.md'
+      - '.github/workflows/openhvac-lab.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'tools/openhvac_lab/**'
+      - 'tools/openhvac_lab_cli.py'
+      - 'tools/openhvac_lab_server.py'
+      - 'tests/test_openhvac_lab.py'
+      - 'tests/test_openhvac_local_first.py'
+      - 'www/openhvac-digital-twin-card.js'
+      - 'examples/openhvac-lab/**'
+      - '.github/workflows/openhvac-lab.yml'
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile pure Python Lab code
+        run: python -m compileall -q tools/openhvac_lab tools/openhvac_lab_cli.py tools/openhvac_lab_server.py
+      - name: Run all 12-feature regression tests
+        run: |
+          python -m unittest discover -s tests -p 'test_openhvac_lab.py' -v
+          python -m unittest discover -s tests -p 'test_openhvac_local_first.py' -v
+      - name: Validate Digital Twin JavaScript syntax
+        run: node --check www/openhvac-digital-twin-card.js
+      - name: Smoke-check the command line
+        run: |
+          python tools/openhvac_lab_cli.py validate-profile --input examples/openhvac-lab/profile-candidate.json
+          python tools/openhvac_lab_cli.py ventilation-lab --input examples/openhvac-lab/ventilation.json
+          python tools/openhvac_lab_cli.py local-hvac-path --path panasonic_split_esphome
+          python tools/openhvac_lab_cli.py local-heatpump-readings --input examples/openhvac-lab/local-heatpump.json
+          python tools/openhvac_lab_cli.py zigbee-audit --input examples/openhvac-lab/zigbee-mesh.json

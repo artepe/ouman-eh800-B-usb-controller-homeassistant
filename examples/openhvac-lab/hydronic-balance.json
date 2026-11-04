@@ -1,0 +1,24 @@
+{
+  "rooms": [
+    {
+      "name": "Living room",
+      "temperature_c": 19,
+      "target_c": 21,
+      "valve_pct": 96,
+      "supply_c": 38,
+      "return_c": 32
+    },
+    {
+      "name": "Bedroom",
+      "temperature_c": 21.3,
+      "target_c": 21,
+      "valve_pct": 24
+    },
+    {
+      "name": "Office",
+      "temperature_c": 23.1,
+      "target_c": 21.5,
+      "valve_pct": 0
+    }
+  ]
+}
