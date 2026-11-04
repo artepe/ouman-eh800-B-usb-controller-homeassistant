@@ -2,12 +2,15 @@
 
 **Open-source Home Assistant integration for HVAC and building automation.**
 
+**Primary language: English.** Optional Home Assistant translations: Finnish,
+Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
+
 [![OpenLVI core checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml)
 [![OpenLVI extension checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.4.0-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.4.1-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -97,6 +100,7 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 
 | Resource | Purpose |
 |---|---|
+| [English default and five additional Ouman languages](docs/LOCALIZATION.md) | Home Assistant translated controller labels and compatibility rules |
 | [OpenLVI model/Modbus/HTTP guide](docs/OPENLVI_BRIDGE.md) | Exact model subsets, Modbus maps, connection instructions and limitations |
 | [BACnet, wired M-Bus, SCADA and diagnostics](docs/OPENLVI_EXTENSIONS.md) | Hardware setup, BACnet object lists, M-Bus master and energy formulas |
 | [Isometric SCADA card](www/openlvi-scada-card.js) and [example](examples/lovelace-openlvi-scada.yaml) | Read-only live Lovelace schematic with example entity IDs |
@@ -123,7 +127,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.0-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.1-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

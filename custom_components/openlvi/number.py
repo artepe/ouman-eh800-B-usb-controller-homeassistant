@@ -47,6 +47,12 @@ class OpenLVINumber(CoordinatorEntity, NumberEntity):
         data = coordinator.config_entry.data
         self.usb = is_usb_eh800b(data)
         if self.usb:
+            # Localize only the visible name. Unique ID, address, raw
+            # protocol property and HA entity_id remain untouched.
+            del self._attr_name
+            self._attr_has_entity_name = True
+            self._attr_translation_key = f"eh800b_{point.key}"
+        if self.usb:
             # Safe USB GET PROPERTY isn't validated. Current value is
             # unknown on startup. Input box is preferable to a slider
             # with a misleading guessed position.
