@@ -1,0 +1,28 @@
+{
+  "now": "2026-11-04T09:00:00Z",
+  "mesh": {
+    "backend": "zigbee2mqtt",
+    "coordinator_count": 1,
+    "uses_vendor_cloud": false,
+    "devices": [
+      {
+        "ieee": "0x00124b0024aa0011",
+        "type": "router",
+        "lqi": 174,
+        "last_seen": "2026-11-04T08:58:00Z"
+      },
+      {
+        "ieee": "0x00124b0024aa0022",
+        "type": "end_device",
+        "lqi": 92,
+        "last_seen": "2026-11-04T08:55:00Z"
+      },
+      {
+        "ieee": "0x00124b0024aa0033",
+        "type": "end_device",
+        "lqi": 33,
+        "last_seen": "2026-11-04T08:40:00Z"
+      }
+    ]
+  }
+}

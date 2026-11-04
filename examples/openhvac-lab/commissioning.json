@@ -1,0 +1,42 @@
+{
+  "site_id": "demo-plant-1",
+  "checked_at": "2026-11-04T09:00:00Z",
+  "profile": {
+    "vendor": "Ouman",
+    "model": "A203",
+    "firmware": "2.0.2",
+    "transport": "modbus_rtu",
+    "verification": "candidate",
+    "source_url": "https://ouman.fi/downloads/",
+    "registers": [
+      {
+        "key": "outdoor",
+        "name": "Outdoor temperature",
+        "address": 201,
+        "area": "holding",
+        "kind": "s16",
+        "decimals": 1,
+        "writable": false
+      },
+      {
+        "key": "l1_supply",
+        "name": "L1 supply temperature",
+        "address": 202,
+        "area": "holding",
+        "kind": "s16",
+        "decimals": 1,
+        "writable": false
+      }
+    ]
+  },
+  "observations": {
+    "outdoor": {
+      "value": 2,
+      "observed_at": "2026-11-04T08:59:00Z"
+    },
+    "l1_supply": {
+      "value": 48,
+      "observed_at": "2026-11-04T08:58:00Z"
+    }
+  }
+}

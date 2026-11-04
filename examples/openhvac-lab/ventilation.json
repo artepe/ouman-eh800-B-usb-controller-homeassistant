@@ -1,0 +1,8 @@
+{
+  "outdoor_c": 2,
+  "supply_c": 17,
+  "extract_c": 22,
+  "supply_airflow_m3h": 280,
+  "fan_electric_kw": 0.16,
+  "co2_ppm": 770
+}

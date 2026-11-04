@@ -45,3 +45,16 @@ maintainer via [@artepe](https://github.com/artepe).
 The project does not claim automatic discovery of every device, automatic
 safety validation, reliable AI fault diagnosis or autonomous AI-based
 physical control. The optional local model provides advisory text only.
+
+## Unreleased OpenHVAC Lab companion tools
+
+The development Lab is a collection of optional offline tools.
+The dynamic Digital Twin is read-only. Imported vendor documents are
+untrusted content; candidates must be checked by a qualified installer.
+The Multi-site HTTP demo **binds 127.0.0.1 only**, uses a long bearer
+token and contains no Modbus/BACnet/actuator command endpoint. It is
+**not** approved for direct internet hosting or use as a tenant cloud
+without an independently reviewed TLS/VPN gateway, RBAC, rate-limiting,
+backup and secrets management. The optional Ollama adapter permits
+private-IP port 11434 only and sends numeric findings rather than
+site secrets. No automatic safety overrides are added.

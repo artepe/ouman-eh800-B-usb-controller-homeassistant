@@ -1,5 +1,7 @@
 # OpenHVAC Bridge
 
+> **Development branch:** [OpenHVAC Lab](docs/OPENHVAC_LAB.md) includes 12 experimental building engineering features and a [local-first heat pump and Zigbee extension](docs/LOCAL_FIRST_HEATPUMPS.md). All new adapters are read-only; not a production-grade controller or vendor cloud bypass.
+
 **Open-source Home Assistant integration for HVAC and building automation.**
 
 **Primary language: English.** Optional Home Assistant translations: Finnish,
@@ -15,6 +17,20 @@ Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
 > heating installation with unverified drivers.
+
+## Experimental OpenHVAC Lab (offline tools)
+
+The `tools/openhvac_lab` toolkit adds a tested engineering foundation for
+12 features: Fault Doctor (optional local Ollama), register/PDF candidate
+explorer, isometric digital twin, hydronic balancing, cost-based heat buffer
+planner, ventilation performance estimates, refrigerant p-h schematic,
+commissioning reports (optional PDF), normalized radio/bus readings, safety
+monitor, localhost-only multi-site reports and a community profile
+validation library.
+
+**It does not add automatic writes or fully autonomous HVAC control.**
+See [OpenHVAC Lab documentation](docs/OPENHVAC_LAB.md) and offline
+[example input files](examples/openhvac-lab/).
 
 ## What does OpenHVAC Bridge do?
 

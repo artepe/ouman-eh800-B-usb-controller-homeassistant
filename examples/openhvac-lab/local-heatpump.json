@@ -1,0 +1,50 @@
+{
+  "path": "mango_r290_tuya_local",
+  "now": "2026-11-04T09:00:00Z",
+  "mapping": {
+    "supply_c": "sensor.demo_heatpump_supply",
+    "return_c": "sensor.demo_heatpump_return",
+    "outdoor_c": "sensor.demo_heatpump_outdoor",
+    "water_flow_m3h": "sensor.demo_heatpump_flow",
+    "electric_power_kw": "sensor.demo_heatpump_electric",
+    "compressor_speed_rps": "sensor.demo_heatpump_compressor_rps",
+    "defrost_active": "binary_sensor.demo_heatpump_defrost"
+  },
+  "states": {
+    "sensor.demo_heatpump_supply": {
+      "state": "52.1",
+      "unit": "°C",
+      "last_updated": "2026-11-04T08:59:40Z"
+    },
+    "sensor.demo_heatpump_return": {
+      "state": "49.1",
+      "unit": "°C",
+      "last_updated": "2026-11-04T08:59:40Z"
+    },
+    "sensor.demo_heatpump_outdoor": {
+      "state": "1.6",
+      "unit": "°C",
+      "last_updated": "2026-11-04T08:59:00Z"
+    },
+    "sensor.demo_heatpump_flow": {
+      "state": "2080",
+      "unit": "L/h",
+      "last_updated": "2026-11-04T08:59:00Z"
+    },
+    "sensor.demo_heatpump_electric": {
+      "state": "1620",
+      "unit": "W",
+      "last_updated": "2026-11-04T08:59:00Z"
+    },
+    "sensor.demo_heatpump_compressor_rps": {
+      "state": "34",
+      "unit": "rps",
+      "last_updated": "2026-11-04T08:59:00Z"
+    },
+    "binary_sensor.demo_heatpump_defrost": {
+      "state": "off",
+      "unit": "boolean",
+      "last_updated": "2026-11-04T08:59:30Z"
+    }
+  }
+}

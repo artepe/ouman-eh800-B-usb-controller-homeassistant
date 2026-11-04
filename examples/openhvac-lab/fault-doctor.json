@@ -1,0 +1,34 @@
+{
+  "current": {
+    "heating_power_kw": 7.8,
+    "electric_power_kw": 1.5,
+    "heating_cop": 5.2,
+    "valve_position_pct": 96,
+    "supply_c": 47,
+    "supply_target_c": 57,
+    "filter_pressure_pa": 220,
+    "filter_limit_pa": 180,
+    "water_flow_m3h": 1.7,
+    "min_expected_flow_m3h": 2
+  },
+  "history": [
+    {
+      "heating_cop": 6.7
+    },
+    {
+      "heating_cop": 6.5
+    },
+    {
+      "heating_cop": 6.6
+    },
+    {
+      "heating_cop": 6.8
+    },
+    {
+      "heating_cop": 6.5
+    },
+    {
+      "heating_cop": 6.7
+    }
+  ]
+}
