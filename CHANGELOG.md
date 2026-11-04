@@ -13,6 +13,9 @@ milestones, not compatibility certifications.
   without manufacturing sensor readings.
 - Added manufacturer and communication catalog for Finnish sites,
   including Ouman, Honeywell, Siemens, Wavin, Danfoss, Resideo and more.
+- Added separate sustained high-CO2 alert blueprint, CO2 Lovelace sample
+  and optional offline CoolProp R290 property/COP CLI; no automatic
+  heat-pump or refrigerant writes.
 - Added Home Assistant supplemental CO2 fan blueprint with enable helper,
   outdoor cutoff, hysteresis, output deadband and invalid-data protection.
 - Added simultaneous water/electric COP and independent refrigerant

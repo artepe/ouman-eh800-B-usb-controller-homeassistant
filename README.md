@@ -129,6 +129,8 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 | Resource | Purpose |
 |---|---|
 | [Finland BMS / floor heating manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) | Uponor, Roth, Tosibox, Siemens, Honeywell, Ouman, Wavin and additional Finnish market devices |
+| [Sustained CO2 notification blueprint](blueprints/automation/openlvi/co2_high_alert.yaml) | Independent high-CO2 notification without fan writes |
+| [R290 and refrigerant property calculator](tools/refrigerant_state_calculator.py) | Optional offline CoolProp state analysis from measured absolute P/T |
 | [CO2 auxiliary 0-10 V fan blueprint](blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml) | Manual-enable, CO2 ramp and cold weather auxiliary fan cutoff |
 | [Heat pump and refrigerant COP guide](docs/THERMAL_AND_REFRIGERANT_COP.md) | Measured water COP, thermodynamic cycle estimate and missing-data safety |
 | [Manufacturer register and control research](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md) | Manufacturer manuals, candidate registers, missing features, safety classification |
