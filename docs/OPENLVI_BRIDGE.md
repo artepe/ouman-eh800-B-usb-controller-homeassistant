@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.4.1-beta.1; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.4.2-beta.1; NOT hardware validated.** Maintained in the repository
 [OpenLVIBridge-homeassistant](https://github.com/artepe/OpenLVIBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
@@ -77,6 +77,11 @@ options/licensing and wiring against the exact unit.
 - [Vallox direct Modbus FAQ](https://www.vallox.com/en/support-and-instructions/frequently-asked-questions/):
   obtain software-version-specific MyVallox map before use.
 
+**New research:** see [manufacturer register source map](REGISTER_AND_CONTROL_SOURCE_MAP.md) and
+[LoRaWAN / other network research](LORAWAN_AND_PROTOCOLS.md). These are
+not proof of direct interoperability; the researched point maps are not
+activated by model name alone.
+
 ## Custom site-specific registers (always read-only)
 
 ```json
@@ -93,7 +98,12 @@ Replace it with your controller's actual point table. Valid areas:
 `holding` (Modbus function 03) and `input` (function 04). Supported
 types: signed/unsigned 16-bit or 32-bit. Vendor 1-based address
 is converted internally to the 0-based Modbus protocol address.
-JSON-supplied registers can never become writable.
+JSON-supplied registers can never become writable. For **read-only** engineering
+units, an optional finite numeric `offset` is applied after decimal scaling.
+For example, a MyVallox 16-bit unsigned centikelvin register may use
+`decimals:2` and `offset:-273.15` to display Celsius. This is not used
+by writes. See [MyVallox sample](../examples/modbus-myvallox-readonly.json).
+The site and vendor address-to-PDU conversion must still be verified.
 
 ## Safety, constraints, and planned work
 

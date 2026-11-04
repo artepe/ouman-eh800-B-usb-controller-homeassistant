@@ -1,0 +1,20 @@
+{
+  "end_device_ids": {
+    "device_id": "demo-meter",
+    "dev_eui": "0102030405060708"
+  },
+  "uplink_message": {
+    "f_port": 15,
+    "f_cnt": 42,
+    "frm_payload": "AQIDBA==",
+    "decoded_payload": {
+      "temperature": 20.5
+    },
+    "rx_metadata": [
+      {
+        "rssi": -35,
+        "snr": 5
+      }
+    ]
+  }
+}

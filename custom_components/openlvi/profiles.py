@@ -4,6 +4,7 @@ Addresses are *1-based* in Ouman PDF tables. This module deliberately
 does not guess unknown registers, firmware versions or write permissions.
 """
 from dataclasses import dataclass
+from math import isfinite
 import json
 
 @dataclass(frozen=True)
@@ -18,6 +19,7 @@ class Register:
     maximum: float | None = None
     writable: bool = False
     area: str = "holding"  # holding (FC03) or input (FC04)
+    offset: float = 0.0  # Read-only engineering-unit correction, e.g. centikelvin
 
     @property
     def count(self):
@@ -36,29 +38,29 @@ SOURCES = {
     "H23": "https://ouflextool.ouman.net/downloads/DeviceTemplates/Ouman/H23/v405/H23%204.0.5_Modbus_fi.pdf",
 }
 BASE = [
-    temp("outdoor", "Ulkolämpötila", 201),
-    temp("l1_supply", "L1 menovesi", 202),
-    temp("l1_return", "L1 paluuvesi", 203),
-    temp("l2_supply", "L2 menovesi", 205),
-    temp("dhw_supply", "Käyttöveden menovesi", 208),
-    temp("dhw_return", "Käyttöveden kierto", 209),
+    temp("outdoor", "Outdoor temperature", 201),
+    temp("l1_supply", "L1 supply water temperature", 202),
+    temp("l1_return", "L1 return water temperature", 203),
+    temp("l2_supply", "L2 supply water temperature", 205),
+    temp("dhw_supply", "Domestic hot water supply", 208),
+    temp("dhw_return", "Domestic hot water recirculation", 209),
 ]
 PROFILE_MAPS = {
     "A203": BASE + [
-        Register("l1_room_target", "L1 huoneasetus", 818, "s16", 1, "°C", 5, 50, True),
-        Register("l2_room_target", "L2 huoneasetus", 905, "s16", 1, "°C", 5, 50, True),
+        Register("l1_room_target", "L1 room temperature setpoint", 818, "s16", 1, "°C", 5, 50, True),
+        Register("l2_room_target", "L2 room temperature setpoint", 905, "s16", 1, "°C", 5, 50, True),
     ],
     "S203": BASE + [
-        Register("l1_room_target", "L1 huoneasetus", 793, "s16", 1, "°C", 5, 50, True),
-        Register("l2_room_target", "L2 huoneasetus", 713, "s16", 1, "°C", 5, 50, True),
+        Register("l1_room_target", "L1 room temperature setpoint", 793, "s16", 1, "°C", 5, 50, True),
+        Register("l2_room_target", "L2 room temperature setpoint", 713, "s16", 1, "°C", 5, 50, True),
     ],
     "C203": BASE + [
-        Register("l1_room_target", "L1 huoneasetus", 585, "s16", 1, "°C", 5, 50, True),
-        Register("l2_room_target", "L2 huoneasetus", 751, "s16", 1, "°C", 5, 50, True),
+        Register("l1_room_target", "L1 room temperature setpoint", 585, "s16", 1, "°C", 5, 50, True),
+        Register("l2_room_target", "L2 room temperature setpoint", 751, "s16", 1, "°C", 5, 50, True),
     ],
     "H23": BASE + [
-        Register("l1_room_target", "L1 huoneasetus", 432, "s16", 1, "°C", 5, 35, True),
-        Register("l2_room_target", "L2 huoneasetus", 453, "s16", 1, "°C", 5, 35, True),
+        Register("l1_room_target", "L1 room temperature setpoint", 432, "s16", 1, "°C", 5, 35, True),
+        Register("l2_room_target", "L2 room temperature setpoint", 453, "s16", 1, "°C", 5, 35, True),
     ],
 }
 SUPPORTED_TYPES = frozenset(("s16", "u16", "s32", "u32"))
@@ -66,7 +68,7 @@ SUPPORTED_TYPES = frozenset(("s16", "u16", "s32", "u32"))
 def parse_profile(raw: str) -> list[Register]:
     """Parse operator-supplied, explicitly *read-only* point list.
 
-    Example {"registers":[{"key":"room","name":"Huone","address":305,
+    Example {"registers":[{"key":"room","name":"Room","address":305,
       "kind":"s32","decimals":1,"unit":"°C"}]}.
     """
     doc = json.loads(raw)
@@ -94,12 +96,15 @@ def parse_profile(raw: str) -> list[Register]:
             raise ValueError("Invalid 1-based address")
         if type(decimals) is not int or not 0 <= decimals <= 5:
             raise ValueError("Decimals must be between 0 and 5")
+        offset = item.get("offset", 0)
+        if type(offset) not in (int, float) or not isfinite(offset) or abs(offset) > 1000:
+            raise ValueError("Register offset must be a finite number within +/-1000")
         keys.add(key)
         # Never honor "writable":true from untrusted or user-supplied templates.
         area = item.get("area", "holding")
         if area not in ("holding", "input"):
             raise ValueError("Use holding or input register area")
-        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area))
+        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area, offset=float(offset)))
     return points
 
 def profile_for(model: str, firmware: str, profile_json: str) -> list[Register]:
@@ -119,9 +124,11 @@ def decode(registers: list[int], point: Register) -> float:
     bits = 32 if point.count == 2 else 16
     if point.kind.startswith("s") and raw & (1 << (bits - 1)):
         raw -= 1 << bits
-    return raw / (10 ** point.decimals)
+    return raw / (10 ** point.decimals) + point.offset
 
 def encode(value: float, point: Register) -> list[int]:
+    if point.offset:
+        raise ValueError("Engineering-unit offset is read-only")
     if not point.writable or point.minimum is None or point.maximum is None:
         raise ValueError("This point is not in the verified write allowlist")
     if not point.minimum <= value <= point.maximum:
@@ -147,28 +154,28 @@ REGIN_SOURCE = "https://www.regincontrols.com/globalassets/pimmediafiles/documen
 # Swegon CASA Genius: SEM/SEC connection, software 4.x, vendor SCB4.3 list.
 # 3x = input, 4x = holding. Emergency stop deliberately excluded.
 SWEGON_GENIUS = [
-    Register("operation_mode", "Käyttötila 1=poissa 2=kotona 3=tehostus", 5001, "u16", 0, None, 1, 3, True, "holding"),
-    Register("co2_auto", "CO2 automatiikka", 5009, "u16", 0, None, area="holding"),
-    Register("co2_home_limit", "Kotona CO2 raja", 5114, "u16", 0, "ppm", area="holding"),
-    Register("co2_away_limit", "Poissa CO2 raja", 5115, "u16", 0, "ppm", area="holding"),
-    Register("unit_state", "Koneen tila", 6301, "u16", 0, None, area="input"),
-    Register("supply_fan_percent", "Tulopuhallin ohjaus", 6303, "u16", 0, "%", area="input"),
-    Register("extract_fan_percent", "Poistopuhallin ohjaus", 6304, "u16", 0, "%", area="input"),
-    Register("supply_fan_rpm", "Tulopuhallin kierrokset", 6305, "u16", 0, "rpm", area="input"),
-    Register("extract_fan_rpm", "Poistopuhallin kierrokset", 6306, "u16", 0, "rpm", area="input"),
-    Register("supply_temp_target", "Tulolämpötilan pyynti", 6320, "s16", 1, "°C", area="input"),
-    Register("heating_state", "Lämmityksen ja LTO:n tila", 6370, "u16", 0, None, area="input"),
-    Register("exchanger_bypass", "LTO ohituspelti", 6348, "u16", 0, "%", area="input"),
+    Register("operation_mode", "Operation mode (1 Away, 2 Home, 3 Boost)", 5001, "u16", 0, None, 1, 3, True, "holding"),
+    Register("co2_auto", "CO2 automation", 5009, "u16", 0, None, area="holding"),
+    Register("co2_home_limit", "CO2 home threshold", 5114, "u16", 0, "ppm", area="holding"),
+    Register("co2_away_limit", "CO2 away threshold", 5115, "u16", 0, "ppm", area="holding"),
+    Register("unit_state", "Ventilation unit status", 6301, "u16", 0, None, area="input"),
+    Register("supply_fan_percent", "Supply fan control", 6303, "u16", 0, "%", area="input"),
+    Register("extract_fan_percent", "Extract fan control", 6304, "u16", 0, "%", area="input"),
+    Register("supply_fan_rpm", "Supply fan RPM", 6305, "u16", 0, "rpm", area="input"),
+    Register("extract_fan_rpm", "Extract fan RPM", 6306, "u16", 0, "rpm", area="input"),
+    Register("supply_temp_target", "Supply air temperature target", 6320, "s16", 1, "°C", area="input"),
+    Register("heating_state", "Heating and heat recovery status", 6370, "u16", 0, None, area="input"),
+    Register("exchanger_bypass", "Heat exchanger bypass damper", 6348, "u16", 0, "%", area="input"),
 ]
 # Regin Corrigo E ventilation, software 3.2 (real signals scaled /10).
 REGIN_CORRIGO_E = [
-    Register("outdoor_temp", "Ulkolämpötila", 1, "s16", 1, "°C", area="input"),
-    Register("unit_mode", "Käyntitila", 3, "u16", 0, None, area="input"),
-    Register("supply_temp", "Tuloilma", 7, "s16", 1, "°C", area="input"),
-    Register("supply_target", "Tulopyynti", 8, "s16", 1, "°C", area="input"),
-    Register("extract_temp", "Poistoilma", 9, "s16", 1, "°C", area="input"),
-    Register("supply_flow", "Tuloilmavirta", 15, "u16", 0, "m³/h", area="input"),
-    Register("extract_flow", "Poistoilmavirta", 16, "u16", 0, "m³/h", area="input"),
+    Register("outdoor_temp", "Outdoor temperature", 1, "s16", 1, "°C", area="input"),
+    Register("unit_mode", "Operating state", 3, "u16", 0, None, area="input"),
+    Register("supply_temp", "Supply air", 7, "s16", 1, "°C", area="input"),
+    Register("supply_target", "Supply target", 8, "s16", 1, "°C", area="input"),
+    Register("extract_temp", "Extract air", 9, "s16", 1, "°C", area="input"),
+    Register("supply_flow", "Supply air flow", 15, "u16", 0, "m³/h", area="input"),
+    Register("extract_flow", "Extract air flow", 16, "u16", 0, "m³/h", area="input"),
 ]
 
 _ouman_profile_for = profile_for
@@ -182,9 +189,9 @@ def profile_for(model: str, firmware: str, profile_json: str, application_key: s
     if model in DANFOSS_MODELS:
         # Globally documented PNU read; application-specific points enabled
         # only after exact installed application key is entered by operator.
-        points = [Register("sensor_s2", "Anturi S2", 10202, "s16", 2, "°C")]
+        points = [Register("sensor_s2", "Sensor S2", 10202, "s16", 2, "°C")]
         if application_key.strip().upper() == "A266.1":
-            points.append(Register("comfort_target", "Piiri 1 mukavuuslämpötila", 11180,
+            points.append(Register("comfort_target", "Circuit 1 comfort temperature", 11180,
                                    "s16", 1, "°C"))
         return points
     if model == "CASA Genius":

@@ -82,7 +82,7 @@ class LocaleTests(unittest.TestCase):
         self.assertIn('f"eh800b_{point.key}"', sensor)
 
     def test_manifest_version_and_legacy_unchanged(self):
-        self.assertEqual(load_json("manifest.json")["version"], "0.4.1-beta.1")
+        self.assertEqual(load_json("manifest.json")["version"], "0.4.2-beta.1")
         legacy = json.loads((ROOT / "custom_components/ouman_eh800/manifest.json")
                             .read_text(encoding="utf-8"))
         self.assertEqual(legacy["version"], "0.1.2")
