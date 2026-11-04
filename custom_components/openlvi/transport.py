@@ -160,18 +160,18 @@ class UsbDriver:
         self.last_confirmed_writes = {}
         self.points = []
         names = {
-            1: "L1 laskettu menovesipyynti",
-            9: "L1 menovesi",
-            10: "Ulkolämpötila",
-            11: "Korjattu ulkolämpötila",
-            15: "L1 laskettu venttiiliasento",
-            16: "L1 venttiiliasento",
-            21: "Hidastettu ulkolämpötila",
+            1: "L1 calculated supply target",
+            9: "L1 supply water temperature",
+            10: "Outdoor temperature",
+            11: "Adjusted outdoor temperature",
+            15: "L1 calculated valve position",
+            16: "L1 valve position",
+            21: "Delayed outdoor temperature",
         }
         for i in range(1, 29):
             unit = "%" if i in (15, 16) else "°C" if i in (1, 9, 10, 11, 21) else None
             self.points.append(Register(
-                f"measurement_{i}", names.get(i, f"Mittaus {i}"), i,
+                f"measurement_{i}", names.get(i, f"Measurement {i}"), i,
                 "s16", 0, unit,
             ))
         # Only confirmed/allowlisted properties get Number entities. Their

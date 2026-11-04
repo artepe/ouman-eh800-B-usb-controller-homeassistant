@@ -1,13 +1,13 @@
 # GitHub About metadata for OpenLVI Bridge
 
 The repository name is already **`OpenLVIBridge-homeassistant`**.
-The GitHub sidebar's **About** fields are not the same as the README and
-must be edited under the repository's **About → gear icon** by a user with
-the appropriate repository permissions.
+The GitHub sidebar's **About** fields are repository metadata, not README
+content. They must be edited under **About → gear icon** by an administrator;
+the current GitHub connector does not expose a repository-metadata update action.
 
 ## Description (copy into GitHub About)
 
-Open-source Home Assistant integration for HVAC/building automation: Ouman, Danfoss, Swegon, Regin, BACnet/IP, Modbus and M-Bus. Experimental.
+Open-source Home Assistant integration for HVAC and building automation. Supports Ouman, Danfoss, Swegon and more via USB, Modbus, BACnet and M-Bus.
 
 ## Website
 
@@ -15,9 +15,8 @@ https://github.com/artepe/OpenLVIBridge-homeassistant/blob/main/docs/OPENLVI_BRI
 
 ## Suggested topics (separate GitHub topic tags)
 
-`home-assistant` `homeassistant` `hvac` `building-automation`
-`modbus` `bacnet` `mbus` `ouman` `danfoss` `swegon`
-`kamstrup` `open-source`
+`home-assistant` `hvac` `building-automation` `ouman` `modbus`
+`bacnet` `heat-pump` `energy-monitoring` `smart-building` `open-source`
 
 Only add tags supported by the actual project scope. In particular, the
 repo is **not** a fully hardware-verified universal controller, and the

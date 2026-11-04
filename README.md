@@ -1,7 +1,6 @@
 # OpenLVI Bridge
 
-**Avoimen lähdekoodin Home Assistant -integraatio LVI- ja kiinteistöautomaatioon.**  
-*An open-source Home Assistant integration for local HVAC and building automation.*
+**Open-source Home Assistant integration for HVAC and building automation.**
 
 [![OpenLVI core checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml)
 [![OpenLVI extension checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml)
@@ -14,19 +13,19 @@
 > reported working on the project's actual EH-800B. Do not replace a working
 > heating installation with unverified drivers.
 
-## Mitä projekti tekee? / What does it do?
+## What does OpenLVI Bridge do?
 
 OpenLVI Bridge links compatible heating, ventilation, metering and building
 automation equipment to **Home Assistant over a local connection**, without
 requiring a vendor cloud service for supported interfaces.
 
-- **Asennusvalikko:** valitse valmistaja → malli → ohjelmistoversio →
-  tiedonsiirto → IP-osoite / sarjaportti. *Manufacturer-first setup wizard.*
-- **Protokollat:** Modbus TCP/RTU, Ouman EH-800 HTTP, EH-800B USB,
+- **Setup wizard:** select manufacturer → model → firmware → protocol →
+  IP address or serial port.
+- **Protocols:** Modbus TCP/RTU, Ouman EH-800 HTTP, EH-800B USB,
   **BACnet/IP (read-only)** and **wired M-Bus (read-only)**.
-- **Mittaukset:** documented temperatures, fan data, valve/setpoint values,
+- **Measurements:** documented temperatures, fan data, valve/setpoint values,
   M-Bus telegram records and BACnet objects, according to model and site.
-- **Ohjaukset:** EH-800B USB: 11 documented L1 setpoint Number entities
+- **Controls:** EH-800B USB: 11 documented L1 setpoint Number entities
   appear on the device automatically, including on existing OpenLVI entries.
   They perform **no write during setup**; a manual value entry sends one
   validated command. Other models require their separate write opt-in.
@@ -35,11 +34,11 @@ requiring a vendor cloud service for supported interfaces.
 - **English AI guide:** automatic read-only baseline, on-device review button
   and optional local Ollama Qwen2.5 0.5B to explain settings. The AI does
   **not** write heating controller settings. [Guide](docs/OPENLVI_AI_GUIDE.md).
-- **Työkalut:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
+- **Tools:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
   2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
   **No autonomous AI equipment control or full 3D digital twin is included.**
 
-## Toteutuksen tila / Current coverage
+## Supported interfaces and validation status
 
 | Manufacturer / hardware | Included implementation | Validation status |
 |---|---|---|
@@ -57,7 +56,7 @@ requiring a vendor cloud service for supported interfaces.
 integrated.** Verify the device firmware, Modbus point list, BACnet object
 map, licensing and communications hardware for the exact installation.
 
-## Asennus Home Assistant OS:ään / Installation
+## Installation on Home Assistant OS
 
 **OpenLVI Bridge — experimental:**
 
@@ -107,7 +106,7 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 | [English AI advisor and Ollama setup](docs/OPENLVI_AI_GUIDE.md) | Optional small model, button, sensor and `openlvi.ask_assistant` action |
 | [Changelog](CHANGELOG.md) and [contributing](CONTRIBUTING.md) | Development status and safe additions |
 
-### Tärkeät turvallisuusrajat / Safety
+## Safety boundaries
 
 OpenLVI is **not a safety-rated building management controller**.
 Maintain the manufacturer's native frost, overheating, pump and valve safety
