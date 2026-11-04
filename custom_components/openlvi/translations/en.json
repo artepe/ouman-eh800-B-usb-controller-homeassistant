@@ -164,6 +164,24 @@
       },
       "english_ai_guide": {
         "name": "OpenLVI English AI guide"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Water-side heating output"
+      },
+      "derived_system_heating_cop": {
+        "name": "Whole-system heating COP"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "Water-side compressor heating COP"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Refrigerant cycle heating COP estimate"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Refrigerant condenser heat output"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Refrigerant compressor electrical heating COP"
       }
     },
     "number": {

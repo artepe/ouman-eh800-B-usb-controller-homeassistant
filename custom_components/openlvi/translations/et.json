@@ -164,6 +164,24 @@
       },
       "english_ai_guide": {
         "name": "OpenLVI ingliskeelne AI-juhend"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Veepoole küttevõimsus"
+      },
+      "derived_system_heating_cop": {
+        "name": "Kogu süsteemi kütte COP"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "Kompressori kütte COP veepoolelt"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Külmaaine ringluse hinnanguline kütte COP"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Külmaaine kondensaatori soojusvõimsus"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Külmaaine kompressori elektriline kütte COP"
       }
     },
     "number": {

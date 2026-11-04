@@ -4,6 +4,23 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.4.3-beta.1 — 2026-11-04 (experimental)
+
+- Added documented **read-only** Modbus point subsets for
+  Uponor Smatrix Base PRO X-148, Roth Touchline SL and Tosibox
+  telemetry. Vendor address notation is explicitly normalized.
+- Added per-point 16-bit unavailable-value handling (0x7FFF/0xFFFF)
+  without manufacturing sensor readings.
+- Added manufacturer and communication catalog for Finnish sites,
+  including Ouman, Honeywell, Siemens, Wavin, Danfoss, Resideo and more.
+- Added Home Assistant supplemental CO2 fan blueprint with enable helper,
+  outdoor cutoff, hysteresis, output deadband and invalid-data protection.
+- Added simultaneous water/electric COP and independent refrigerant
+  enthalpy-cycle estimates; refrigerant kW requires actual mass flow.
+- Added optional pre-configured HA water and refrigerant COP package
+  examples. **No new automatic heating or safety-controller writes**.
+- No physical production acceptance testing on the new device families.
+
 ## OpenLVI Bridge 0.4.2-beta.1 — 2026-11-04 (experimental)
 
 - Added manufacturer/source research for NIBE, MyVallox, Swegon CASA,

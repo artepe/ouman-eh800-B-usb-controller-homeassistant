@@ -1,0 +1,48 @@
+# OpenLVI Home Assistant package: English-only water-side COP readout.
+# Save as packages/openlvi_water_cop.yaml when packages are enabled, OR copy
+# the 'template' section into configuration.yaml. Verify all entity IDs.
+#
+# Intended for the user's Mango R290 example. Sensor input units MUST be
+# W or kW and are detected from Home Assistant unit_of_measurement.
+# If unknown/missing, outputs remain unavailable (never guess units).
+# No equipment commands or control automation.
+
+template:
+  - sensor:
+      - name: "OpenLVI Water Heating COP"
+        unique_id: openlvi_water_heating_cop_example
+        icon: mdi:heat-pump-outline
+        state_class: measurement
+        availability: >-
+          {% set heat = states('sensor.hp_lampoteho_laskettu') | float(none) %}
+          {% set elec = states('sensor.invt_pout_power') | float(none) %}
+          {% set hu = state_attr('sensor.hp_lampoteho_laskettu', 'unit_of_measurement') %}
+          {% set eu = state_attr('sensor.invt_pout_power', 'unit_of_measurement') %}
+          {{ heat is not none and heat > 0 and hu in ['W', 'kW']
+             and elec is not none and elec > 0 and eu in ['W', 'kW'] }}
+        state: >-
+          {% set heat = states('sensor.hp_lampoteho_laskettu') | float %}
+          {% set electric = states('sensor.invt_pout_power') | float %}
+          {% set heat_kw = heat / 1000 if state_attr('sensor.hp_lampoteho_laskettu', 'unit_of_measurement') == 'W' else heat %}
+          {% set electric_kw = electric / 1000 if state_attr('sensor.invt_pout_power', 'unit_of_measurement') == 'W' else electric %}
+          {{ (heat_kw / electric_kw) | round(2) }}
+        attributes:
+          input_power_entity: "sensor.invt_pout_power"
+          caveat: >-
+            Compressor/inverter-referred COP if this power reading excludes
+            circulation pumps, controls and defrost auxiliary power.
+            NOT the whole-building/system COP. Verify measurement
+            synchronization and meter location.
+
+      - name: "OpenLVI Water Heat Output"
+        unique_id: openlvi_water_heat_output_example
+        device_class: power
+        state_class: measurement
+        unit_of_measurement: "kW"
+        availability: >-
+          {% set heat = states('sensor.hp_lampoteho_laskettu') | float(none) %}
+          {{ heat is not none and heat > 0 and
+             state_attr('sensor.hp_lampoteho_laskettu', 'unit_of_measurement') in ['W', 'kW'] }}
+        state: >-
+          {% set value = states('sensor.hp_lampoteho_laskettu') | float %}
+          {{ ((value / 1000) if state_attr('sensor.hp_lampoteho_laskettu', 'unit_of_measurement') == 'W' else value) | round(2) }}

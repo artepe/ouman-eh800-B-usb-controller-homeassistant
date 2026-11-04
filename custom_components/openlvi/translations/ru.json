@@ -164,6 +164,24 @@
       },
       "english_ai_guide": {
         "name": "Англоязычный ИИ-помощник OpenLVI"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Тепловая мощность водяного контура"
+      },
+      "derived_system_heating_cop": {
+        "name": "COP отопления всей системы"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "COP компрессора по водяному контуру"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Расчётный COP холодильного цикла при нагреве"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Тепловая мощность конденсатора хладагента"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Электрический COP компрессора при нагреве"
       }
     },
     "number": {

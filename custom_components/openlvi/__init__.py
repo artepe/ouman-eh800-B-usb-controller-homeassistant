@@ -11,6 +11,7 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 from .const import DOMAIN
 from .transport import make_transport
 from .diagnostics import derive_plant_metrics, diagnostic_notes
+from .engineering import derive_cop_metrics
 from .ai_guide import (OpenLVIGuide, CONF_AI_AUTO, CONF_AI_URL, REVIEW_INTERVAL_SECONDS)
 
 _LOGGER = logging.getLogger(__name__)
@@ -31,6 +32,7 @@ class OumanCoordinator(DataUpdateCoordinator):
             if not values:
                 raise ValueError("No points responded")
             values.update(derive_plant_metrics(values))
+            values.update(derive_cop_metrics(values))
             self.diagnostic_messages = diagnostic_notes(values)
             if self.guide:
                 self.guide.baseline(values)

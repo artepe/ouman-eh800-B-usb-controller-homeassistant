@@ -11,6 +11,9 @@ on:
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
+      - 'tests/test_openlvi_building_extensions.py'
+      - 'custom_components/openlvi/engineering.py'
+      - 'blueprints/automation/openlvi/**'
       - 'tools/lorawan_uplink_inspect.py'
       - 'examples/modbus-myvallox-readonly.json'
       - '.github/workflows/openlvi-core.yml'
@@ -22,6 +25,9 @@ on:
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
+      - 'tests/test_openlvi_building_extensions.py'
+      - 'custom_components/openlvi/engineering.py'
+      - 'blueprints/automation/openlvi/**'
       - 'tools/lorawan_uplink_inspect.py'
       - 'examples/modbus-myvallox-readonly.json'
       - '.github/workflows/openlvi-core.yml'
@@ -43,6 +49,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_openlvi_localization.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_register_offsets.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_lorawan_inspector.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_building_extensions.py' -v
       - name: Validate Modbus client keyword against pinned library
         run: |
           python -m pip install pymodbus==3.13.1

@@ -1,7 +1,7 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.4.2-beta.1; NOT hardware validated.** Maintained in the repository
-[OpenLVIBridge-homeassistant](https://github.com/artepe/OpenLVIBridge-homeassistant).
+**Experimental beta 0.4.3-beta.1; NOT hardware validated.** Maintained in the repository
+[Open-HVACBridge-homeassistant](https://github.com/artepe/Open-HVACBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
 
@@ -81,6 +81,22 @@ options/licensing and wiring against the exact unit.
 [LoRaWAN / other network research](LORAWAN_AND_PROTOCOLS.md). These are
 not proof of direct interoperability; the researched point maps are not
 activated by model name alone.
+
+## New Finnish controller and building automation profiles
+
+- Uponor Smatrix Base PRO X-148: input registers 30001–30025
+  (logical one-based PDU addresses 1–25), missing marker 0x7FFF.
+- Roth Touchline SL: first-zone Modbus RTU room/floor temperatures,
+  humidity, zone output, target and battery, all monitoring-only.
+- Tosibox: status register offsets 14–23 from 40001, with disabled
+  status writes. Firmware >= 5.5.0 and enabled local Modbus required.
+- Siemens Desigo, Honeywell EAGLEHAWK, Wavin Sentio, Ouman WL-BASE,
+  Danfoss Icon2 and others are documented research targets, **not**
+  plug-and-play without the model-specific interface and point map.
+
+See [Finnish market source catalog](FINLAND_BUILDING_AUTOMATION_CATALOG.md),
+[CO2 supplemental fan blueprint](../blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml)
+and [thermal and refrigerant COP guide](THERMAL_AND_REFRIGERANT_COP.md).
 
 ## Custom site-specific registers (always read-only)
 

@@ -21,6 +21,11 @@ SETPOINT_KEYS = (
 SENSOR_KEYS = (
     *(f"eh800b_measurement_{index}" for index in range(1, 29)),
     "derived_l1_delta_t", "derived_l1_thermal_power_kw",
+    "derived_water_heating_power_kw", "derived_system_heating_cop",
+    "derived_water_compressor_heating_cop",
+    "derived_refrigerant_cycle_heating_cop_estimate",
+    "derived_refrigerant_heating_power_kw",
+    "derived_refrigerant_compressor_heating_cop",
     "diagnostics", "english_ai_guide",
 )
 NUMBER_KEYS = tuple("eh800b_" + x for x in SETPOINT_KEYS)
@@ -82,7 +87,7 @@ class LocaleTests(unittest.TestCase):
         self.assertIn('f"eh800b_{point.key}"', sensor)
 
     def test_manifest_version_and_legacy_unchanged(self):
-        self.assertEqual(load_json("manifest.json")["version"], "0.4.2-beta.1")
+        self.assertEqual(load_json("manifest.json")["version"], "0.4.3-beta.1")
         legacy = json.loads((ROOT / "custom_components/ouman_eh800/manifest.json")
                             .read_text(encoding="utf-8"))
         self.assertEqual(legacy["version"], "0.1.2")

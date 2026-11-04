@@ -20,6 +20,7 @@ class Register:
     writable: bool = False
     area: str = "holding"  # holding (FC03) or input (FC04)
     offset: float = 0.0  # Read-only engineering-unit correction, e.g. centikelvin
+    invalid_raw_values: tuple[int, ...] = ()  # Explicit 16-bit no-data markers
 
     @property
     def count(self):
@@ -99,12 +100,21 @@ def parse_profile(raw: str) -> list[Register]:
         offset = item.get("offset", 0)
         if type(offset) not in (int, float) or not isfinite(offset) or abs(offset) > 1000:
             raise ValueError("Register offset must be a finite number within +/-1000")
+        invalid_raw_values = item.get("invalid_raw_values", [])
+        if (not isinstance(invalid_raw_values, list)
+                or len(invalid_raw_values) > 8
+                or any(type(v) is not int or v < 0 or v > 65535
+                       for v in invalid_raw_values)
+                or len(set(invalid_raw_values)) != len(invalid_raw_values)
+                or (invalid_raw_values and kind in ("s32", "u32"))):
+            raise ValueError("Invalid 16-bit no-data markers")
         keys.add(key)
         # Never honor "writable":true from untrusted or user-supplied templates.
         area = item.get("area", "holding")
         if area not in ("holding", "input"):
             raise ValueError("Use holding or input register area")
-        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area, offset=float(offset)))
+        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area, offset=float(offset),
+                               invalid_raw_values=tuple(invalid_raw_values)))
     return points
 
 def profile_for(model: str, firmware: str, profile_json: str) -> list[Register]:
@@ -116,10 +126,12 @@ def profile_for(model: str, firmware: str, profile_json: str) -> list[Register]:
         raise ValueError("Firmware must match the documented register map, or supply a custom profile")
     return list(PROFILE_MAPS[model])
 
-def decode(registers: list[int], point: Register) -> float:
+def decode(registers: list[int], point: Register) -> float | None:
     """Ouman uses high-word-first, big-endian signed/unsigned register data."""
     if len(registers) != point.count:
         raise ValueError("Missing Modbus register")
+    if point.count == 1 and registers[0] in point.invalid_raw_values:
+        return None
     raw = (registers[0] << 16 | registers[1]) if point.count == 2 else registers[0]
     bits = 32 if point.count == 2 else 16
     if point.kind.startswith("s") and raw & (1 << (bits - 1)):
@@ -127,8 +139,8 @@ def decode(registers: list[int], point: Register) -> float:
     return raw / (10 ** point.decimals) + point.offset
 
 def encode(value: float, point: Register) -> list[int]:
-    if point.offset:
-        raise ValueError("Engineering-unit offset is read-only")
+    if point.offset or point.invalid_raw_values:
+        raise ValueError("Offset and no-data marker points are read-only")
     if not point.writable or point.minimum is None or point.maximum is None:
         raise ValueError("This point is not in the verified write allowlist")
     if not point.minimum <= value <= point.maximum:
@@ -178,6 +190,78 @@ REGIN_CORRIGO_E = [
     Register("extract_flow", "Extract air flow", 16, "u16", 0, "m³/h", area="input"),
 ]
 
+
+# Additional source-backed, READ-ONLY point maps. These require the exact
+# hardware/firmware and a physical acceptance test before production use.
+# NEVER assume that other floor heating generations share these registers.
+UPONOR_X148_INPUTS = [
+    # The manufacturer's 30001 notation maps to zero-based FC04 address 0.
+    # Generic OpenLVI profiles store one-based PDU addresses, not 3xxxx tags.
+    Register("controller_outdoor_temp", "Controller outdoor temperature", 1,
+             "s16", 1, "°C", area="input", invalid_raw_values=(0x7fff,)),
+]
+UPONOR_X148_INPUTS += [
+    Register(f"room_{i}_temperature", f"Room {i} temperature", i + 1,
+             "s16", 1, "°C", area="input", invalid_raw_values=(0x7fff,))
+    for i in range(1, 13)
+]
+UPONOR_X148_INPUTS += [
+    Register(f"room_{i}_humidity", f"Room {i} humidity", i + 13,
+             "u16", 0, "%", area="input", invalid_raw_values=(0x7fff,))
+    for i in range(1, 13)
+]
+# Manufacturer Roth Touchline SL Modbus register table: R and R/W points
+# are all imported as non-writable sensors; only a first-zone subset is
+# enabled until channel allocation / firmware are physically confirmed.
+ROTH_TOUCHLINE_SL = [
+    Register("fw_major", "Firmware major version", 3, "u16", 0, None),
+    Register("fw_minor", "Firmware minor version", 4, "u16", 0, None),
+    Register("fw_revision", "Firmware revision", 5, "u16", 0, None),
+    Register("zone_1_temperature", "Zone 1 room temperature", 23, "u16", 1, "°C"),
+    Register("zone_1_floor_temperature", "Zone 1 floor temperature", 74, "u16", 1, "°C"),
+    Register("zone_1_humidity", "Zone 1 humidity", 122, "u16", 1, "%"),
+    Register("zone_1_actuator_open", "Zone 1 actuator opening", 170, "u16", 0, "%"),
+    Register("zone_1_target", "Zone 1 temperature target", 221, "u16", 1, "°C"),
+    Register("zone_1_battery", "Zone 1 battery", 270, "u16", 0, "%"),
+]
+# Tosibox official page lists offsets relative to holding 40001. This driver
+# uses one-based PDU addresses. Offset 14 is address 15 in this representation.
+# READ-ONLY. Registers for changing WAN/VPN access or sending SMS are excluded.
+TOSIBOX_STATUS_BASE = [
+    Register("cellular_rsrp_raw", "Cellular RSRP raw", 15, "u16", 0, None,
+             invalid_raw_values=(0xffff,)),
+    Register("cellular_rssi_raw", "Cellular RSSI raw", 16, "u16", 0, None,
+             invalid_raw_values=(0xffff,)),
+    Register("internet_interface", "Active Internet interface code", 17,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("tosibox_cloud_ok", "Tosibox cloud connection (0/1)", 18,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("vpn_tunnel_count", "VPN tunnel count", 19,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("internet_enabled", "Internet access enabled (read-only)", 20,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("vpn_enabled", "VPN access enabled (read-only)", 21,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+]
+TOSIBOX_FIRMWARE = [
+    Register("firmware_major", "Tosibox firmware major", 22,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("firmware_minor", "Tosibox firmware minor", 23,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+    Register("firmware_patch", "Tosibox firmware patch", 24,
+             "u16", 0, None, invalid_raw_values=(0xffff,)),
+]
+
+
+def tosibox_firmware_tuple(value: str) -> tuple[int, int, int]:
+    """Require an explicit firmware string; no guessing from model names."""
+    import re
+    if not re.fullmatch(r"\d{1,3}\.\d{1,3}\.\d{1,3}", value.strip()):
+        raise ValueError("Tosibox firmware must be supplied as major.minor.patch")
+    return tuple(int(i) for i in value.split("."))
+
+
+
 _ouman_profile_for = profile_for
 
 def profile_for(model: str, firmware: str, profile_json: str, application_key: str = "") -> list[Register]:
@@ -186,6 +270,18 @@ def profile_for(model: str, firmware: str, profile_json: str, application_key: s
         return parse_profile(profile_json)
     if model in PROFILE_MAPS:
         return _ouman_profile_for(model, firmware, "")
+    if model == "Smatrix Base PRO X-148":
+        return list(UPONOR_X148_INPUTS)
+    if model == "Touchline SL Modbus":
+        return list(ROTH_TOUCHLINE_SL)
+    if model.startswith("TOSIBOX "):
+        version = tosibox_firmware_tuple(firmware)
+        if version < (5, 5, 0):
+            raise ValueError("Tosibox Modbus status needs firmware >= 5.5.0")
+        points = list(TOSIBOX_STATUS_BASE)
+        if version >= (5, 6, 0):
+            points.extend(TOSIBOX_FIRMWARE)
+        return points
     if model in DANFOSS_MODELS:
         # Globally documented PNU read; application-specific points enabled
         # only after exact installed application key is entered by operator.

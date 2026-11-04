@@ -164,6 +164,24 @@
       },
       "english_ai_guide": {
         "name": "Angielski przewodnik AI OpenLVI"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Moc grzewcza po stronie wody"
+      },
+      "derived_system_heating_cop": {
+        "name": "COP ogrzewania całego systemu"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "COP ogrzewania sprężarki po stronie wody"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Szacowany COP obiegu czynnika chłodniczego"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Moc cieplna skraplacza czynnika chłodniczego"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Elektryczny COP ogrzewania sprężarki"
       }
     },
     "number": {
