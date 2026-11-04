@@ -45,7 +45,8 @@
     },
     "error": {
       "invalid_profile": "Ohjelmistoversio, sovellusavain tai rekisterikartta on virheellinen",
-      "cannot_connect": "Yhteys tai mittausten luku epäonnistui"
+      "cannot_connect": "Yhteys tai mittausten luku epäonnistui",
+      "invalid_auth": "Väärä käyttäjätunnus tai salasana"
     },
     "abort": {
       "already_configured": "Jo määritetty"

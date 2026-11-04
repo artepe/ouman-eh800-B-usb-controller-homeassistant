@@ -108,14 +108,28 @@ def calculate(
     if not all(isfinite(v) for v in (*h, sat_evap_dew_c, sat_cond_bubble_c)):
         raise ValueError("Invalid fluid property output")
 
+    # P and T only fix the state of a single-phase fluid. Without superheat
+    # or subcooling the measured point may be two-phase (or the pressure was
+    # gauge, not absolute) and the enthalpy would be meaningless.
+    superheat_k = temps[0] - sat_evap_dew_c
+    subcooling_k = sat_cond_bubble_c - temps[2]
+    if superheat_k <= 0:
+        raise ValueError(
+            f"Suction is not superheated vapour (superheat {superheat_k:.1f} K): "
+            "check the suction sensor position and that pressure is absolute")
+    if subcooling_k <= 0:
+        raise ValueError(
+            f"Condenser outlet is not subcooled liquid (subcooling {subcooling_k:.1f} K): "
+            "check the liquid-line sensor and that pressure is absolute")
+
     result = {
         "fluid": fluid,
         "status": "unverified_input_thermodynamic_estimate_only",
         "enthalpy_suction_kj_kg": round(h[0], 3),
         "enthalpy_discharge_kj_kg": round(h[1], 3),
         "enthalpy_condenser_out_kj_kg": round(h[2], 3),
-        "superheat_k": round(temps[0] - sat_evap_dew_c, 2),
-        "subcooling_k": round(sat_cond_bubble_c - temps[2], 2),
+        "superheat_k": round(superheat_k, 2),
+        "subcooling_k": round(subcooling_k, 2),
         "cycle_heating_cop_estimate": round(
             refrigerant_cycle_heating_cop(*h), 3),
     }

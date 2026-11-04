@@ -13,6 +13,7 @@ on:
       - 'tests/test_openlvi_lorawan_inspector.py'
       - 'tests/test_openlvi_building_extensions.py'
       - 'tests/test_openlvi_r290_calculator.py'
+      - 'tests/test_openlvi_robustness.py'
       - 'tools/refrigerant_state_calculator.py'
       - 'custom_components/openlvi/engineering.py'
       - 'blueprints/automation/openlvi/**'
@@ -24,6 +25,9 @@ on:
       - 'custom_components/openlvi/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
+      - 'tests/test_openlvi_usb_controls.py'
+      - 'tests/test_openlvi_ai_guide.py'
+      - 'tests/test_openlvi_robustness.py'
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
@@ -55,6 +59,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_openlvi_lorawan_inspector.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_building_extensions.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_r290_calculator.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_robustness.py' -v
       - name: Validate Modbus client keyword against pinned library
         run: |
           python -m pip install pymodbus==3.13.1

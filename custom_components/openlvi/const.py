@@ -25,7 +25,7 @@ CONF_VENDOR = "vendor"
 CONF_APPLICATION = "application_key"
 CONF_PARITY = "parity"
 VENDOR_MODELS = {
-    "Ouman": MODELS + ("WL-BASE 2.1", "EC-104", "Oulink ETH", "M-LINK"),
+    "Ouman": MODELS + ("WL-BASE 2.1", "Oulink ETH", "M-LINK"),  # EC-104 is already in MODELS
     "Danfoss": ("ECL Comfort 210", "ECL Comfort 296", "ECL Comfort 310", "ECL Comfort 310B", "ECL 120/220", "Icon2", "Ally Gateway"),
     "Regin": ("Corrigo E Ventilation", "Corrigo 5", "Exigo"),
     "Swegon": ("CASA Genius", "CASA Smart", "GOLD"),

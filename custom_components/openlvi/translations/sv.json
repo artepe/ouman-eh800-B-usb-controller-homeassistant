@@ -45,7 +45,8 @@
     },
     "error": {
       "invalid_profile": "Firmware, programnyckel eller registerkarta är ogiltig",
-      "cannot_connect": "Kunde inte ansluta eller läsa mätningar"
+      "cannot_connect": "Kunde inte ansluta eller läsa mätningar",
+      "invalid_auth": "Fel användarnamn eller lösenord"
     },
     "abort": {
       "already_configured": "Redan konfigurerad"

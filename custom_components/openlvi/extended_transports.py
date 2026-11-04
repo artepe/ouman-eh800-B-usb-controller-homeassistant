@@ -7,14 +7,15 @@ M-Bus master/converter, NOT a passive RS-485/TTL USB dongle.
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
 from decimal import Decimal
 import ipaddress
 import json
 import logging
+from math import isfinite
 import re
 
 from .profiles import Register
+from .units import normalize_unit
 
 _LOGGER = logging.getLogger(__name__)
 BACNET_TYPES = frozenset((
@@ -185,7 +186,13 @@ class BacnetDriver:
 
 
 def mbus_records_to_values(records) -> tuple[list[Register], dict]:
-    """Decode only present records; no guessed Kamstrup indexes or units."""
+    """Decode only present records; no guessed Kamstrup indexes or units.
+
+    pyMeterBus reports units such as "C", "m^3" and "date time"; they are
+    normalised to Home Assistant spellings. A record whose value is not a
+    number (meter date/time) gets no unit: HA rejects a non-numeric state
+    on a sensor that has a unit of measurement.
+    """
     points, values = [], {}
     for i, record in enumerate(records[:64], start=1):
         value = getattr(record, "value", None)
@@ -193,19 +200,25 @@ def mbus_records_to_values(records) -> tuple[list[Register], dict]:
             value = getattr(record, "parsed_value", None)
         if value is None:
             continue
-        unit = str(getattr(record, "unit", "") or "")
+        unit = normalize_unit(getattr(record, "unit", None))
         key = f"record_{i}"
-        if isinstance(value, (int, float, Decimal)):
+        if isinstance(value, bool):
+            value = str(value)
+        elif isinstance(value, (int, float, Decimal)):
             value = float(value)
         else:
             try:
                 value = float(str(value))
             except (TypeError, ValueError):
                 value = str(value)
+        if isinstance(value, float) and not isfinite(value):
+            continue
+        if isinstance(value, str):
+            unit = None
         # Do not assign energy/power categories based on index: record layouts
         # depend on the Kamstrup meter's configured M-Bus telegram profile.
-        points.append(Register(key, f"M-Bus mittaus {i} ({unit})",
-                               i, "s16", 0, unit or None, writable=False))
+        label = f"M-Bus record {i} ({unit})" if unit else f"M-Bus record {i}"
+        points.append(Register(key, label, i, "s16", 0, unit, writable=False))
         values[key] = value
     return points, values
 

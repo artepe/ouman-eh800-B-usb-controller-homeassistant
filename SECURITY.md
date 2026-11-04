@@ -11,7 +11,7 @@ maintainer via [@artepe](https://github.com/artepe).
 
 - `custom_components/ouman_eh800` **v0.1.2**: last version reported working
   with one real EH-800B. It is **not** a safety-certified control system.
-- `custom_components/openlvi` **v0.4.0-beta.1**: experimental. The CI tests
+- `custom_components/openlvi` **v0.4.4-beta.1**: experimental. The CI tests
   do not establish compatibility with physical HVAC/metering equipment.
 - No promise of a vulnerability-remediation SLA is made.
 

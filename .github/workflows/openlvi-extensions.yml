@@ -5,12 +5,14 @@ on:
     paths:
       - 'custom_components/openlvi/**'
       - 'tests/test_openlvi_extended.py'
+      - 'tests/test_openlvi_robustness.py'
       - 'tools/openlvi_pointmap_import.py'
       - '.github/workflows/openlvi-extensions.yml'
   pull_request:
     paths:
       - 'custom_components/openlvi/**'
       - 'tests/test_openlvi_extended.py'
+      - 'tests/test_openlvi_robustness.py'
       - 'tools/openlvi_pointmap_import.py'
       - '.github/workflows/openlvi-extensions.yml'
 jobs:
@@ -35,3 +37,5 @@ jobs:
           assert callable(meterbus.send_request_frame)
           assert callable(Application.from_object_list)
           PY
+      - name: Decode a real pyMeterBus telegram
+        run: python -m unittest discover -s tests -p 'test_openlvi_robustness.py' -v

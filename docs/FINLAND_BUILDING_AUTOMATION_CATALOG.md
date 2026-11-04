@@ -38,7 +38,7 @@ SMS sending registers 47-138 are excluded.
 
 | Brand/model | Verified bus / system | Open-HVACBridge |
 |---|---|---|
-| Uponor Smatrix Base PRO X-148 | Modbus RTU RS485; FC04 input 30001 outside, 30002–30013 rooms, 30014–30025 RH; 0x7FFF missing | 25-point new read-only profile |
+| Uponor Smatrix Base PRO X-148 | Modbus RTU RS485; FC04 input 30001 outside, 30002–30013 rooms, 30014–30025 RH; 0x7FFF missing; temperatures in 0.1 °F by default, RH in the low byte | 25-point new read-only profile |
 | Uponor Smatrix Base PRO X-147 | KNX converter R-147 + I-147 controller; ETS map required | Research only |
 | Uponor Smatrix Pulse R-208 | Ethernet R-208 module, unofficial community HA integration | Existing third-party, no official generic Modbus |
 | Roth Touchline SL | New-generation RS485 Modbus RTU; register 23 room, 74 floor, 122 RH, 170 actuator %, 221 target, 270 battery | First-zone read-only profile |
@@ -70,6 +70,13 @@ FC04 input at PDU address 0; Open-HVACBridge represents it as input
 address 1, not 30001. Roth's manual uses direct one-based holding
 register numbers (e.g. 23 -> PDU 22). Never enable a write just
 because the vendor labels a point R/W.
+
+**Uponor temperature unit:** the X-148 sends temperatures as tenths of a
+degree **Fahrenheit** by default (manual: 21.0 °C is sent as 698). The
+built-in profile therefore declares °F and Home Assistant converts to
+°C. If the site's U_BMS file was switched to Celsius, use a custom
+read-only profile with `"unit": "°C"` instead. Relative humidity is
+in the low byte; the profile masks the high byte (`"mask": 255`).
 
 ## Siemens and Honeywell building controllers
 

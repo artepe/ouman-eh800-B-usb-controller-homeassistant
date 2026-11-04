@@ -1,6 +1,7 @@
 """OpenLVI Bridge setup: manufacturer, model, transport, credentials."""
 import voluptuous as vol
 from homeassistant import config_entries
+from homeassistant.data_entry_flow import AbortFlow
 from homeassistant.helpers import selector
 from .const import (
     DOMAIN, VENDOR_MODELS, CONF_VENDOR, CONF_MODEL, CONF_FIRMWARE,
@@ -10,7 +11,7 @@ from .const import (
     CONF_BACNET_DEVICE_ID, CONF_BACNET_LOCAL_INSTANCE,
 )
 from .profiles import profile_for
-from .transport import make_transport
+from .transport import is_auth_error, make_transport
 from .ai_guide import (CONF_AI_URL, CONF_AI_MODEL, CONF_AI_AUTO,
                        DEFAULT_MODEL, validate_local_ai_url, validate_model)
 
@@ -89,7 +90,9 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     await driver.async_connect()
                     values = await driver.async_read()
                     if not values:
-                        raise ValueError("No sensor values could be read")
+                        # Reachable but silent (wrong unit ID, wiring, gateway):
+                        # a connection problem, not an invalid profile.
+                        raise ConnectionError("No sensor values could be read")
                 finally:
                     await driver.async_close()
                 identifier = ":".join(str(trial.get(k, "")) for k in (
@@ -102,10 +105,13 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     title=f"{trial[CONF_VENDOR]} {trial[CONF_MODEL]}",
                     data=trial,
                 )
-            except ValueError:
+            except AbortFlow:
+                raise
+            except (ValueError, KeyError):
                 errors["base"] = "invalid_profile"
-            except Exception:
-                errors["base"] = "cannot_connect"
+            except Exception as err:
+                errors["base"] = ("invalid_auth" if is_auth_error(err)
+                                  else "cannot_connect")
 
         if kind == "http":
             schema = {

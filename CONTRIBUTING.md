@@ -28,7 +28,16 @@ device-specific register maps, BACnet object lists and verified diagnostics.
 python3 -m compileall -q custom_components/openlvi tools
 python3 -m unittest discover -s tests -p 'test_*profiles.py' -v
 python3 -m unittest discover -s tests -p 'test_openlvi_extended.py' -v
+python3 -m unittest discover -s tests -p 'test_openlvi_robustness.py' -v
 node --check www/openlvi-scada-card.js
+```
+
+Home Assistant level tests (config flow, setup retry, sensor classes;
+all transports faked, no hardware):
+
+```bash
+python3 -m pip install -r tests_ha/requirements.txt
+python3 -m pytest tests_ha
 ```
 
 GitHub Actions runs these tests automatically on pull requests and `main`.

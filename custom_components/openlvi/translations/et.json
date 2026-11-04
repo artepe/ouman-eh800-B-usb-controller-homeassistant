@@ -45,7 +45,8 @@
     },
     "error": {
       "invalid_profile": "Püsivara, rakenduse võti või registrikaart on vigane",
-      "cannot_connect": "Ühendamine või mõõtmiste lugemine ebaõnnestus"
+      "cannot_connect": "Ühendamine või mõõtmiste lugemine ebaõnnestus",
+      "invalid_auth": "Vale kasutajanimi või parool"
     },
     "abort": {
       "already_configured": "Juba seadistatud"
