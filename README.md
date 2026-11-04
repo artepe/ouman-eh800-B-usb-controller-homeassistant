@@ -10,7 +10,7 @@ Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.4.1-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.4.2-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -40,6 +40,18 @@ requiring a vendor cloud service for supported interfaces.
 - **Tools:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
   2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
   **No autonomous AI equipment control or full 3D digital twin is included.**
+
+- **New manufacturer research:** verified documentation links and candidate registers for
+  NIBE S-series, MyVallox, extended Swegon CASA, Danfoss ECL, Corrigo 5,
+  Grundfos, Wilo and others; **not automatically installed as working
+  controllers**. See [source map](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md).
+- **LoRaWAN research:** Milesight UG65, ChirpStack v4 and The Things Stack v3
+  application-server MQTT envelopes, plus a read-only offline JSON inspector.
+  No built-in radio, MQTT subscriber or LoRaWAN downlink is added.
+  See [network integration guide](docs/LORAWAN_AND_PROTOCOLS.md).
+- **Engineering-unit offset:** operator-supplied read-only Modbus profiles
+  now support an offset (e.g. MyVallox centikelvin -> Celsius). Use only after
+  validating the 1-based register address and physical device reading.
 
 ## Supported interfaces and validation status
 
@@ -100,6 +112,9 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 
 | Resource | Purpose |
 |---|---|
+| [Manufacturer register and control research](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md) | Manufacturer manuals, candidate registers, missing features, safety classification |
+| [LoRaWAN / MQTT and other networks](docs/LORAWAN_AND_PROTOCOLS.md) | UG65 embedded server, ChirpStack and TTS uplinks; other field protocols |
+| [MyVallox read-only Modbus example](examples/modbus-myvallox-readonly.json) | Experimental 12-point RTU sample including centikelvin conversion; verify addresses |
 | [English default and five additional Ouman languages](docs/LOCALIZATION.md) | Home Assistant translated controller labels and compatibility rules |
 | [OpenLVI model/Modbus/HTTP guide](docs/OPENLVI_BRIDGE.md) | Exact model subsets, Modbus maps, connection instructions and limitations |
 | [BACnet, wired M-Bus, SCADA and diagnostics](docs/OPENLVI_EXTENSIONS.md) | Hardware setup, BACnet object lists, M-Bus master and energy formulas |
@@ -127,7 +142,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.1-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.2-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

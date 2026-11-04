@@ -1,0 +1,117 @@
+{
+  "registers": [
+    {
+      "key": "fan_speed",
+      "name": "Fan speed",
+      "address": 4353,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": "%"
+    },
+    {
+      "key": "extract_air_temp",
+      "name": "Extract air temperature",
+      "address": 4354,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 2,
+      "offset": -273.15,
+      "unit": "°C"
+    },
+    {
+      "key": "exhaust_air_temp",
+      "name": "Exhaust air temperature",
+      "address": 4355,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 2,
+      "offset": -273.15,
+      "unit": "°C"
+    },
+    {
+      "key": "outdoor_air_temp",
+      "name": "Outdoor air temperature",
+      "address": 4356,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 2,
+      "offset": -273.15,
+      "unit": "°C"
+    },
+    {
+      "key": "supply_cell_temp",
+      "name": "Supply air after heat recovery",
+      "address": 4357,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 2,
+      "offset": -273.15,
+      "unit": "°C"
+    },
+    {
+      "key": "supply_air_temp",
+      "name": "Supply air temperature",
+      "address": 4358,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 2,
+      "offset": -273.15,
+      "unit": "°C"
+    },
+    {
+      "key": "extract_fan_rpm",
+      "name": "Extract fan speed",
+      "address": 4361,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": "rpm"
+    },
+    {
+      "key": "supply_fan_rpm",
+      "name": "Supply fan speed",
+      "address": 4362,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": "rpm"
+    },
+    {
+      "key": "humidity",
+      "name": "Relative humidity",
+      "address": 4363,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": "%"
+    },
+    {
+      "key": "co2",
+      "name": "Carbon dioxide",
+      "address": 4364,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": "ppm"
+    },
+    {
+      "key": "heat_exchanger_state",
+      "name": "Heat recovery cell state",
+      "address": 4616,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": null
+    },
+    {
+      "key": "fault_state",
+      "name": "Fault condition",
+      "address": 4621,
+      "area": "holding",
+      "kind": "u16",
+      "decimals": 0,
+      "unit": null
+    }
+  ]
+}

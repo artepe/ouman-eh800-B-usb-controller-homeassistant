@@ -110,14 +110,14 @@ The isometric scene is a lightweight CSS/HTML schematic with live labels,
 
 ### Diagnostics and energy
 
-A derived `L1 lämpötilaero` sensor appears when both `l1_supply`
-and `l1_return` exist. A `L1 laskettu lämpöteho` sensor is added
+A derived `L1 temperature difference` sensor appears when both `l1_supply`
+and `l1_return` exist. A `L1 estimated thermal power` sensor is added
 if `flow_m3h` is also present and is in 0..100 m³/h.
 Formula: P[kW] = 1.163 * flow[m³/h] * (supply°C − return°C),
 **for water only**; glycol and different fluid properties change the
 factor. Historical kWh requires a meter or integration over time.
 
-The `OpenLVI diagnostiikka` sensor reports deterministic suspicious
+The `OpenLVI diagnostics` sensor reports deterministic suspicious
 temperature and supply-setpoint deviations. It is *advisory*, not an AI,
 not a guaranteed fault detector, and it never commands a controller.
 

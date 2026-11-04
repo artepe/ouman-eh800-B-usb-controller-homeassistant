@@ -4,6 +4,19 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.4.2-beta.1 — 2026-11-04 (experimental)
+
+- Added manufacturer/source research for NIBE, MyVallox, Swegon CASA,
+  Danfoss, Regin, Grundfos, Wilo, EMS-ESP and HeishaMon.
+- Documented LoRaWAN/MQTT topic formats for Milesight UG65 Embedded NS,
+  ChirpStack v4 and The Things Stack v3 plus other building networks.
+- Added a **standalone read-only** LoRaWAN JSON uplink inspector and test
+  fixture messages. No MQTT credentials, subscriptions or downlinks.
+- Added optional engineering-unit offset to read-only Modbus point maps,
+  with an experimental MyVallox RTU profile (centikelvin -> °C).
+- Updated remaining legacy default Modbus point labels to English.
+- No new control writes and no physical field acceptance testing.
+
 ## OpenLVI Bridge 0.4.1-beta.1 — 2026-11-04 (experimental)
 
 - English is the canonical/default OpenLVI interface language.
