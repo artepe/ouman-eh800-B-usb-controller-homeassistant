@@ -84,6 +84,48 @@ def bacnet_bind_args(local_address: str, local_instance: int):
     return [local_device, network_port]
 
 
+def _default_app_factory(local_address: str, local_instance: int):
+    from bacpypes3.app import Application
+    return Application.from_object_list(
+        bacnet_bind_args(local_address, local_instance)
+    )
+
+
+# One BACpypes3 Application (= one UDP 47808 socket) per local bind IP,
+# shared by every BACnet device configured on that interface. Separate
+# Applications would all bind the same port with SO_REUSEPORT, and Linux
+# then hands each device's replies to only one of the sockets, so the other
+# devices (and the setup wizard's connection test) time out.
+_app_factory = _default_app_factory
+_SHARED_APPS: dict[str, list] = {}  # bind IP -> [application, users, instance]
+
+
+def _acquire_app(local_address: str, local_instance: int):
+    key = str(ipaddress.ip_interface(local_address).ip)
+    shared = _SHARED_APPS.get(key)
+    if shared is None:
+        shared = [_app_factory(local_address, local_instance), 0, local_instance]
+        _SHARED_APPS[key] = shared
+    elif shared[2] != local_instance:
+        _LOGGER.warning(
+            "BACnet on %s already runs as local device %s; using it instead of %s",
+            key, shared[2], local_instance,
+        )
+    shared[1] += 1
+    return shared[0]
+
+
+def _release_app(local_address: str) -> None:
+    key = str(ipaddress.ip_interface(local_address).ip)
+    shared = _SHARED_APPS.get(key)
+    if shared is None:
+        return
+    shared[1] -= 1
+    if shared[1] <= 0:
+        del _SHARED_APPS[key]
+        shared[0].close()
+
+
 class BacnetDriver:
     def __init__(self, hass, data):
         self.data = data
@@ -113,10 +155,7 @@ class BacnetDriver:
         ))
 
     async def async_connect(self):
-        from bacpypes3.app import Application
-        self.app = Application.from_object_list(
-            bacnet_bind_args(self.local_address, self.local_instance)
-        )
+        self.app = _acquire_app(self.local_address, self.local_instance)
         if self._configured:
             for item in self._configured:
                 self._add_point(item)
@@ -181,8 +220,8 @@ class BacnetDriver:
 
     async def async_close(self):
         if self.app:
-            self.app.close()
             self.app = None
+            _release_app(self.local_address)
 
 
 def mbus_records_to_values(records) -> tuple[list[Register], dict]:

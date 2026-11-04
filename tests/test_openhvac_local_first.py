@@ -7,7 +7,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from openhvac_lab.local_hvac import PATHS, UNIT_MAP, plan_local_path, normalize_heatpump_entities
+from openhvac_lab.local_hvac import UNIT_MAP, plan_local_path, normalize_heatpump_entities
 from openhvac_lab.zigbee import zigbee_mesh_audit
 
 

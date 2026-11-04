@@ -1,6 +1,6 @@
 """Ventilation recovery, airflow and demand indicators; no fan commands."""
 from __future__ import annotations
-from .core import number, optional_number
+from .core import optional_number
 
 
 def assess_ventilation(data):

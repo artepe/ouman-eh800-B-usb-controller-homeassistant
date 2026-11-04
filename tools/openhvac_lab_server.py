@@ -66,7 +66,7 @@ def make_handler(store, token):
                     self.reply(200, data) if data else self.reply(404, {"error": "not_found"})
                 else:
                     self.reply(404, {"error": "not_found"})
-            except (ValueError, OSError) as exc:
+            except (ValueError, OSError):
                 self.reply(400, {"error": "invalid_request"})
 
         def do_POST(self):

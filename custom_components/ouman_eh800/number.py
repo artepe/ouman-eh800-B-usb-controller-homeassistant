@@ -10,24 +10,26 @@ from .ouman import OumanUSB
 CONF_PORT = "port"
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.string})
 
-# id, stable object id, label, min raw, max raw, step raw, scale, initial raw
+# id, stable object id, label, min raw, max raw, step raw, scale
+# v0.1.3: PID 56/57/58 (P band, I time, D time) and manual valve position 92
+# are no longer exposed. Changing them on a live plant coincided with
+# abnormal valve behaviour (docs/PID_KNOWN_ISSUES.md).
+FORBIDDEN_PROPERTY_IDS = frozenset({56, 57, 58, 92})
 PROPS = [
-    (54, "l1_supply_minimum", "L1 Supply minimum", 50, 950, 10, 10, 140),
-    (55, "l1_supply_maximum", "L1 Supply maximum", 50, 950, 10, 10, 890),
-    (56, "l1_p_band", "L1 P band", 2, 600, 1, 1, 250),
-    (57, "l1_i_time", "L1 I time", 5, 300, 1, 1, 50),
-    (58, "l1_d_time", "L1 D time", 0, 100, 1, 1, 0),
-    (67, "l1_curve_minus_20c", "L1 Curve -20C", 0, 1000, 10, 10, 900),
-    (69, "l1_curve_minus_10c", "L1 Curve -10C", 0, 1000, 10, 10, 700),
-    (71, "l1_curve_0c", "L1 Curve 0C", 0, 1000, 10, 10, 550),
-    (73, "l1_curve_plus_10c", "L1 Curve +10C", 0, 1000, 10, 10, 490),
-    (75, "l1_curve_plus_20c", "L1 Curve +20C", 0, 1000, 10, 10, 180),
-    (91, "l1_summer_shutoff", "L1 Summer shutoff", 5, 95, 1, 1, 24),
-    (92, "l1_manual_valve_position", "L1 Manual valve position", 0, 100, 1, 1, 81),
-    (126, "l1_max_supply_change_rate", "L1 Max supply change rate", 1, 50, 1, 1, 40),
-    (127, "l1_supply_setpoint", "L1 Supply setpoint", 0, 950, 10, 10, 150),
-    (134, "l1_fine_adjustment", "L1 Fine adjustment", -40, 40, 1, 10, 0),
+    (54, "l1_supply_minimum", "L1 Supply minimum", 50, 950, 10, 10),
+    (55, "l1_supply_maximum", "L1 Supply maximum", 50, 950, 10, 10),
+    (67, "l1_curve_minus_20c", "L1 Curve -20C", 0, 1000, 10, 10),
+    (69, "l1_curve_minus_10c", "L1 Curve -10C", 0, 1000, 10, 10),
+    (71, "l1_curve_0c", "L1 Curve 0C", 0, 1000, 10, 10),
+    (73, "l1_curve_plus_10c", "L1 Curve +10C", 0, 1000, 10, 10),
+    (75, "l1_curve_plus_20c", "L1 Curve +20C", 0, 1000, 10, 10),
+    (91, "l1_summer_shutoff", "L1 Summer shutoff", 5, 95, 1, 1),
+    (126, "l1_max_supply_change_rate", "L1 Max supply change rate", 1, 50, 1, 1),
+    (127, "l1_supply_setpoint", "L1 Supply setpoint", 0, 950, 10, 10),
+    (134, "l1_fine_adjustment", "L1 Fine adjustment", -40, 40, 1, 10),
 ]
+if {p[0] for p in PROPS} & FORBIDDEN_PROPERTY_IDS:
+    raise RuntimeError("PID/manual valve properties must not be exposed")
 
 async def async_setup_platform(hass, config, async_add_entities, discovery_info=None):
     hub = OumanUSB(config[CONF_PORT])
@@ -36,7 +38,7 @@ async def async_setup_platform(hass, config, async_add_entities, discovery_info=
 class OumanNumber(NumberEntity):
     _attr_should_poll = False
 
-    def __init__(self, hub, pid, object_id, label, pmin, pmax, step, scale, initial):
+    def __init__(self, hub, pid, object_id, label, pmin, pmax, step, scale):
         self.hub = hub
         self.pid = pid
         self.scale = scale
@@ -46,7 +48,10 @@ class OumanNumber(NumberEntity):
         self._attr_native_min_value = pmin / scale
         self._attr_native_max_value = pmax / scale
         self._attr_native_step = step / scale
-        self._attr_native_value = initial / scale
+        # No safe USB read exists for these properties. Show unknown until a
+        # confirmed write instead of placeholder numbers that look real.
+        self._attr_native_value = None
+        self._attr_assumed_state = True
         if scale == 10:
             self._attr_native_unit_of_measurement = "°C"
 

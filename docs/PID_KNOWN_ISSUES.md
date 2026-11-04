@@ -18,7 +18,8 @@ causality and affected firmware versions are **not fully established**.
 
 ## Production policy
 
-- Hide 56/57/58 from writable HA Number entities.
+- Hide 56/57/58 from writable HA Number entities (done in OpenHVAC and in
+  the legacy driver from v0.1.3; manual valve 92 is hidden too).
 - Saved PID snapshot information can be displayed as **read-only** sensors.
   A timestamp belongs to the backup file, not necessarily a live read.
 - Never issue `SET PROPERTY` to discover a property value.

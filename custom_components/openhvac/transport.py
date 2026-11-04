@@ -192,14 +192,15 @@ class HttpDriver:
             self.client = None
 
 class UsbDriver:
-    """EH-800B: shared locked USB reader and explicit manual setpoint writes.
+    """EH-800B: locked USB reader and explicit manual setpoint writes.
 
-    The legacy serial hub owns one port-level lock across read/write calls.
+    The bundled client (ouman_usb.py, the tested v0.1.2 framing) holds one
+    port-level lock across read/write calls.
     No SET PROPERTY is sent on setup, refresh, reconnect or discovery.
     """
 
     def __init__(self, hass, data):
-        from custom_components.ouman_eh800.ouman import OumanUSB
+        from .ouman_usb import OumanUSB
         from .usb_setpoints import USB_SAFE_SETPOINTS
 
         self.hass = hass
@@ -244,10 +245,10 @@ class UsbDriver:
     def _write_once(self, prop_id: int, wire_raw: int):
         from .usb_setpoints import confirm_property_reply
 
-        # The legacy hub's _command takes the same per-port RLock as its
-        # measurements() call. Explicit retries=1 prevents repeat writes
-        # after a missing/garbled response. A failed response is ambiguous.
-        response = self.hub._command(
+        # command() takes the same per-port RLock as measurements().
+        # Explicit retries=1 prevents repeat writes after a missing or
+        # garbled response. A failed response is ambiguous.
+        response = self.hub.command(
             f"SET PROPERTY {prop_id} {wire_raw}", wait=0.18, retries=1
         )
         confirm_property_reply(prop_id, wire_raw, response)

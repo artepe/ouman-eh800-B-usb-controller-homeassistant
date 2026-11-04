@@ -64,7 +64,7 @@ class FakeHub:
     def measurements(self):
         return [(55.8, "C")] * 28
 
-    def _command(self, cmd, wait=0.18, retries=3):
+    def command(self, cmd, wait=0.18, retries=3):
         self.commands.append((cmd, retries))
         if self.fail_reply:
             return "truncated"
@@ -76,27 +76,21 @@ class FakeHub:
 
 
 async def run_driver_sequence():
-    # Stub only the non-transport Home Assistant imports and the legacy
-    # controller object. The real Hub is NOT called during CI.
+    # Stub only the non-transport Home Assistant imports and the bundled
+    # USB client. The real serial client is NOT called during CI.
     homeassistant = types.ModuleType("homeassistant")
     homeassistant.__path__ = []
     ha_helpers = types.ModuleType("homeassistant.helpers")
     ha_helpers.__path__ = []
     ha_http = types.ModuleType("homeassistant.helpers.aiohttp_client")
     ha_http.async_get_clientsession = lambda hass: None
-    legacy_root = types.ModuleType("custom_components")
-    legacy_root.__path__ = []
-    legacy = types.ModuleType("custom_components.ouman_eh800")
-    legacy.__path__ = []
-    legacy_module = types.ModuleType("custom_components.ouman_eh800.ouman")
-    legacy_module.OumanUSB = FakeHub
+    usb_module = types.ModuleType("openhvac.ouman_usb")
+    usb_module.OumanUSB = FakeHub
     for name, module in [
         ("homeassistant", homeassistant),
         ("homeassistant.helpers", ha_helpers),
         ("homeassistant.helpers.aiohttp_client", ha_http),
-        ("custom_components", legacy_root),
-        ("custom_components.ouman_eh800", legacy),
-        ("custom_components.ouman_eh800.ouman", legacy_module),
+        ("openhvac.ouman_usb", usb_module),
     ]:
         sys.modules[name] = module
 

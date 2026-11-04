@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'custom_components/openhvac/**'
+      - 'custom_components/ouman_eh800/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openhvac_vendor_profiles.py'
       - 'tests/test_openhvac_usb_controls.py'
@@ -23,6 +24,7 @@ on:
   pull_request:
     paths:
       - 'custom_components/openhvac/**'
+      - 'custom_components/ouman_eh800/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openhvac_vendor_profiles.py'
       - 'tests/test_openhvac_usb_controls.py'
@@ -48,7 +50,7 @@ jobs:
         with:
           python-version: '3.13'
       - name: Compile integration files
-        run: python -m compileall -q custom_components/openhvac tools/lorawan_uplink_inspect.py
+        run: python -m compileall -q custom_components/openhvac custom_components/ouman_eh800 tools/lorawan_uplink_inspect.py
       - name: Test register decoding and write allowlist
         run: |
           python -m unittest discover -s tests -p 'test_*profiles.py' -v

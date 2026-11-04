@@ -1,6 +1,6 @@
 """Advisory site safety monitor; never clears native HVAC safety alarms."""
 from __future__ import annotations
-from .core import finding, optional_number, utc_time, InvalidMeasurement
+from .core import finding, optional_number, utc_time
 from datetime import datetime, timezone
 
 
