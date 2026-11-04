@@ -1,6 +1,6 @@
 # GitHub About metadata for OpenLVI Bridge
 
-The repository name is already **`OpenLVIBridge-homeassistant`**.
+The repository name is already **`Open-HVACBridge-homeassistant`**.
 The GitHub sidebar's **About** fields are repository metadata, not README
 content. They must be edited under **About → gear icon** by an administrator;
 the current GitHub connector does not expose a repository-metadata update action.
@@ -11,7 +11,7 @@ Open-source Home Assistant integration for HVAC and building automation. Support
 
 ## Website
 
-https://github.com/artepe/OpenLVIBridge-homeassistant/blob/main/docs/OPENLVI_BRIDGE.md
+https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/OPENLVI_BRIDGE.md
 
 ## Suggested topics (separate GitHub topic tags)
 

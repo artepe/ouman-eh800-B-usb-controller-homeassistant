@@ -53,7 +53,9 @@ class ModbusDriver:
         values = {}
         for point in self.points:
             try:
-                values[point.key] = await self._read_point(point)
+                value = await self._read_point(point)
+                if value is not None:
+                    values[point.key] = value
             except Exception as err:
                 _LOGGER.warning("Ouman point %s unavailable: %s", point.key, err)
         return values

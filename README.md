@@ -5,12 +5,12 @@
 **Primary language: English.** Optional Home Assistant translations: Finnish,
 Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 
-[![OpenLVI core checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-core.yml)
-[![OpenLVI extension checks](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml/badge.svg)](https://github.com/artepe/OpenLVIBridge-homeassistant/actions/workflows/openlvi-extensions.yml)
+[![OpenLVI core checks](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/openlvi-core.yml/badge.svg)](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/openlvi-core.yml)
+[![OpenLVI extension checks](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/openlvi-extensions.yml/badge.svg)](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/openlvi-extensions.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.4.2-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.4.3-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -52,6 +52,22 @@ requiring a vendor cloud service for supported interfaces.
 - **Engineering-unit offset:** operator-supplied read-only Modbus profiles
   now support an offset (e.g. MyVallox centikelvin -> Celsius). Use only after
   validating the 1-based register address and physical device reading.
+
+- **Finland BMS expansion:** documented, READ-ONLY initial Modbus profiles
+  for Uponor Smatrix Base PRO X-148 (25 points), Roth Touchline SL
+  (first zone, 9 points), and Tosibox connectivity status (firmware 5.5+).
+  Exact hardware/firmware and on-wire offset testing remains pending.
+- **CO2 auxiliary ventilation:** a reusable Home Assistant blueprint for
+  Shelly 0-10 V supplemental fans with outdoor cutoff, hysteresis, a
+  manual enable helper and invalid-sensor lockout. **Not for mandatory AHU.**
+- **Heating / refrigerant COP:** read-only thermal kW, system and compressor
+  COP, plus refrigerant thermodynamic cycle estimate from real enthalpies.
+  No fictional flow rate or refrigerant states.
+  [COP guide](docs/THERMAL_AND_REFRIGERANT_COP.md).
+- **Finland device catalog:** Ouman, Siemens, Honeywell, Uponor, Roth,
+  Wavin, Danfoss, Resideo and more, with documented interfaces,
+  compatibility limits and links.
+  [Manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md).
 
 ## Supported interfaces and validation status
 
@@ -112,6 +128,9 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 
 | Resource | Purpose |
 |---|---|
+| [Finland BMS / floor heating manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) | Uponor, Roth, Tosibox, Siemens, Honeywell, Ouman, Wavin and additional Finnish market devices |
+| [CO2 auxiliary 0-10 V fan blueprint](blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml) | Manual-enable, CO2 ramp and cold weather auxiliary fan cutoff |
+| [Heat pump and refrigerant COP guide](docs/THERMAL_AND_REFRIGERANT_COP.md) | Measured water COP, thermodynamic cycle estimate and missing-data safety |
 | [Manufacturer register and control research](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md) | Manufacturer manuals, candidate registers, missing features, safety classification |
 | [LoRaWAN / MQTT and other networks](docs/LORAWAN_AND_PROTOCOLS.md) | UG65 embedded server, ChirpStack and TTS uplinks; other field protocols |
 | [MyVallox read-only Modbus example](examples/modbus-myvallox-readonly.json) | Experimental 12-point RTU sample including centikelvin conversion; verify addresses |
@@ -142,7 +161,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.2-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.3-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

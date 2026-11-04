@@ -1,0 +1,44 @@
+# OpenLVI Home Assistant package: refrigerant-cycle COP from measured
+# refrigerant ENTHALPIES in kJ/kg (not just T, P, Hz or EEV opening).
+# Enter your own verified entity IDs. These are PLACEHOLDERS.
+#
+# 'OpenLVI Refrigerant Cycle COP Estimate' is a THERMODYNAMIC ratio,
+# not measured electrical COP. Correct refrigerant and phase properties,
+# calibrated pressure (ABSOLUTE), temperatures and enthalpy are mandatory.
+# No refrigerant-side actuators are controlled by this package.
+template:
+  - sensor:
+      - name: "OpenLVI Refrigerant Cycle COP Estimate"
+        unique_id: openlvi_refrigerant_cycle_cop_estimate
+        state_class: measurement
+        icon: mdi:molecule
+        availability: >-
+          {% set h1 = states('sensor.ref_h_suction_kj_kg') | float(none) %}
+          {% set h2 = states('sensor.ref_h_discharge_kj_kg') | float(none) %}
+          {% set h3 = states('sensor.ref_h_liquid_kj_kg') | float(none) %}
+          {{ h1 is not none and h2 is not none and h3 is not none
+             and h2 > h1 and h2 > h3 and (h2 - h3) >= (h2 - h1) }}
+        state: >-
+          {% set h1 = states('sensor.ref_h_suction_kj_kg') | float %}
+          {% set h2 = states('sensor.ref_h_discharge_kj_kg') | float %}
+          {% set h3 = states('sensor.ref_h_liquid_kj_kg') | float %}
+          {{ ((h2 - h3) / (h2 - h1)) | round(2) }}
+        attributes:
+          caution: "Theoretical cycle-only COP; not electrical/whole system COP."
+
+      - name: "OpenLVI Refrigerant Condenser Heat Output"
+        unique_id: openlvi_refrigerant_condenser_heat_output
+        state_class: measurement
+        device_class: power
+        unit_of_measurement: kW
+        availability: >-
+          {% set m = states('sensor.ref_mass_flow_kg_s') | float(none) %}
+          {% set h2 = states('sensor.ref_h_discharge_kj_kg') | float(none) %}
+          {% set h3 = states('sensor.ref_h_liquid_kj_kg') | float(none) %}
+          {{ m is not none and h2 is not none and h3 is not none
+             and m > 0 and h2 > h3 }}
+        state: >-
+          {% set m = states('sensor.ref_mass_flow_kg_s') | float %}
+          {% set h2 = states('sensor.ref_h_discharge_kj_kg') | float %}
+          {% set h3 = states('sensor.ref_h_liquid_kj_kg') | float %}
+          {{ (m * (h2 - h3)) | round(2) }}

@@ -16,6 +16,12 @@ async def async_setup_entry(hass, entry, async_add_entities):
     for key, name, unit in (
         ("l1_delta_t", "L1 temperature difference", "K"),
         ("l1_thermal_power_kw", "L1 estimated thermal power", "kW"),
+        ("water_heating_power_kw", "Water-side heating output", "kW"),
+        ("system_heating_cop", "Whole-system heating COP", None),
+        ("water_compressor_heating_cop", "Water-side compressor heating COP", None),
+        ("refrigerant_cycle_heating_cop_estimate", "Refrigerant thermodynamic heating COP estimate", None),
+        ("refrigerant_heating_power_kw", "Refrigerant condenser heat output", "kW"),
+        ("refrigerant_compressor_heating_cop", "Refrigerant compressor electrical heating COP", None),
     ):
         if key in (coordinator.data or {}):
             entities.append(DerivedSensor(coordinator, key, name, unit))
