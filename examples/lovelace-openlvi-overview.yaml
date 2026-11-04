@@ -4,21 +4,21 @@ type: vertical-stack
 cards:
   - type: markdown
     content: |
-      ## OpenLVI Bridge // Valvomo
-      **Paikalliset säätimet, mittaukset ja huoltotiedot**
+      ## OpenLVI Bridge // Control Room
+      **Local HVAC controllers, live measurements and maintenance data**
   - type: entities
-    title: L1 lämmitys
+    title: L1 heating
     entities:
       - entity: sensor.openlvi_l1_supply
-        name: Menovesi
+        name: Supply water
       - entity: sensor.openlvi_l1_return
-        name: Paluuvesi
+        name: Return water
       - entity: sensor.openlvi_l1_delta_t
         name: Delta-T
       - entity: sensor.openlvi_l1_thermal_power_kw
-        name: Laskettu lämpöteho
+        name: Estimated thermal power
   - type: history-graph
-    title: Lämmityksen trendit
+    title: Heating trends
     hours_to_show: 24
     entities:
       - entity: sensor.openlvi_l1_supply

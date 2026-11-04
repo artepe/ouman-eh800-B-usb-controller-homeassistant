@@ -1,6 +1,6 @@
 # EH-800B USB — L1 controls automatically in OpenLVI Bridge
 
-**Version:** OpenLVI Bridge 0.3.0-beta.1 (experimental).
+**Version:** OpenLVI Bridge 0.4.0-beta.1 (experimental).
 The legacy Ouman EH-800B v0.1.2 remains unchanged and was the last
 installation version reported working on a physical controller.
 
@@ -21,19 +21,23 @@ updating and restarting; no need to delete the configuration entry.
 
 ## Which controls appear?
 
+Control names below are the English defaults for new installs. Existing Home
+Assistant entity IDs are preserved by their stable unique IDs; a user-renamed
+entity remains user-renamed.
+
 | USB property ID | HA number control | Allowed range | Increment |
 |---|---|---|---|
-| 54 | L1 menoveden alaraja | 5–95 °C | 1 °C |
-| 55 | L1 menoveden yläraja | 5–95 °C | 1 °C |
-| 67 | L1 käyrä −20 °C | 0–100 °C | 1 °C |
-| 69 | L1 käyrä −10 °C | 0–100 °C | 1 °C |
-| 71 | L1 käyrä 0 °C | 0–100 °C | 1 °C |
-| 73 | L1 käyrä +10 °C | 0–100 °C | 1 °C |
-| 75 | L1 käyrä +20 °C | 0–100 °C | 1 °C |
-| 91 | L1 kesäsulkuasetus | 5–95 raw | 1 raw |
-| 126 | L1 menoveden muutosraja | 1–50 raw | 1 raw |
-| 127 | L1 menoveden asetus | 0–95 °C | 1 °C |
-| 134 | L1 hienosäätö | −4–4 °C | 0.1 °C |
+| 54 | L1 supply minimum | 5–95 °C | 1 °C |
+| 55 | L1 supply maximum | 5–95 °C | 1 °C |
+| 67 | L1 heating curve −20 °C | 0–100 °C | 1 °C |
+| 69 | L1 heating curve −10 °C | 0–100 °C | 1 °C |
+| 71 | L1 heating curve 0 °C | 0–100 °C | 1 °C |
+| 73 | L1 heating curve +10 °C | 0–100 °C | 1 °C |
+| 75 | L1 heating curve +20 °C | 0–100 °C | 1 °C |
+| 91 | L1 summer shutoff setting | 5–95 raw | 1 raw |
+| 126 | L1 maximum supply change rate | 1–50 raw | 1 raw |
+| 127 | L1 supply setpoint | 0–95 °C | 1 °C |
+| 134 | L1 fine adjustment | −4–4 °C | 0.1 °C |
 
 **Unsafe or unverified properties are intentionally omitted**, most
 importantly PID 56/57/58 and manual valve position 92. Do not attempt

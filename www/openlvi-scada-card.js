@@ -34,7 +34,7 @@ class OpenLVIScadaCard extends HTMLElement {
         @media(max-width:460px){.metric .value{font-size:15px}.cube{width:110px;left:calc(50% - 55px)}}
       </style>
       <ha-card class="panel">
-        <h3>OPENLVI // SCADA</h3><p>Isometrinen live-valvomo • vain luku</p>
+        <h3>OPENLVI // SCADA</h3><p>Isometric real-time monitor • read-only</p>
         <div class="plant">
           <div class="path a"></div><div class="path b"></div><div class="cube"></div>
           <div class="fan left"></div><div class="fan right"></div>
@@ -43,7 +43,7 @@ class OpenLVIScadaCard extends HTMLElement {
         </div>
         <div class="values">
         ${["outdoor","supply","return","valve","power","delta_t"].map(k =>
-         `<div class="metric"><div class="name">${({outdoor:"Ulko",supply:"Meno",return:"Paluu",valve:"Venttiili",power:"Teho",delta_t:"Delta T"})[k]}</div><div class="value" id="${k}">—</div></div>`).join("")}
+         `<div class="metric"><div class="name">${({outdoor:"Outdoor",supply:"Supply",return:"Return",valve:"Valve",power:"Power",delta_t:"Delta T"})[k]}</div><div class="value" id="${k}">—</div></div>`).join("")}
         </div>
       </ha-card>`;
   }

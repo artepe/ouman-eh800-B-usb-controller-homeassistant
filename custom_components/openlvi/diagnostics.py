@@ -37,11 +37,11 @@ def diagnostic_notes(data: dict) -> list[str]:
     notes = []
     dt = m.get("l1_delta_t")
     if dt is not None and dt < -2:
-        notes.append("L1 menovesi on yli 2 °C paluuta kylmempi: tarkista anturit ja virtaussuunta")
+        notes.append("L1 supply is more than 2 °C colder than return: check sensors and flow direction")
     if dt is not None and dt > 25:
-        notes.append("L1 meno-/paluulämpötilaero ylittää 25 °C: tarkista virtaus ja mittaukset")
+        notes.append("L1 supply/return temperature difference exceeds 25 °C: check circulation and measurements")
     target = _number(data, "l1_supply_target")
     supply = _number(data, "l1_supply")
     if target is not None and supply is not None and abs(target - supply) > 15:
-        notes.append("L1 menovesi poikkeaa yli 15 °C pyynnistä: tarkista lämmönlähde ja venttiili")
+        notes.append("L1 supply differs from target by over 15 °C: check the heat source and mixing valve")
     return notes

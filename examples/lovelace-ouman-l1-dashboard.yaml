@@ -3,66 +3,66 @@ cards:
   - type: markdown
     content: |
       # 🔥 Ouman EH-800B
-      ### L1 lämmityspiirin valvomo
+      ### L1 heating circuit control room
   - type: grid
     columns: 2
     square: false
     cards:
       - type: gauge
         entity: sensor.ouman_l1_supply_water_temperature
-        name: Menovesi
+        name: Supply water
         min: 0
         max: 100
         needle: true
       - type: gauge
         entity: sensor.ouman_l1_calculated_supply_target
-        name: Menovesitavoite
+        name: Supply target
         min: 0
         max: 100
         needle: true
       - type: gauge
         entity: sensor.ouman_l1_valve_position
-        name: Venttiili
+        name: Valve
         min: 0
         max: 100
         needle: true
       - type: gauge
         entity: sensor.ouman_l1_valve_calculated_position
-        name: Venttiilin tavoite
+        name: Valve target
         min: 0
         max: 100
         needle: true
   - type: entities
-    title: 🔥 L1 lämmityskäyrä — SÄÄTÖ
+    title: 🔥 L1 heating curve — SETTINGS
     show_header_toggle: false
     entities:
       - entity: number.ouman_l1_curve_20c
-        name: ❄️ -20 °C → menovesi
+        name: ❄️ -20 °C → supply
       - entity: number.ouman_l1_curve_10c
-        name: ❄️ -10 °C → menovesi
+        name: ❄️ -10 °C → supply
       - entity: number.ouman_l1_curve_0c
-        name: 🌡️ 0 °C → menovesi
+        name: 🌡️ 0 °C → supply
       - entity: number.ouman_l1_curve_10c_2
-        name: ☀️ +10 °C → menovesi
+        name: ☀️ +10 °C → supply
       - entity: number.ouman_l1_curve_20c_2
-        name: ☀️ +20 °C → menovesi
+        name: ☀️ +20 °C → supply
   - type: entities
-    title: 📊 Ouman reaaliajassa
+    title: 📊 Ouman live measurements
     show_header_toggle: false
     entities:
       - entity: sensor.ouman_l1_calculated_supply_target
-        name: Laskettu menovesi
+        name: Calculated supply
       - entity: sensor.ouman_l1_supply_water_temperature
-        name: Todellinen menovesi
+        name: Actual supply
       - entity: sensor.ouman_l1_valve_calculated_position
-        name: Venttiilin ohjaus
+        name: Valve control signal
       - entity: sensor.ouman_l1_valve_position
-        name: Venttiilin asento
+        name: Valve position
   - type: history-graph
-    title: 📈 Menovesi — 12 h
+    title: 📈 Supply water — 12 h
     hours_to_show: 12
     entities:
       - entity: sensor.ouman_l1_supply_water_temperature
-        name: Menovesi
+        name: Supply water
       - entity: sensor.ouman_l1_calculated_supply_target
-        name: Tavoite
+        name: Target

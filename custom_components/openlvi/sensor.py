@@ -14,8 +14,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
         if not (editable and point.writable)
     ]
     for key, name, unit in (
-        ("l1_delta_t", "L1 lämpötilaero", "K"),
-        ("l1_thermal_power_kw", "L1 laskettu lämpöteho", "kW"),
+        ("l1_delta_t", "L1 temperature difference", "K"),
+        ("l1_thermal_power_kw", "L1 estimated thermal power", "kW"),
     ):
         if key in (coordinator.data or {}):
             entities.append(DerivedSensor(coordinator, key, name, unit))
@@ -67,12 +67,12 @@ class DerivedSensor(CoordinatorEntity, SensorEntity):
 class DiagnosticSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
         super().__init__(coordinator)
-        self._attr_name = "OpenLVI diagnostiikka"
+        self._attr_name = "OpenLVI diagnostics"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_diagnostics"
 
     @property
     def native_value(self):
-        return "Huomio" if self.coordinator.diagnostic_messages else "Ei huomioita"
+        return "Review needed" if self.coordinator.diagnostic_messages else "No findings"
 
     @property
     def extra_state_attributes(self):

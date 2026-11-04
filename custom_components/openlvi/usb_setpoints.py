@@ -33,17 +33,17 @@ class UsbSetpoint:
 # Approved L1 property IDs from the legacy EH-800B USB project. These are
 # manually triggered setpoints, never sent during installation or startup.
 USB_SAFE_SETPOINTS = (
-    UsbSetpoint(54, "l1_supply_minimum", "L1 menoveden alaraja", 50, 950, 10, 10, "°C"),
-    UsbSetpoint(55, "l1_supply_maximum", "L1 menoveden yläraja", 50, 950, 10, 10, "°C"),
-    UsbSetpoint(67, "l1_curve_minus_20c", "L1 käyrä -20 °C", 0, 1000, 10, 10, "°C"),
-    UsbSetpoint(69, "l1_curve_minus_10c", "L1 käyrä -10 °C", 0, 1000, 10, 10, "°C"),
-    UsbSetpoint(71, "l1_curve_0c", "L1 käyrä 0 °C", 0, 1000, 10, 10, "°C"),
-    UsbSetpoint(73, "l1_curve_plus_10c", "L1 käyrä +10 °C", 0, 1000, 10, 10, "°C"),
-    UsbSetpoint(75, "l1_curve_plus_20c", "L1 käyrä +20 °C", 0, 1000, 10, 10, "°C"),
-    UsbSetpoint(91, "l1_summer_shutoff", "L1 kesäsulkuasetus", 5, 95, 1, 1),
-    UsbSetpoint(126, "l1_max_supply_change_rate", "L1 menoveden muutosraja", 1, 50, 1, 1),
-    UsbSetpoint(127, "l1_supply_setpoint", "L1 menoveden asetus", 0, 950, 10, 10, "°C"),
-    UsbSetpoint(134, "l1_fine_adjustment", "L1 hienosäätö", -40, 40, 1, 10, "°C"),
+    UsbSetpoint(54, "l1_supply_minimum", "L1 supply minimum", 50, 950, 10, 10, "°C"),
+    UsbSetpoint(55, "l1_supply_maximum", "L1 supply maximum", 50, 950, 10, 10, "°C"),
+    UsbSetpoint(67, "l1_curve_minus_20c", "L1 heating curve -20 °C", 0, 1000, 10, 10, "°C"),
+    UsbSetpoint(69, "l1_curve_minus_10c", "L1 heating curve -10 °C", 0, 1000, 10, 10, "°C"),
+    UsbSetpoint(71, "l1_curve_0c", "L1 heating curve 0 °C", 0, 1000, 10, 10, "°C"),
+    UsbSetpoint(73, "l1_curve_plus_10c", "L1 heating curve +10 °C", 0, 1000, 10, 10, "°C"),
+    UsbSetpoint(75, "l1_curve_plus_20c", "L1 heating curve +20 °C", 0, 1000, 10, 10, "°C"),
+    UsbSetpoint(91, "l1_summer_shutoff", "L1 summer shutoff setting", 5, 95, 1, 1),
+    UsbSetpoint(126, "l1_max_supply_change_rate", "L1 maximum supply change rate", 1, 50, 1, 1),
+    UsbSetpoint(127, "l1_supply_setpoint", "L1 supply setpoint", 0, 950, 10, 10, "°C"),
+    UsbSetpoint(134, "l1_fine_adjustment", "L1 fine adjustment", -40, 40, 1, 10, "°C"),
 )
 USB_BY_KEY = {spec.key: spec for spec in USB_SAFE_SETPOINTS}
 USB_BY_ID = {spec.property_id: spec for spec in USB_SAFE_SETPOINTS}
