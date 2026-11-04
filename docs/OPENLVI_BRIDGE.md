@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.4.0-beta.1; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.4.1-beta.1; NOT hardware validated.** Maintained in the repository
 [OpenLVIBridge-homeassistant](https://github.com/artepe/OpenLVIBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
@@ -20,6 +20,12 @@ The interactive wizard asks:
    read-only BACnet/IP, or wired M-Bus for Kamstrup.
 4. IP/USB details, unit ID, serial parity, BACnet device instance
    or an exact site-specific read-only point list.
+
+**English is the default interface language.** Optional Home Assistant
+translations (Finnish, Swedish, Estonian, Polish and Russian) are stored
+separately and are selected by the user's Home Assistant language preference.
+The controller's actual language setting is not changed. See
+[Language support](LOCALIZATION.md).
 
 The setup probe is *read-only*. On **EH-800B USB**, 11 guarded L1
 Number controls now appear automatically (also on previously configured

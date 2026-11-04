@@ -4,6 +4,18 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.4.1-beta.1 — 2026-11-04 (experimental)
+
+- English is the canonical/default OpenLVI interface language.
+- Added complete Home Assistant translations for the Ouman manual's
+  six languages: English, Finnish, Swedish, Estonian, Polish, Russian.
+- Localized EH-800B USB measurement names, L1 control names, status/AI
+  entity names, review button and setup/options UI.
+- Preserved existing entity unique IDs, device identifiers and USB property
+  IDs. The physical Ouman language setting is not changed.
+- Original tested legacy EH-800B v0.1.2 driver is unchanged.
+- Localized names and terminology require real-user language review.
+
 ## OpenLVI Bridge 0.4.0-beta.1 — 2026-11-04 (experimental)
 
 - English setting explanations: on-device guide sensor, manual review button

@@ -28,6 +28,14 @@ class OumanSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self.point = point
         self._attr_name = point.name
+        # Stable unique IDs and point keys never change. Only the displayed
+        # Ouman USB names are localized by Home Assistant per user language.
+        if (coordinator.config_entry.data.get(CONF_VENDOR) == "Ouman"
+                and coordinator.config_entry.data.get(CONF_MODEL) == "EH-800B"
+                and coordinator.config_entry.data.get("transport") == "usb"):
+            del self._attr_name
+            self._attr_has_entity_name = True
+            self._attr_translation_key = f"eh800b_{point.key}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{point.key}_sensor"
         self._attr_native_unit_of_measurement = point.unit
 
@@ -49,7 +57,8 @@ class DerivedSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator, key, name, unit):
         super().__init__(coordinator)
         self.key = key
-        self._attr_name = name
+        self._attr_has_entity_name = True
+        self._attr_translation_key = f"derived_{key}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_derived_{key}"
         self._attr_native_unit_of_measurement = unit
 
@@ -67,7 +76,8 @@ class DerivedSensor(CoordinatorEntity, SensorEntity):
 class DiagnosticSensor(CoordinatorEntity, SensorEntity):
     def __init__(self, coordinator):
         super().__init__(coordinator)
-        self._attr_name = "OpenLVI diagnostics"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "diagnostics"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_diagnostics"
 
     @property
@@ -91,7 +101,8 @@ class AIGuideSensor(CoordinatorEntity, SensorEntity):
 
     def __init__(self, coordinator):
         super().__init__(coordinator)
-        self._attr_name = "OpenLVI English AI guide"
+        self._attr_has_entity_name = True
+        self._attr_translation_key = "english_ai_guide"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_english_ai_guide"
         self._attr_icon = "mdi:robot-outline"
 

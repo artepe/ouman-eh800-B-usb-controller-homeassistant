@@ -1,7 +1,7 @@
 {
   "domain": "openlvi",
   "name": "OpenLVI Bridge (experimental)",
-  "version": "0.4.0-beta.1",
+  "version": "0.4.1-beta.1",
   "documentation": "https://github.com/artepe/OpenLVIBridge-homeassistant/blob/main/docs/OPENLVI_BRIDGE.md",
   "issue_tracker": "https://github.com/artepe/OpenLVIBridge-homeassistant/issues",
   "config_flow": true,
