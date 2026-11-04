@@ -11,7 +11,7 @@ maintainer via [@artepe](https://github.com/artepe).
 
 - `custom_components/ouman_eh800` **v0.1.2**: last version reported working
   with one real EH-800B. It is **not** a safety-certified control system.
-- `custom_components/openlvi` **v0.4.4-beta.1**: experimental. The CI tests
+- `custom_components/openhvac` **v0.5.0-beta.1**: experimental. The CI tests
   do not establish compatibility with physical HVAC/metering equipment.
 - No promise of a vulnerability-remediation SLA is made.
 
@@ -21,7 +21,7 @@ maintainer via [@artepe](https://github.com/artepe).
   UDP 47808) generally have no per-command authentication. Device HTTP may
   use unencrypted credentials. Never publish these services to the internet.
   Use a trusted LAN/VLAN, firewall and secure remote access.
-- **Safe-by-default configuration:** the new OpenLVI configuration wizard
+- **Safe-by-default configuration:** the new OpenHVAC configuration wizard
   defaults to read-only, except for the eleven separately allowlisted
   EH-800B USB Number controls, which require explicit manual input. User-supplied point maps are read-only; remote
   BACnet and wired M-Bus are read-only in the current implementation. Built-in

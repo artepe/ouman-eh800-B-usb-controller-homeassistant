@@ -1,22 +1,22 @@
-# EH-800B USB — L1 controls automatically in OpenLVI Bridge
+# EH-800B USB — L1 controls automatically in OpenHVAC Bridge
 
-**Version:** OpenLVI Bridge 0.4.0-beta.1 (experimental).
+**Version:** OpenHVAC Bridge 0.4.0-beta.1 (experimental).
 The legacy Ouman EH-800B v0.1.2 remains unchanged and was the last
 installation version reported working on a physical controller.
 
 ## No separate YAML number platform
 
-For a single EH-800B connected via USB, install the OpenLVI component
-in `/config/custom_components/openlvi` and keep the original
+For a single EH-800B connected via USB, install the OpenHVAC component
+in `/config/custom_components/openhvac` and keep the original
 `/config/custom_components/ouman_eh800` **source folder** alongside it.
-OpenLVI imports its proven serial hub. Do **not** configure both
-`sensor: - platform: ouman_eh800` and the OpenLVI USB integration
+OpenHVAC imports its proven serial hub. Do **not** configure both
+`sensor: - platform: ouman_eh800` and the OpenHVAC USB integration
 against the same serial port: use **one polling owner**.
 
-Restart Home Assistant. Open **Settings → Devices & services → OpenLVI
+Restart Home Assistant. Open **Settings → Devices & services → OpenHVAC
 Bridge → Ouman EH-800B**. The device now gets 28 measurement entities
 and **11 Number controls** without a separate `number:` YAML setup.
-Existing OpenLVI EH-800B entries also gain these Number entities after
+Existing OpenHVAC EH-800B entries also gain these Number entities after
 updating and restarting; no need to delete the configuration entry.
 
 ## Which controls appear?

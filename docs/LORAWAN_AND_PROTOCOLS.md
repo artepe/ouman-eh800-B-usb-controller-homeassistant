@@ -1,8 +1,8 @@
-# OpenLVI LoRaWAN, MQTT and additional building-network research
+# OpenHVAC LoRaWAN, MQTT and additional building-network research
 
 **Status 2026-11-04:** research, a standalone offline JSON inspector and
 test fixtures are included. There is **no live LoRaWAN transport inside
-the OpenLVI configuration wizard yet**, no automatic discovery of a
+the OpenHVAC configuration wizard yet**, no automatic discovery of a
 gateway, no radio receive hardware and no downlink/control commands.
 
 ## Preferred local path: Milesight UG65 -> existing MQTT -> Home Assistant
@@ -29,7 +29,7 @@ With UG65's **embedded LoRaWAN network server**:
    supported; use only verified decoded field names for MQTT sensors.
 8. Add retained MQTT discovery messages for confirmed sensors and
    availability/birth messages, or rely on Home Assistant's native
-   MQTT entities to avoid creating duplicate OpenLVI devices.
+   MQTT entities to avoid creating duplicate OpenHVAC devices.
 
 The user's existing three leak sensors must keep their current DevEUIs,
 device identifiers and associations. Do not reset/replace their
@@ -74,23 +74,23 @@ It does not send LoRaWAN downlinks or gateway configuration.
 
 ## Further communication transports worth supporting
 
-| Network / bus | Required hardware and integration | Recommended OpenLVI boundary |
+| Network / bus | Required hardware and integration | Recommended OpenHVAC boundary |
 |---|---|---|
 | LoRaWAN EU868 | Existing UG65 or other gateway + network server + MQTT | Decode app-server uplinks only, no downlinks by default |
-| Wired M-Bus EN 13757-2/3 | Powered active M-Bus master (OpenLVI already has an experimental read adapter) | Read metering records with units |
+| Wired M-Bus EN 13757-2/3 | Powered active M-Bus master (OpenHVAC already has an experimental read adapter) | Read metering records with units |
 | Wireless M-Bus / OMS | Compatible 868 MHz wM-Bus radio, decoder such as wmbusmeters, licensed keys where needed | Read decoded heat/water meter data via MQTT |
 | Z-Wave EU868 | Z-Wave radio controller + Z-Wave JS | Use Home Assistant entities (NorthQ is not LoRaWAN) |
 | Zigbee | Compatible coordinator + ZHA or Zigbee2MQTT | Reuse native entities, avoid duplicate radio stacks |
 | Matter/Thread | Matter controller + Thread border router when needed | Reuse native HA Matter entities |
 | BLE | Bluetooth adapter/proxy compatible with device's GATT protocol | Prefer existing HA integrations |
 | KNX/IP | KNX/IP gateway/router and ETS project for group addresses | Reuse native HA KNX integration; separate approval for writes |
-| BACnet MS/TP | Actual RS-485 BACnet MS/TP adapter/router | Proposed adapter; existing OpenLVI supports targeted BACnet/IP |
+| BACnet MS/TP | Actual RS-485 BACnet MS/TP adapter/router | Proposed adapter; existing OpenHVAC supports targeted BACnet/IP |
 | DALI-2 | DALI controller/gateway, e.g. DALI -> KNX/IP / Modbus | Read gateway mapped endpoints |
 | EnOcean | Supported 868 MHz transceiver + telegram decoder | Read existing Home Assistant entities |
 | eBUS | Isolated bus interface + ebusd | Use ebusd MQTT Discovery, no blind bus writes |
 | EMS/EMS2 | Properly isolated EMS-ESP bridge | Use EMS-ESP MQTT integration |
-| RS-485 Modbus RTU | Isolated serial gateway / serial interface | Existing OpenLVI driver; unit ID, parity, register map required |
-| Modbus TCP | IP-accessible controller/gateway, private LAN | Existing OpenLVI driver; no public internet exposure |
+| RS-485 Modbus RTU | Isolated serial gateway / serial interface | Existing OpenHVAC driver; unit ID, parity, register map required |
+| Modbus TCP | IP-accessible controller/gateway, private LAN | Existing OpenHVAC driver; no public internet exposure |
 | 0–10 V / 4–20 mA | Calibrated ADC/DAC via gateway | Analog signal, **not a radio protocol** |
 | Pulse / IEC 62056 optical | Suitable optocoupler head or protocol reader | Verify pulse LED vs IEC 62056-21 serial optical port |
 | LoRa raw P2P | Explicit raw-LoRa transmitter and matching software | Not interoperable with LoRaWAN network server by default |
@@ -111,7 +111,7 @@ No universal direct-radio scanner. Prefer dedicated protocol collectors:
 
     device -> correct radio/bus interface -> verified decoder
            -> MQTT / Home Assistant integration
-           -> OpenLVI read-only analytics and SCADA
+           -> OpenHVAC read-only analytics and SCADA
 
 Attach a hardware- and firmware-qualified point profile with:
 - exact source URL and publication/revision date;

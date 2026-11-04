@@ -1,0 +1,13 @@
+# Copy www/openhvac-scada-card.js into /config/www/openhvac-scada-card.js.
+# Dashboard Resources -> Add JavaScript module /local/openhvac-scada-card.js
+# Replace the entity IDs below with actual Home Assistant entities.
+type: custom:openhvac-scada-card
+entities:
+  outdoor: sensor.openhvac_outdoor
+  supply: sensor.openhvac_l1_supply
+  return: sensor.openhvac_l1_return
+  valve: sensor.openhvac_l1_valve
+  fan_supply: sensor.openhvac_supply_fan_rpm
+  fan_extract: sensor.openhvac_extract_fan_rpm
+  power: sensor.openhvac_l1_thermal_power_kw
+  delta_t: sensor.openhvac_l1_delta_t

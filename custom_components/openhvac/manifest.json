@@ -1,0 +1,18 @@
+{
+  "domain": "openhvac",
+  "name": "OpenHVAC Bridge (experimental)",
+  "version": "0.5.0-beta.1",
+  "documentation": "https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/OPENHVAC_BRIDGE.md",
+  "issue_tracker": "https://github.com/artepe/Open-HVACBridge-homeassistant/issues",
+  "config_flow": true,
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "requirements": [
+    "pymodbus==3.13.1",
+    "ouman-eh-800-api==2.0.0",
+    "pyserial==3.5",
+    "bacpypes3==0.0.110",
+    "pyMeterBus==0.8.5"
+  ],
+  "codeowners": []
+}

@@ -1,0 +1,179 @@
+blueprint:
+  name: "OpenHVAC | Supplemental CO2 ventilation fan (0-10 V)"
+  description: >-
+    Safe-by-default CO2-based supplemental fan speed control for a Shelly
+    0-10 V dimmer exposed as a Home Assistant light entity. English labels.
+    Uses an outdoor-temperature cutout (default 6 C), configurable CO2
+    mapping, a deadband to avoid rapid changes and a manual enable helper.
+    Missing/invalid sensors DO NOT trigger an actuator command.
+    Do NOT use this to shut down mandatory whole-building ventilation,
+    fire/smoke extraction, frost protection, or code-required air exchange.
+    Verify actual fan motor minimum V and your local regulations.
+  domain: automation
+  input:
+    co2_sensor:
+      name: Indoor CO2 sensor
+      selector:
+        entity:
+          domain: sensor
+    outdoor_sensor:
+      name: Outdoor temperature sensor
+      selector:
+        entity:
+          domain: sensor
+          device_class: temperature
+    fan_light:
+      name: Supplemental 0-10 V fan (light entity)
+      selector:
+        entity:
+          domain: light
+    enable_helper:
+      name: Automatic control enable helper
+      description: >-
+        Use input_boolean.co2_fan_auto or create an input_boolean in
+        Settings -> Devices & services -> Helpers. Turning it off leaves
+        the fan under manual control.
+      selector:
+        entity:
+          domain: input_boolean
+    co2_min:
+      name: CO2 at minimum fan speed (ppm)
+      default: 650
+      selector:
+        number:
+          min: 400
+          max: 2000
+          step: 25
+          unit_of_measurement: ppm
+          mode: box
+    co2_max:
+      name: CO2 at maximum fan speed (ppm)
+      default: 1400
+      selector:
+        number:
+          min: 600
+          max: 5000
+          step: 25
+          unit_of_measurement: ppm
+          mode: box
+    outdoor_cutoff_c:
+      name: Outdoor cutout below this temperature (C)
+      default: 6
+      selector:
+        number:
+          min: -20
+          max: 20
+          step: 0.5
+          unit_of_measurement: °C
+          mode: box
+    cold_hysteresis_c:
+      name: Outdoor restart hysteresis (C)
+      default: 1
+      selector:
+        number:
+          min: 0
+          max: 5
+          step: 0.5
+          unit_of_measurement: °C
+    minimum_percent:
+      name: Minimum operating fan output (%)
+      default: 20
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+    maximum_percent:
+      name: Maximum operating fan output (%)
+      default: 100
+      selector:
+        number:
+          min: 1
+          max: 100
+          step: 1
+          unit_of_measurement: "%"
+    minimum_change_percent:
+      name: Minimum change to command (% points)
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 20
+          step: 1
+          unit_of_measurement: "%"
+
+mode: restart
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id: !input co2_sensor
+    for: "00:01:00"
+  - trigger: state
+    entity_id: !input outdoor_sensor
+    for: "00:01:00"
+  - trigger: time_pattern
+    minutes: "/5"
+
+conditions:
+  - condition: state
+    entity_id: !input enable_helper
+    state: "on"
+
+variables:
+  co2_entity: !input co2_sensor
+  outdoor_entity: !input outdoor_sensor
+  light_entity: !input fan_light
+  co2_low: !input co2_min
+  co2_high: !input co2_max
+  outdoor_cutoff: !input outdoor_cutoff_c
+  outdoor_hysteresis: !input cold_hysteresis_c
+  min_output: !input minimum_percent
+  max_output: !input maximum_percent
+  deadband: !input minimum_change_percent
+  desired_percent: >-
+    {% set co2 = states(co2_entity) | float(none) %}
+    {% set outdoor = states(outdoor_entity) | float(none) %}
+    {% if co2 is none or outdoor is none
+          or co2 < 350 or co2 > 10000
+          or outdoor < -50 or outdoor > 60
+          or co2_high <= co2_low or max_output < min_output %}
+      -1
+    {% elif outdoor < outdoor_cutoff
+          or (outdoor < outdoor_cutoff + outdoor_hysteresis
+              and not is_state(light_entity, 'on')) %}
+      0
+    {% else %}
+      {% set fraction = ((co2 - co2_low) / (co2_high - co2_low)) %}
+      {% set bounded = [1, [0, fraction] | max] | min %}
+      {{ (min_output + bounded * (max_output - min_output)) | round(0) | int }}
+    {% endif %}
+
+actions:
+  # A computed value of -1 indicates invalid/missing data. Leave the fan
+  # untouched rather than changing a real actuator based on an estimate.
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ desired_percent | int(-1) == 0 and is_state(light_entity, 'on') }}"
+        sequence:
+          - action: light.turn_off
+            target:
+              entity_id: !input fan_light
+      - conditions:
+          - condition: template
+            value_template: >-
+              {% set target = desired_percent | int(-1) %}
+              {% set current = (state_attr(light_entity, 'brightness') | int(0))
+                                 * 100 / 255 %}
+              {{ target > 0 and (
+                  not is_state(light_entity, 'on')
+                  or (target - current) | abs >= deadband
+                 ) }}
+        sequence:
+          - action: light.turn_on
+            target:
+              entity_id: !input fan_light
+            data:
+              brightness_pct: "{{ desired_percent | int }}"

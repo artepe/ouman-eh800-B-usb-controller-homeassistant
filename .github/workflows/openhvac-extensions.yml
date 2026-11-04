@@ -1,0 +1,41 @@
+name: OpenHVAC extension checks
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'custom_components/openhvac/**'
+      - 'tests/test_openhvac_extended.py'
+      - 'tests/test_openhvac_robustness.py'
+      - 'tools/openhvac_pointmap_import.py'
+      - '.github/workflows/openhvac-extensions.yml'
+  pull_request:
+    paths:
+      - 'custom_components/openhvac/**'
+      - 'tests/test_openhvac_extended.py'
+      - 'tests/test_openhvac_robustness.py'
+      - 'tools/openhvac_pointmap_import.py'
+      - '.github/workflows/openhvac-extensions.yml'
+jobs:
+  extensions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Compile Python
+        run: python -m compileall -q custom_components/openhvac tools
+      - name: Portable tests and safety checks
+        run: python -m unittest discover -s tests -p 'test_openhvac_extended.py' -v
+      - name: Validate dependencies
+        run: |
+          python -m pip install bacpypes3==0.0.110 pyMeterBus==0.8.5 pyserial==3.5
+          python - <<'PY'
+          from bacpypes3.app import Application
+          import meterbus
+          import serial
+          assert callable(meterbus.send_request_frame)
+          assert callable(Application.from_object_list)
+          PY
+      - name: Decode a real pyMeterBus telegram
+        run: python -m unittest discover -s tests -p 'test_openhvac_robustness.py' -v

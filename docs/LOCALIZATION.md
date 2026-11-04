@@ -1,9 +1,9 @@
-# OpenLVI language support
+# OpenHVAC language support
 
-OpenLVI Bridge is **English-first**. Its source text, stable device identifiers,
+OpenHVAC Bridge is **English-first**. Its source text, stable device identifiers,
 default controller labels, setup flow, documentation, protocol descriptions and
 AI guidance are written in English. The English translations in
-`custom_components/openlvi/strings.json` are authoritative.
+`custom_components/openhvac/strings.json` are authoritative.
 
 ## Supported optional interface languages
 
@@ -50,7 +50,7 @@ write language-related USB properties or alter any controller configuration.
   delete or regenerate entities.
 - The separate legacy `custom_components/ouman_eh800` v0.1.2 remains
   untouched. Its existing visible names are already in English. Its
-  historical properties and device protocol are not migrated by OpenLVI.
+  historical properties and device protocol are not migrated by OpenHVAC.
 
 ## Source and testing
 

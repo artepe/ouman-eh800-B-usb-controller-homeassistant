@@ -145,7 +145,7 @@ def main(argv=None):
         print(json.dumps(normalized, indent=2, ensure_ascii=False))
         return 0
     except (ValueError, OSError, UnicodeError) as exc:
-        print(f"OpenLVI: {exc}", file=sys.stderr)
+        print(f"OpenHVAC: {exc}", file=sys.stderr)
         return 2
 
 

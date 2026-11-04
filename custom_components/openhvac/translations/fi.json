@@ -1,0 +1,229 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Valitse valmistaja",
+        "description": "Liitä tuetut lämmitys- ja ilmanvaihtosäätimet paikallisesti.",
+        "data": {
+          "vendor": "Valmistaja"
+        }
+      },
+      "model": {
+        "title": "Valitse säädinmalli",
+        "description": "Valitse tarkka malli ja ohjelmistoversio. EH-800B USB:n hyväksytyt L1-säädöt näkyvät automaattisesti; muut tarvitsevat erillisen kirjoitusluvan.",
+        "data": {
+          "model": "Malli",
+          "firmware": "Ohjelmistoversio",
+          "application_key": "Sovellusavain",
+          "allow_writes": "Salli muiden mallien tarkistetut kirjoitukset (EH-800B USB erikseen)"
+        }
+      },
+      "transport": {
+        "title": "Protokolla",
+        "data": {
+          "transport": "Yhteystapa"
+        }
+      },
+      "connection": {
+        "title": "Paikallinen yhteys",
+        "description": "Kohteessa ohjelmoidut säätimet vaativat tarkistetun vain luku -rekisterikartan. Tuntemattomia pisteitä ei arvata.",
+        "data": {
+          "host": "Kohdelaitteen IP-osoite",
+          "port": "Sarjaportti tai TCP-portti",
+          "baudrate": "Siirtonopeus",
+          "parity": "Pariteetti",
+          "unit_id": "Modbus- tai M-Bus-laiteosoite",
+          "profile_json": "Modbus-rekisterikartta / BACnet-objektit (JSON)",
+          "url": "EH-800 URL",
+          "username": "Käyttäjätunnus",
+          "password": "Salasana",
+          "bacnet_device_id": "BACnet-kohdelaitteen instanssi",
+          "bacnet_local_address": "Paikallinen BACnet IP/CIDR",
+          "bacnet_local_instance": "BACnet-asiakkaan instanssi"
+        }
+      }
+    },
+    "error": {
+      "invalid_profile": "Ohjelmistoversio, sovellusavain tai rekisterikartta on virheellinen",
+      "cannot_connect": "Yhteys tai mittausten luku epäonnistui",
+      "invalid_auth": "Väärä käyttäjätunnus tai salasana"
+    },
+    "abort": {
+      "already_configured": "Jo määritetty"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Paikallinen englanninkielinen AI-opas",
+        "description": "Valinnainen paikallisverkon Ollama. Englanninkielinen perusopas toimii ilmankin. AI ei muuta säätimen asetuksia.",
+        "data": {
+          "ai_url": "Paikallinen Ollama-osoite (esim. http://192.168.10.5:11434)",
+          "ai_model": "Pieni paikallinen malli",
+          "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein"
+        }
+      }
+    },
+    "error": {
+      "invalid_ai_connection": "Vain paikallisverkon http://IPv4:11434 sallitaan"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "eh800b_measurement_1": {
+        "name": "L1 laskettu menovesipyynti"
+      },
+      "eh800b_measurement_2": {
+        "name": "Mittaus 2"
+      },
+      "eh800b_measurement_3": {
+        "name": "Mittaus 3"
+      },
+      "eh800b_measurement_4": {
+        "name": "Mittaus 4"
+      },
+      "eh800b_measurement_5": {
+        "name": "Mittaus 5"
+      },
+      "eh800b_measurement_6": {
+        "name": "Mittaus 6"
+      },
+      "eh800b_measurement_7": {
+        "name": "Mittaus 7"
+      },
+      "eh800b_measurement_8": {
+        "name": "Mittaus 8"
+      },
+      "eh800b_measurement_9": {
+        "name": "L1 menoveden lämpötila"
+      },
+      "eh800b_measurement_10": {
+        "name": "Ulkolämpötila"
+      },
+      "eh800b_measurement_11": {
+        "name": "Korjattu ulkolämpötila"
+      },
+      "eh800b_measurement_12": {
+        "name": "Mittaus 12"
+      },
+      "eh800b_measurement_13": {
+        "name": "Mittaus 13"
+      },
+      "eh800b_measurement_14": {
+        "name": "Mittaus 14"
+      },
+      "eh800b_measurement_15": {
+        "name": "L1 laskettu venttiiliasento"
+      },
+      "eh800b_measurement_16": {
+        "name": "L1 venttiiliasento"
+      },
+      "eh800b_measurement_17": {
+        "name": "Mittaus 17"
+      },
+      "eh800b_measurement_18": {
+        "name": "Mittaus 18"
+      },
+      "eh800b_measurement_19": {
+        "name": "Mittaus 19"
+      },
+      "eh800b_measurement_20": {
+        "name": "Mittaus 20"
+      },
+      "eh800b_measurement_21": {
+        "name": "Hidastettu ulkolämpötila"
+      },
+      "eh800b_measurement_22": {
+        "name": "Mittaus 22"
+      },
+      "eh800b_measurement_23": {
+        "name": "Mittaus 23"
+      },
+      "eh800b_measurement_24": {
+        "name": "Mittaus 24"
+      },
+      "eh800b_measurement_25": {
+        "name": "Mittaus 25"
+      },
+      "eh800b_measurement_26": {
+        "name": "Mittaus 26"
+      },
+      "eh800b_measurement_27": {
+        "name": "Mittaus 27"
+      },
+      "eh800b_measurement_28": {
+        "name": "Mittaus 28"
+      },
+      "derived_l1_delta_t": {
+        "name": "L1 lämpötilaero"
+      },
+      "derived_l1_thermal_power_kw": {
+        "name": "L1 laskettu lämpöteho"
+      },
+      "diagnostics": {
+        "name": "OpenHVAC-diagnostiikka"
+      },
+      "english_ai_guide": {
+        "name": "OpenHVAC:n englanninkielinen AI-opas"
+      },
+      "derived_water_heating_power_kw": {
+        "name": "Vesipuolen lämmitysteho"
+      },
+      "derived_system_heating_cop": {
+        "name": "Koko järjestelmän lämmitys-COP"
+      },
+      "derived_water_compressor_heating_cop": {
+        "name": "Vesipuolen kompressorin lämmitys-COP"
+      },
+      "derived_refrigerant_cycle_heating_cop_estimate": {
+        "name": "Kylmäainekierron laskennallinen lämmitys-COP"
+      },
+      "derived_refrigerant_heating_power_kw": {
+        "name": "Kylmäaineen lauhdutusteho"
+      },
+      "derived_refrigerant_compressor_heating_cop": {
+        "name": "Kylmäainepuolen kompressorin sähköinen lämmitys-COP"
+      }
+    },
+    "number": {
+      "eh800b_l1_supply_minimum": {
+        "name": "L1 menoveden alaraja"
+      },
+      "eh800b_l1_supply_maximum": {
+        "name": "L1 menoveden yläraja"
+      },
+      "eh800b_l1_curve_minus_20c": {
+        "name": "L1 lämmityskäyrä −20 °C:ssa"
+      },
+      "eh800b_l1_curve_minus_10c": {
+        "name": "L1 lämmityskäyrä −10 °C:ssa"
+      },
+      "eh800b_l1_curve_0c": {
+        "name": "L1 lämmityskäyrä 0 °C:ssa"
+      },
+      "eh800b_l1_curve_plus_10c": {
+        "name": "L1 lämmityskäyrä +10 °C:ssa"
+      },
+      "eh800b_l1_curve_plus_20c": {
+        "name": "L1 lämmityskäyrä +20 °C:ssa"
+      },
+      "eh800b_l1_summer_shutoff": {
+        "name": "L1 kesäsulun asetus"
+      },
+      "eh800b_l1_max_supply_change_rate": {
+        "name": "L1 menoveden muutosnopeuden raja"
+      },
+      "eh800b_l1_supply_setpoint": {
+        "name": "L1 menoveden asetusarvo"
+      },
+      "eh800b_l1_fine_adjustment": {
+        "name": "L1 hienosäätö"
+      }
+    },
+    "button": {
+      "review_settings_en": {
+        "name": "Tarkista asetukset englanniksi"
+      }
+    }
+  }
+}

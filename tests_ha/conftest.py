@@ -1,4 +1,4 @@
-"""Fixtures for Home Assistant level OpenLVI tests.
+"""Fixtures for Home Assistant level OpenHVAC tests.
 
 Uses pytest-homeassistant-custom-component. No network or hardware: every
 transport is replaced by an in-memory fake.
@@ -18,5 +18,5 @@ pytest_plugins = "pytest_homeassistant_custom_component"
 
 @pytest.fixture(autouse=True)
 def auto_enable_custom_integrations(enable_custom_integrations):
-    """Let Home Assistant load custom_components/openlvi in every test."""
+    """Let Home Assistant load custom_components/openhvac in every test."""
     yield

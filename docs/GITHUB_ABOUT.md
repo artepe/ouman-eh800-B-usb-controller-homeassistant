@@ -1,4 +1,4 @@
-# GitHub About metadata for OpenLVI Bridge
+# GitHub About metadata for OpenHVAC Bridge
 
 The repository name is already **`Open-HVACBridge-homeassistant`**.
 The GitHub sidebar's **About** fields are repository metadata, not README
@@ -11,7 +11,7 @@ Open-source Home Assistant integration for HVAC and building automation. Support
 
 ## Website
 
-https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/OPENLVI_BRIDGE.md
+https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/OPENHVAC_BRIDGE.md
 
 ## Suggested topics (separate GitHub topic tags)
 
@@ -28,4 +28,4 @@ BACnet/M-Bus implementations are in beta.
 - Website points to maintained documentation.
 - Topics above have been selected.
 - README prominently distinguishes *tested* legacy EH-800B code from the
-  *experimental* OpenLVI code.
+  *experimental* OpenHVAC code.
