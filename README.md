@@ -10,7 +10,7 @@ Swedish, Estonian, Polish and Russian. [Language guide](docs/LOCALIZATION.md).
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.4.3-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.4.4-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -163,7 +163,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.3-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.4-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

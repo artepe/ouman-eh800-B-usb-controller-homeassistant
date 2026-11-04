@@ -1,0 +1,27 @@
+name: OpenLVI Home Assistant tests
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests_ha/**'
+      - '.github/workflows/openlvi-ha.yml'
+  pull_request:
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests_ha/**'
+      - '.github/workflows/openlvi-ha.yml'
+jobs:
+  home-assistant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: tests_ha/requirements.txt
+      - name: Install Home Assistant test harness
+        run: python -m pip install -r tests_ha/requirements.txt
+      - name: Config flow, setup retry and sensor tests (no hardware)
+        run: python -m pytest tests_ha -q

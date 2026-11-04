@@ -4,6 +4,39 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## OpenLVI Bridge 0.4.4-beta.1 — 2026-11-04 (experimental)
+
+Fixes only; no new writes and no change to the legacy EH-800B v0.1.2 driver.
+
+- Setup now retries (`ConfigEntryNotReady`) when a Modbus device or EH-800
+  is not reachable yet, e.g. when HA starts before the controller after a
+  power cut. Before, the entry stayed failed until reloaded by hand.
+- Rejected EH-800 credentials are shown as a configuration error at setup
+  and as "Wrong username or password" in the setup wizard.
+- Setup wizard: adding an already configured device now aborts with
+  "Already configured" (the abort was swallowed and shown as a connection
+  error). A reachable device that returns no values is reported as a
+  connection problem instead of an invalid register map.
+- Sensors get a device class and state class from their unit, so Home
+  Assistant keeps long-term statistics and meter totals work in the Energy
+  view. Supply/return differences in K are temperature differences.
+- Wired M-Bus: pyMeterBus units are normalised (`C` -> `°C`, `m^3` -> `m³`).
+  Date/time records no longer carry a unit; HA rejected them as
+  non-numeric sensor values. Record names are now English.
+- Uponor X-148: temperatures are tenths of a degree Fahrenheit by default
+  (manual: 21.0 °C = 698). The profile now declares °F so HA shows °C;
+  before, a 21 °C room read 69.8 °C. Humidity masks the high byte.
+- Modbus: a cycle stops after 3 unanswered points instead of waiting about
+  8 s for every point; unavailable points are logged when the set changes,
+  not on every poll.
+- Custom register profiles: missing fields raise a clear validation error;
+  optional read-only 16-bit `mask`.
+- Refrigerant calculator: explicit error when the suction is not
+  superheated or the condenser outlet is not subcooled.
+- Removed a duplicate "EC-104" model entry.
+- New Home Assistant level tests (`tests_ha/`, CI workflow) with faked
+  transports; they fail on 0.4.3 and pass on this version.
+
 ## OpenLVI Bridge 0.4.3-beta.1 — 2026-11-04 (experimental)
 
 - Added documented **read-only** Modbus point subsets for

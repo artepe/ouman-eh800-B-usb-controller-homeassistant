@@ -1,0 +1,5 @@
+pytest-homeassistant-custom-component==0.13.316
+pymodbus==3.13.1
+ouman-eh-800-api==2.0.0
+pyserial==3.5
+pyMeterBus==0.8.5

@@ -45,7 +45,8 @@
     },
     "error": {
       "invalid_profile": "Firmware, application key or register map is missing or invalid",
-      "cannot_connect": "Could not connect or read measurements"
+      "cannot_connect": "Could not connect or read measurements",
+      "invalid_auth": "Wrong username or password"
     },
     "abort": {
       "already_configured": "Already configured"

@@ -6,10 +6,11 @@ import logging
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, SupportsResponse
+from homeassistant.exceptions import ConfigEntryError, ConfigEntryNotReady
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import DOMAIN
-from .transport import make_transport
+from .transport import is_auth_error, make_transport
 from .diagnostics import derive_plant_metrics, diagnostic_notes
 from .engineering import derive_cop_metrics
 from .ai_guide import (OpenLVIGuide, CONF_AI_AUTO, CONF_AI_URL, REVIEW_INTERVAL_SECONDS)
@@ -49,9 +50,30 @@ class OumanCoordinator(DataUpdateCoordinator):
             raise UpdateFailed(f"OpenLVI local read failed: {err}") from err
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    driver = make_transport(hass, entry.data)
+    try:
+        driver = make_transport(hass, entry.data)
+    except ImportError as err:
+        raise ConfigEntryError(
+            "EH-800B USB needs the custom_components/ouman_eh800 folder "
+            f"(protocol reader) next to openlvi: {err}"
+        ) from err
+    except (ValueError, KeyError) as err:
+        # A stored profile/firmware/address that no longer validates cannot
+        # be fixed by retrying; show it as a configuration error instead.
+        raise ConfigEntryError(f"Invalid OpenLVI configuration: {err}") from err
     try:
         await driver.async_connect()
+    except Exception as err:
+        await driver.async_close()
+        if is_auth_error(err):
+            raise ConfigEntryError(
+                "The controller rejected the stored username or password"
+            ) from err
+        # Typical after a power cut: HA boots before the controller or
+        # Modbus gateway. ConfigEntryNotReady makes HA retry with back-off
+        # instead of leaving the entry failed until a manual reload.
+        raise ConfigEntryNotReady(f"Controller not reachable yet: {err}") from err
+    try:
         coordinator = OumanCoordinator(hass, driver, entry)
         await coordinator.async_config_entry_first_refresh()
         coordinator.guide = OpenLVIGuide(hass, entry, coordinator)

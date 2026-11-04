@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.4.3-beta.1; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.4.4-beta.1; NOT hardware validated.** Maintained in the repository
 [Open-HVACBridge-homeassistant](https://github.com/artepe/Open-HVACBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.

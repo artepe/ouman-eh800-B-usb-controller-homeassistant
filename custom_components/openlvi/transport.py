@@ -12,6 +12,22 @@ from .profiles import Register, profile_for, decode, encode
 
 _LOGGER = logging.getLogger(__name__)
 
+# After this many points in a row get no answer at all (timeout or lost
+# connection), the rest of the cycle is skipped. Each silent point costs
+# timeout x (retries + 1) = about 8 s, so a broken RS-485 line behind a
+# gateway would otherwise stall one cycle for minutes on a large profile.
+MAX_SILENT_POINTS = 3
+
+
+def is_auth_error(err: Exception) -> bool:
+    """True when the EH-800 HTTP library rejected the username/password."""
+    try:
+        from ouman_eh_800_api.exceptions import OumanClientAuthenticationError
+    except ImportError:
+        return False
+    return isinstance(err, OumanClientAuthenticationError)
+
+
 class ModbusDriver:
     def __init__(self, data):
         self.data = data
@@ -19,6 +35,7 @@ class ModbusDriver:
             data[CONF_MODEL], data.get(CONF_FIRMWARE, ""), data.get(CONF_PROFILE, ""), data.get(CONF_APPLICATION, "")
         )
         self.client = None
+        self._last_failed: frozenset[str] = frozenset()
 
     async def async_connect(self):
         from pymodbus.client import AsyncModbusTcpClient, AsyncModbusSerialClient
@@ -51,14 +68,43 @@ class ModbusDriver:
 
     async def async_read(self):
         values = {}
-        for point in self.points:
+        failed = []
+        silent = 0
+        for index, point in enumerate(self.points):
             try:
                 value = await self._read_point(point)
-                if value is not None:
-                    values[point.key] = value
+            except ValueError as err:
+                # The device answered (exception code / short reply): this
+                # point is unsupported, the link itself works.
+                failed.append(point.key)
+                silent = 0
+                _LOGGER.debug("Modbus point %s rejected: %s", point.key, err)
+                continue
             except Exception as err:
-                _LOGGER.warning("Ouman point %s unavailable: %s", point.key, err)
+                # No answer at all (timeout, connection lost).
+                failed.append(point.key)
+                silent += 1
+                _LOGGER.debug("Modbus point %s unanswered: %s", point.key, err)
+                if silent >= MAX_SILENT_POINTS:
+                    failed.extend(p.key for p in self.points[index + 1:])
+                    break
+                continue
+            silent = 0
+            if value is not None:
+                values[point.key] = value
+        self._log_failures(frozenset(failed))
         return values
+
+    def _log_failures(self, failed: frozenset[str]) -> None:
+        """Warn when the set of unavailable points changes, not every poll."""
+        if failed and failed != self._last_failed:
+            _LOGGER.warning(
+                "%d of %d Modbus points unavailable: %s",
+                len(failed), len(self.points), ", ".join(sorted(failed)),
+            )
+        elif not failed and self._last_failed:
+            _LOGGER.info("All %d Modbus points are readable again", len(self.points))
+        self._last_failed = failed
 
     async def async_write(self, point: Register, value: float):
         if not self.data.get(CONF_ALLOW_WRITES, False):

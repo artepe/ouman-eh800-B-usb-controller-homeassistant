@@ -45,7 +45,8 @@
     },
     "error": {
       "invalid_profile": "Nieprawidłowy firmware, klucz aplikacji lub mapa rejestrów",
-      "cannot_connect": "Nie można połączyć się ani odczytać pomiarów"
+      "cannot_connect": "Nie można połączyć się ani odczytać pomiarów",
+      "invalid_auth": "Nieprawidłowa nazwa użytkownika lub hasło"
     },
     "abort": {
       "already_configured": "Już skonfigurowano"

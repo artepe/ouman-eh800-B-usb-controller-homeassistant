@@ -1,7 +1,30 @@
 """Sensor entities for model-specific Ouman points."""
-from homeassistant.components.sensor import SensorEntity
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorStateClass,
+)
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_ALLOW_WRITES
+from .units import normalize_unit, sensor_classes
+
+
+def _apply_unit(entity, unit) -> None:
+    """Unit plus device/state class, so HA keeps long-term statistics.
+
+    Without a state class HA drops history after the recorder purge
+    window and energy/volume meters cannot be used in the Energy view.
+    """
+    unit = normalize_unit(unit)
+    device_class, state_class = sensor_classes(unit)
+    entity._attr_native_unit_of_measurement = unit
+    if device_class:
+        try:
+            entity._attr_device_class = SensorDeviceClass(device_class)
+        except ValueError:
+            pass  # Older HA without this class (e.g. temperature_delta).
+    if state_class:
+        entity._attr_state_class = SensorStateClass(state_class)
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = entry.runtime_data
@@ -43,7 +66,7 @@ class OumanSensor(CoordinatorEntity, SensorEntity):
             self._attr_has_entity_name = True
             self._attr_translation_key = f"eh800b_{point.key}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_{point.key}_sensor"
-        self._attr_native_unit_of_measurement = point.unit
+        _apply_unit(self, point.unit)
 
     @property
     def native_value(self):
@@ -66,7 +89,9 @@ class DerivedSensor(CoordinatorEntity, SensorEntity):
         self._attr_has_entity_name = True
         self._attr_translation_key = f"derived_{key}"
         self._attr_unique_id = f"{coordinator.config_entry.entry_id}_derived_{key}"
-        self._attr_native_unit_of_measurement = unit
+        _apply_unit(self, unit)
+        # Delta T, kW and COP are all instantaneous numeric values.
+        self._attr_state_class = SensorStateClass.MEASUREMENT
 
     @property
     def native_value(self):

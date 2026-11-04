@@ -21,6 +21,7 @@ class Register:
     area: str = "holding"  # holding (FC03) or input (FC04)
     offset: float = 0.0  # Read-only engineering-unit correction, e.g. centikelvin
     invalid_raw_values: tuple[int, ...] = ()  # Explicit 16-bit no-data markers
+    mask: int | None = None  # Read-only 16-bit bit mask, e.g. 0x00FF low byte
 
     @property
     def count(self):
@@ -83,10 +84,17 @@ def parse_profile(raw: str) -> list[Register]:
     for item in entries:
         if not isinstance(item, dict):
             raise ValueError("Each register must be a JSON object")
-        key, name = item["key"], item["name"]
-        address = item["address"]
-        kind = item.get("kind", "s16").lower()
+        # Missing fields are a profile error (ValueError), not a crash.
+        key, name = item.get("key"), item.get("name")
+        address = item.get("address")
+        kind = item.get("kind", "s16")
+        if not isinstance(kind, str):
+            raise ValueError("Register kind must be text, e.g. s16")
+        kind = kind.lower()
         decimals = item.get("decimals", 0)
+        unit = item.get("unit")
+        if unit is not None and (not isinstance(unit, str) or len(unit) > 16):
+            raise ValueError("Register unit must be short text")
         if not isinstance(key, str) or not key.isidentifier() or len(key) > 64:
             raise ValueError("Invalid register key")
         if not isinstance(name, str) or not (1 <= len(name) <= 90):
@@ -108,13 +116,17 @@ def parse_profile(raw: str) -> list[Register]:
                 or len(set(invalid_raw_values)) != len(invalid_raw_values)
                 or (invalid_raw_values and kind in ("s32", "u32"))):
             raise ValueError("Invalid 16-bit no-data markers")
+        mask = item.get("mask")
+        if mask is not None and (type(mask) is not int or not 1 <= mask <= 0xFFFF
+                                 or kind in ("s32", "u32")):
+            raise ValueError("Mask must be a 16-bit integer for s16/u16 points")
         keys.add(key)
         # Never honor "writable":true from untrusted or user-supplied templates.
         area = item.get("area", "holding")
         if area not in ("holding", "input"):
             raise ValueError("Use holding or input register area")
-        points.append(Register(key, name, address, kind, decimals, item.get("unit"), writable=False, area=area, offset=float(offset),
-                               invalid_raw_values=tuple(invalid_raw_values)))
+        points.append(Register(key, name, address, kind, decimals, unit, writable=False, area=area, offset=float(offset),
+                               invalid_raw_values=tuple(invalid_raw_values), mask=mask))
     return points
 
 def profile_for(model: str, firmware: str, profile_json: str) -> list[Register]:
@@ -133,14 +145,16 @@ def decode(registers: list[int], point: Register) -> float | None:
     if point.count == 1 and registers[0] in point.invalid_raw_values:
         return None
     raw = (registers[0] << 16 | registers[1]) if point.count == 2 else registers[0]
+    if point.mask is not None and point.count == 1:
+        raw &= point.mask
     bits = 32 if point.count == 2 else 16
     if point.kind.startswith("s") and raw & (1 << (bits - 1)):
         raw -= 1 << bits
     return raw / (10 ** point.decimals) + point.offset
 
 def encode(value: float, point: Register) -> list[int]:
-    if point.offset or point.invalid_raw_values:
-        raise ValueError("Offset and no-data marker points are read-only")
+    if point.offset or point.invalid_raw_values or point.mask is not None:
+        raise ValueError("Offset, masked and no-data marker points are read-only")
     if not point.writable or point.minimum is None or point.maximum is None:
         raise ValueError("This point is not in the verified write allowlist")
     if not point.minimum <= value <= point.maximum:
@@ -197,17 +211,23 @@ REGIN_CORRIGO_E = [
 UPONOR_X148_INPUTS = [
     # The manufacturer's 30001 notation maps to zero-based FC04 address 0.
     # Generic OpenLVI profiles store one-based PDU addresses, not 3xxxx tags.
+    # Temperatures are tenths of a degree FAHRENHEIT by default (Uponor
+    # X-148 manual: 21.0 °C = 698). HA converts °F to the user's unit.
+    # Sites whose U_BMS file was switched to Celsius need a custom profile.
     Register("controller_outdoor_temp", "Controller outdoor temperature", 1,
-             "s16", 1, "°C", area="input", invalid_raw_values=(0x7fff,)),
+             "s16", 1, "°F", area="input", invalid_raw_values=(0x7fff,)),
 ]
 UPONOR_X148_INPUTS += [
     Register(f"room_{i}_temperature", f"Room {i} temperature", i + 1,
-             "s16", 1, "°C", area="input", invalid_raw_values=(0x7fff,))
+             "s16", 1, "°F", area="input", invalid_raw_values=(0x7fff,))
     for i in range(1, 13)
 ]
 UPONOR_X148_INPUTS += [
+    # Relative humidity is in the low byte; the manual says the high byte
+    # may be ignored, so it is masked off.
     Register(f"room_{i}_humidity", f"Room {i} humidity", i + 13,
-             "u16", 0, "%", area="input", invalid_raw_values=(0x7fff,))
+             "u16", 0, "%", area="input", invalid_raw_values=(0x7fff,),
+             mask=0x00FF)
     for i in range(1, 13)
 ]
 # Manufacturer Roth Touchline SL Modbus register table: R and R/W points
