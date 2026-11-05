@@ -1,7 +1,0 @@
-sensor:
-  - platform: ouman_eh800
-    port: /dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
-
-number:
-  - platform: ouman_eh800
-    port: /dev/serial/by-id/usb-OUMAN_Ouman_EH-800-if00
