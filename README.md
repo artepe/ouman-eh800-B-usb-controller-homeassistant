@@ -87,6 +87,22 @@ requiring a vendor cloud service for supported interfaces.
 integrated.** Verify the device firmware, Modbus point list, BACnet object
 map, licensing and communications hardware for the exact installation.
 
+## Local Tuya heat pumps (Mango Energy)
+
+This repository also includes a **separate Home Assistant integration**,
+[`mango_tuya_local`](custom_components/mango_tuya_local), imported from
+[artepe/chinaheatpump-tuya-local-home-assistant](https://github.com/artepe/chinaheatpump-tuya-local-home-assistant).
+It connects to a compatible Mango Energy heat pump over **local Tuya 3.5**,
+with a 770-parameter model-specific profile and the Mango Control sidebar.
+**It is not part of the OpenLVI manufacturer setup wizard:** install and configure
+Mango Tuya Local independently under Home Assistant Devices & Services.
+Supported hardware, local-key setup, write restrictions, and test status are
+listed in [the installation and safety guide](docs/MANGO_TUYA_LOCAL.md).
+
+This import does not add support for other Tuya heat pump models and does not
+change the established Ouman/Modbus drivers. A device local key may have to be
+obtained separately; normal LAN operation does not require a Tuya Cloud API account.
+
 ## Installation on Home Assistant OS
 
 **OpenLVI Bridge — experimental:**

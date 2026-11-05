@@ -1,0 +1,3976 @@
+{
+  "format": "mango_dashboard_catalog_v1",
+  "groups": [
+    {
+      "group": 0,
+      "name": "User Para",
+      "title": "Daily settings",
+      "icon": "mdi:tune-variant",
+      "description": "Temperature targets, operating choices, schedules and user preferences."
+    },
+    {
+      "group": 1,
+      "name": "SYS Para",
+      "title": "System configuration",
+      "icon": "mdi:cog-outline",
+      "description": "System identity, operating limits, control compensation and communication settings."
+    },
+    {
+      "group": 2,
+      "name": "Comp Set",
+      "title": "Compressor",
+      "icon": "mdi:engine-outline",
+      "description": "Compressor speed limits, response settings, startup and oil-return parameters."
+    },
+    {
+      "group": 3,
+      "name": "Fan Set",
+      "title": "Fan",
+      "icon": "mdi:fan",
+      "description": "Fan drive configuration, speed limits and temperature-dependent adjustments."
+    },
+    {
+      "group": 4,
+      "name": "MORTOR Set",
+      "title": "Valve hardware",
+      "icon": "mdi:valve",
+      "description": "Expansion-valve hardware, manual positions, bypass and oil-return settings."
+    },
+    {
+      "group": 5,
+      "name": "EEV Set",
+      "title": "Expansion valve",
+      "icon": "mdi:valve-open",
+      "description": "Main expansion-valve opening tables and controller response parameters."
+    },
+    {
+      "group": 6,
+      "name": "EVI Set",
+      "title": "Vapor injection",
+      "icon": "mdi:pipe-valve",
+      "description": "EVI valve opening criteria, targets and response parameters."
+    },
+    {
+      "group": 7,
+      "name": "Defro.Set.",
+      "title": "Defrost",
+      "icon": "mdi:snowflake-melt",
+      "description": "Defrost timing, temperature criteria, termination and drainage settings."
+    },
+    {
+      "group": 8,
+      "name": "Anti&FanCoil",
+      "title": "Frost & hydraulics",
+      "icon": "mdi:water-pump",
+      "description": "Frost prevention, water-pump response, fan-coil and sterilization settings."
+    },
+    {
+      "group": 9,
+      "name": "Protect Set.",
+      "title": "Protection",
+      "icon": "mdi:shield-check-outline",
+      "description": "Alarm delays, temperature and current criteria, reset and interlock settings."
+    },
+    {
+      "group": 10,
+      "name": "Input&Sensor",
+      "title": "Inputs & sensors",
+      "icon": "mdi:access-point",
+      "description": "Input assignments, temperature offsets, power estimates and sensor configuration."
+    },
+    {
+      "group": 11,
+      "name": "Testing1",
+      "title": "Service tables 1",
+      "icon": "mdi:flask-outline",
+      "description": "Manufacturer service and test-point table entries. They are settings, not live measurements."
+    },
+    {
+      "group": 12,
+      "name": "Testing2",
+      "title": "Service tables 2",
+      "icon": "mdi:flask-round-bottom-outline",
+      "description": "The second service table, including heating and EVI test-point settings."
+    },
+    {
+      "group": 13,
+      "name": "Press Set.",
+      "title": "Pressure & pump drive",
+      "icon": "mdi:gauge",
+      "description": "Pressure/flow sensor calibration and pump motor or inverter configuration."
+    },
+    {
+      "group": 14,
+      "name": "WorkingFreq",
+      "title": "Working frequency",
+      "icon": "mdi:chart-bell-curve",
+      "description": "All 46 cooling and heating frequency-table entries, arranged by named operating condition."
+    },
+    {
+      "group": 15,
+      "name": "Protect Set.2",
+      "title": "Protection & auxiliary",
+      "icon": "mdi:shield-alert-outline",
+      "description": "Additional operating limits, auxiliary heaters, circulation and smart-grid settings."
+    },
+    {
+      "group": 16,
+      "name": "SYS Para 2",
+      "title": "Solar & thermostat",
+      "icon": "mdi:solar-power-variant-outline",
+      "description": "Solar-loop, thermostat and additional heating operating-limit settings."
+    }
+  ],
+  "parameters": {
+    "0:0": {
+      "description": "Selects the controller's operating strategy. The numeric mode codes are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:1": {
+      "description": "Cooling temperature target. The displayed unit and scale have not yet been verified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:2": {
+      "description": "Heating temperature target. The displayed unit and scale have not yet been verified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:3": {
+      "description": "Domestic hot-water temperature target. The displayed unit and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:4": {
+      "description": "Temperature target used by automatic operation. The switching strategy is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:5": {
+      "description": "Selects a power or performance mode. The device's numeric choices are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:6": {
+      "description": "Configures silent operation, which can restrict operating speed. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:7": {
+      "description": "Sets the start hour for silent operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:8": {
+      "description": "Sets the start minute for silent operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:9": {
+      "description": "Sets the end hour for silent operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:10": {
+      "description": "Sets the end minute for silent operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:11": {
+      "description": "Configures the scheduled-operation function. The enable codes have not yet been mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:12": {
+      "description": "Heating target associated with scheduled operation. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:13": {
+      "description": "Cooling target associated with scheduled operation. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:14": {
+      "description": "Sets the start hour for scheduled operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:15": {
+      "description": "Sets the start minute for scheduled operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:16": {
+      "description": "Sets the end hour for scheduled operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:17": {
+      "description": "Sets the end minute for scheduled operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:18": {
+      "description": "Configures the heating two-way-valve interlock. The input or output mapping is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:19": {
+      "description": "Configures the controller's screen lock. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:20": {
+      "description": "Sets alarm sound behaviour. Sound On and Once 10sec are verified; Raw 0 and Raw 3 remain unmapped.",
+      "confidence": "verified_options",
+      "family": ""
+    },
+    "0:21": {
+      "description": "Selects the circulation-pump operating strategy. The mode codes are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:22": {
+      "description": "Configures the pump function named END.PUMP. Its exact operating condition is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:23": {
+      "description": "Configures a combined domestic-hot-water operating mode. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:24": {
+      "description": "Maximum operating-time setting. The timer unit and exact limiting behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:25": {
+      "description": "Minimum cooling-time setting. The timer unit and switching behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:26": {
+      "description": "Minimum heating-time setting. The timer unit and switching behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:27": {
+      "description": "Maximum domestic-hot-water run-time setting. The timer unit is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:28": {
+      "description": "Temperature setting associated with the heat-pump function. The reference sensor is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:29": {
+      "description": "Manufacturer defrost setting named C.E.P. Its exact function has not been verified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:30": {
+      "description": "Number-of-units setting for a multi-unit installation. The configuration format is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:31": {
+      "description": "Assignment/configuration of unit 00 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:32": {
+      "description": "Assignment/configuration of unit 01 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:33": {
+      "description": "Assignment/configuration of unit 02 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:34": {
+      "description": "Assignment/configuration of unit 03 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:35": {
+      "description": "Assignment/configuration of unit 04 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:36": {
+      "description": "Assignment/configuration of unit 05 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:37": {
+      "description": "Assignment/configuration of unit 06 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:38": {
+      "description": "Assignment/configuration of unit 07 in a multi-unit system. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:39": {
+      "description": "Shared compressor-control difference setting. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:40": {
+      "description": "Update-period setting for energy/load control. Its timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:41": {
+      "description": "Sets the scheduled sterilization day. The weekday encoding is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:42": {
+      "description": "Sets the start hour for sterilization.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:43": {
+      "description": "Sets the start minute for sterilization.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:44": {
+      "description": "Configures the hot-water sterilization function. The enable or mode codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:45": {
+      "description": "Selects or configures cooling-curve control. The curve codes are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:46": {
+      "description": "Selects or configures heating-curve control. The curve codes are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "0:47": {
+      "description": "Input/output assignment for DO4_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:0": {
+      "description": "Equipment-type configuration. The numeric type codes have not been mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:1": {
+      "description": "Refrigerant-type configuration. The numeric refrigerant codes have not been mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:2": {
+      "description": "Configures the reversing valve. Output polarity and choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:3": {
+      "description": "Manufacturer model configuration. The numeric model codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:4": {
+      "description": "Selects the remote-controller or external-control type. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:5": {
+      "description": "System control update-period setting. The timer unit is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:6": {
+      "description": "Configures remembered state after shutdown. The exact restart behaviour is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:7": {
+      "description": "Configures automatic startup. The trigger and numeric choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:8": {
+      "description": "Domestic-hot-water control temperature difference, usually associated with restart hysteresis.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:9": {
+      "description": "Selects the controller's operating strategy. The numeric mode codes are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:10": {
+      "description": "Cooling-control compensation setting. Raw 1 is confirmed to display as 0.1; the compensation algorithm is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:11": {
+      "description": "Reversing-valve opening delay. The timer unit and switching sequence are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:12": {
+      "description": "Reversing-valve shutdown delay. The timer unit and switching sequence are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:13": {
+      "description": "Ambient-temperature criterion associated with an auxiliary heater. The exact trigger is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:14": {
+      "description": "Liquid-related exhaust-temperature criterion. Its exact protection or valve logic is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:15": {
+      "description": "Difference setting for the liquid/exhaust criterion. The reference signals are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:16": {
+      "description": "Ambient-temperature criterion for enabling the crankcase heater. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:17": {
+      "description": "Ambient-temperature criterion for disabling the crankcase heater. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:18": {
+      "description": "Ambient-temperature criterion associated with automatic heating selection.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:19": {
+      "description": "Ambient-temperature criterion associated with automatic cooling selection.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:20": {
+      "description": "Heating-control compensation setting. Its scale and compensation algorithm are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:21": {
+      "description": "Minimum time for the manufacturer function PWD. The function and timer unit are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:22": {
+      "description": "Maximum time for the manufacturer function PWD. The function and timer unit are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:23": {
+      "description": "Minimum warm-operation timer. Its exact cycle and timer unit are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:24": {
+      "description": "Maximum warm-operation timer. App writes of raw 998/999 were observed; the timer unit is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:25": {
+      "description": "Input/output assignment for DO3_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:26": {
+      "description": "Input/output assignment for DO5_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:27": {
+      "description": "Input/output assignment for DO7_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:28": {
+      "description": "Input/output assignment for DO1_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:29": {
+      "description": "Configures external on/off control. The input polarity and choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:30": {
+      "description": "Manufacturer setting H.Eng Load D in system configuration. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "1:31": {
+      "description": "Manufacturer setting H.Eng Unload D in system configuration. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "1:32": {
+      "description": "Configures the manufacturer function named Trans Use. Its exact purpose is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:33": {
+      "description": "Ambient criterion associated with low-pressure inhibition. Its exact protection logic is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:34": {
+      "description": "Ambient-temperature criterion associated with anti-ice heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:35": {
+      "description": "Lower allowed cooling-target setting. The displayed temperature scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:36": {
+      "description": "Upper allowed cooling-target setting. The displayed temperature scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:37": {
+      "description": "Lower allowed heating-target setting. The displayed temperature scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:38": {
+      "description": "Upper allowed heating-target setting. The displayed temperature scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:39": {
+      "description": "Range associated with load compensation. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:40": {
+      "description": "Time associated with load compensation. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:41": {
+      "description": "Building-management communication format. The numeric protocol choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:42": {
+      "description": "Building-management communication baud-rate choice. Numeric choices are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:43": {
+      "description": "Building-management communication address setting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:44": {
+      "description": "Manufacturer setting C.Eng Load D in system configuration. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "1:45": {
+      "description": "Device-role or equipment-type configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:46": {
+      "description": "Configures the chassis or base-pan heater function. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "1:47": {
+      "description": "Manufacturer setting C.Eng Unload D in system configuration. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:0": {
+      "description": "Compressor motor-profile code. The manufacturer's motor-code table is unavailable.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:1": {
+      "description": "Selects compressor manual/service operation. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:2": {
+      "description": "Manual compressor speed request. Despite the label, the displayed speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:3": {
+      "description": "Compressor protection configuration. The numeric choices are not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:4": {
+      "description": "Compressor frequency pre-adjustment/subtraction setting. The exact algorithm is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:5": {
+      "description": "Lower compressor speed setting. The raw-to-speed conversion has not been verified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:6": {
+      "description": "Upper compressor speed setting. The raw-to-speed conversion has not been verified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:7": {
+      "description": "Rated compressor speed for cooling. The raw-to-speed conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:8": {
+      "description": "Rated compressor speed for heating. The raw-to-speed conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:9": {
+      "description": "Time for holding a control state or speed. The exact condition and timer scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:10": {
+      "description": "Lower compressor operating-speed setting for cooling. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:11": {
+      "description": "Upper compressor operating-speed setting for cooling. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:12": {
+      "description": "Lower compressor operating-speed setting for heating. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:13": {
+      "description": "Upper compressor operating-speed setting for heating. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:14": {
+      "description": "Minimum-speed or RSP timing setting. The exact RSP meaning and timer scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:15": {
+      "description": "Timing setting for compressor oil-return operation. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:16": {
+      "description": "Address setting named AdviceAddr. The communication target is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:17": {
+      "description": "Compressor frequency request associated with defrost. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:18": {
+      "description": "Compressor frequency request during startup. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:19": {
+      "description": "Compressor startup speed setting. The raw-to-speed conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:20": {
+      "description": "Compressor running-speed setting. The raw-to-speed conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:21": {
+      "description": "Compressor speed setting during defrost. The raw-to-speed conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:22": {
+      "description": "Adjustment factor for the speed mode named RpsStdAdjust. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:23": {
+      "description": "Compressor startup-period setting. The timer scale and startup sequence are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:24": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:25": {
+      "description": "Integral-response setting for this control loop; it adjusts accumulated-error response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:26": {
+      "description": "Derivative-response setting for this control loop; it relates to error-change response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:27": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:28": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:29": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:30": {
+      "description": "Manufacturer setting Cold Cond Up in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:31": {
+      "description": "Manufacturer setting Heat Cond Up in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:32": {
+      "description": "Adjustment factor for the speed mode named RpsEcoAdjust. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:33": {
+      "description": "Manufacturer setting Heat Evap Down in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:34": {
+      "description": "Manufacturer setting Freq.Max.Cur.Lmt in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:35": {
+      "description": "Manufacturer setting Freq.Max.Load.T in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:36": {
+      "description": "Manufacturer setting Freq.Blockage.T in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:37": {
+      "description": "Manufacturer setting Exh Up Limit in compressor. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "2:38": {
+      "description": "Compressor speed setting during oil-return operation. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:39": {
+      "description": "Delay associated with SpeedDownDly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:40": {
+      "description": "Adjustment factor for the speed mode named RpsStrongAdjust. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:41": {
+      "description": "Maximum compressor-frequency setting in silent operation. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:42": {
+      "description": "Width of compressor frequency-avoidance bands. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:43": {
+      "description": "Compressor frequency-avoidance point 1. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:44": {
+      "description": "Compressor frequency-avoidance point 2. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:45": {
+      "description": "Compressor frequency-avoidance point 3. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:46": {
+      "description": "Compressor frequency-avoidance point 4. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "2:47": {
+      "description": "Compressor model/profile identifier. The numeric model table is not yet mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:0": {
+      "description": "Frequency-controlled fan configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:1": {
+      "description": "Electronically commutated fan profile code. The model-code table is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:2": {
+      "description": "Maximum fan speed setting for cooling. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:3": {
+      "description": "Minimum fan speed setting for cooling. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:4": {
+      "description": "Adjustment factor for the speed mode named FanEcoAdj. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:5": {
+      "description": "Fan speed-control strategy. The numeric strategy codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:6": {
+      "description": "Fan speed setting labelled M.Speed. Its operating condition and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:7": {
+      "description": "Manufacturer setting HighModule.T in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:8": {
+      "description": "Temperature-related fan speed criterion named Cold HF.Env. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:9": {
+      "description": "Temperature-related fan speed criterion named Cold LF.Env. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:10": {
+      "description": "Temperature-related fan speed criterion named Heat HF.Env. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:11": {
+      "description": "Temperature-related fan speed criterion named Heat LF.Env. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:12": {
+      "description": "Temperature-related fan speed criterion named Cold HF.cond. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:13": {
+      "description": "Temperature-related fan speed criterion named Cold LF.cond. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:14": {
+      "description": "Temperature-related fan speed criterion named Heat HF.evap. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:15": {
+      "description": "Temperature-related fan speed criterion named Heat LF.evap. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:16": {
+      "description": "Fixed fan-speed configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:17": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:18": {
+      "description": "Manufacturer setting SpeedPercent in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:19": {
+      "description": "Maximum fan speed setting for heating. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:20": {
+      "description": "Minimum fan speed setting for heating. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:21": {
+      "description": "Pulse-count configuration for the PWM fan interface. The hardware mapping is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:22": {
+      "description": "Adjustment factor for the speed mode named FanStrongAdj. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:23": {
+      "description": "Communication address of the electronically commutated fan.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:24": {
+      "description": "Minimum fan speed setting for fan. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:25": {
+      "description": "Maximum fan speed setting for fan. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:26": {
+      "description": "Number or assignment of frequency-controlled fans. The encoding is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:27": {
+      "description": "Maximum fan-speed setting for silent operation. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:28": {
+      "description": "Manufacturer setting Pwm_Init in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:29": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:30": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:31": {
+      "description": "Manufacturer setting Pwm_Area in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:32": {
+      "description": "Adjustment factor for the speed mode named FanStdAdj. The scale and exact mode behaviour are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:33": {
+      "description": "Manufacturer setting Avoid Cold.F in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:34": {
+      "description": "Pause in fan frequency-command transmission. Its timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:35": {
+      "description": "Manufacturer setting Avoid Cold.T in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:36": {
+      "description": "Manufacturer setting FreqCpstCoef in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:37": {
+      "description": "Minimum fan speed setting for fan. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:38": {
+      "description": "Manufacturer setting ColdFanEnv. Dif in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:39": {
+      "description": "Manufacturer setting ColdFanWing Dif in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:40": {
+      "description": "Manufacturer setting HeatFanEnv. Dif in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:41": {
+      "description": "Manufacturer setting HeatFanWing Dif in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:42": {
+      "description": "Manufacturer setting CoolFanSpeed adj in fan. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "3:43": {
+      "description": "Intermediate fan speed setting for cooling. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:44": {
+      "description": "Intermediate fan speed setting for heating. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:45": {
+      "description": "Intermediate temperature criterion setting for cooling. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "3:46": {
+      "description": "Intermediate temperature criterion setting for heating. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:0": {
+      "description": "Main expansion-valve enable/type configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:1": {
+      "description": "Main expansion-valve stepper-drive mode. The numeric drive codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:2": {
+      "description": "Main expansion-valve stepper actuation-rate setting. The rate scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:3": {
+      "description": "Main expansion-valve maximum step-count setting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:4": {
+      "description": "Main expansion-valve opening limit or request named M.EEV ForceOD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:5": {
+      "description": "Main expansion-valve opening limit or request named M.EEV Max OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:6": {
+      "description": "Main expansion-valve compensation setting named M.OH Exh Cpst. The exact reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:7": {
+      "description": "Main expansion-valve manual/service-mode configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:8": {
+      "description": "Main expansion-valve position request in manual/service operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:9": {
+      "description": "Configures coordination between the main expansion valve and vapor-injection valve.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:10": {
+      "description": "Secondary expansion-valve enable/type configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:11": {
+      "description": "Secondary expansion-valve stepper-drive mode. The numeric drive codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:12": {
+      "description": "Secondary expansion-valve stepper actuation-rate setting. The rate scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:13": {
+      "description": "Secondary expansion-valve maximum step-count setting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:14": {
+      "description": "Secondary expansion-valve opening limit or request named S.EEV ForceOD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:15": {
+      "description": "Secondary expansion-valve opening limit or request named S.EEV Max OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:16": {
+      "description": "Secondary expansion-valve opening limit or request named S.EEV Min OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:17": {
+      "description": "Secondary expansion-valve manual/service-mode configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:18": {
+      "description": "Secondary expansion-valve position request in manual/service operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:19": {
+      "description": "Manufacturer setting Lehw.In in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:20": {
+      "description": "Manufacturer setting Lehw.Env in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:21": {
+      "description": "Manufacturer setting Lehw.EEV in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:22": {
+      "description": "Main expansion-valve compensation setting named M.OH Freq Cpst. The exact reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:23": {
+      "description": "Difference setting for expansion-valve/inverter coordination. The reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:24": {
+      "description": "Expansion-valve/inverter coordination setting for increasing operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:25": {
+      "description": "Expansion-valve/inverter coordination setting for decreasing operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:26": {
+      "description": "Main expansion-valve compensation setting named M.EEV Exh Sub. The exact reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:27": {
+      "description": "Bypass-valve operating criterion named ByV On Env. The trigger, timing or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:28": {
+      "description": "Bypass-valve operating criterion named ByVon OD Coef.. The trigger, timing or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:29": {
+      "description": "Bypass-valve operating criterion named ByVoff OD Coef.. The trigger, timing or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:30": {
+      "description": "Bypass-valve operating criterion named ByV Off Dly. The trigger, timing or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:31": {
+      "description": "Bypass-valve operating criterion named Cool ByV Off Dly. The trigger, timing or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:32": {
+      "description": "Compressor-on hold setting associated with oil return. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:33": {
+      "description": "Manufacturer setting Reoil CmOn Time in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:34": {
+      "description": "Oil-return activation timing setting. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:35": {
+      "description": "Manufacturer setting AV Var Freq Inc in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:36": {
+      "description": "Manufacturer setting AV Freq Inc Coef in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:37": {
+      "description": "Manufacturer setting AV Freq Red Coef in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:38": {
+      "description": "Manufacturer setting Freq Lim V Coef in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:39": {
+      "description": "Manufacturer setting Open Freq Lim V Pv in valve hardware. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "4:40": {
+      "description": "Main expansion-valve compensation setting named M.OH ExhEX Cpst. The exact reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:41": {
+      "description": "Expansion-valve opening/step setting at the start of oil-return operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:42": {
+      "description": "Selects an expansion-valve pre-opening calculation strategy. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:43": {
+      "description": "Expansion-valve opening limit for the condition named Heat Out M Min OD1. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:44": {
+      "description": "Expansion-valve opening limit for the condition named Heat Out M Min OD2. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:45": {
+      "description": "Expansion-valve opening limit for the condition named Heat Out M Min OD3. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:46": {
+      "description": "Expansion-valve opening limit for the condition named Heat Out M Min OD4. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "4:47": {
+      "description": "Expansion-valve opening limit for the condition named Heat Out M Min OD5. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:0": {
+      "description": "Expansion-valve opening associated with idle operation. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:1": {
+      "description": "Time for holding the initial expansion-valve position. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:2": {
+      "description": "Expansion-valve response or transition setting Cold Ampli.. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:3": {
+      "description": "Expansion-valve response or transition setting Heat Ampli.1. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:4": {
+      "description": "Expansion-valve response or transition setting Heat Ampli.2. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:5": {
+      "description": "Expansion-valve response or transition setting Heat Ampli.3. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:6": {
+      "description": "Expansion-valve response or transition setting Heat Change.1. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:7": {
+      "description": "Expansion-valve response or transition setting Heat Change.2. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:8": {
+      "description": "Expansion-valve opening limit for the condition named Cold I.Min OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:9": {
+      "description": "Expansion-valve opening limit for the condition named Cold I.Max OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:10": {
+      "description": "Expansion-valve opening limit for the condition named Heat I.Min OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:11": {
+      "description": "Expansion-valve opening limit for the condition named Heat I.Max OD%. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:12": {
+      "description": "Manufacturer setting Cold Min OD in expansion valve. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "5:13": {
+      "description": "Expansion-valve target-table entry Cool Sv1. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:14": {
+      "description": "Expansion-valve target-table entry Cool Sv2. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:15": {
+      "description": "Expansion-valve target-table entry Cool Sv3. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:16": {
+      "description": "Expansion-valve response or transition setting Cold Chg1. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:17": {
+      "description": "Expansion-valve response or transition setting Cold Chg2. The control scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:18": {
+      "description": "Expansion-valve target-table entry Heat Sv1. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:19": {
+      "description": "Expansion-valve target-table entry Heat Sv2. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:20": {
+      "description": "Expansion-valve target-table entry Heat Sv3. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:21": {
+      "description": "Expansion-valve target-table entry Heat Sv4. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:22": {
+      "description": "Expansion-valve target-table entry Heat Sv5. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:23": {
+      "description": "Expansion-valve target-table entry Heat Sv6. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:24": {
+      "description": "Expansion-valve target-table entry Heat Sv7. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:25": {
+      "description": "Expansion-valve target-table entry Heat Sv8. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:26": {
+      "description": "Expansion-valve target-table entry Heat Sv9. The exact target signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:27": {
+      "description": "Evaporator criterion associated with forced valve closure. The exact trigger is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:28": {
+      "description": "Expansion-valve opening used during defrost. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:29": {
+      "description": "Expansion-valve controller limiting range. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:30": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:31": {
+      "description": "Integral-response setting for this control loop; it adjusts accumulated-error response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:32": {
+      "description": "Derivative-response setting for this control loop; it relates to error-change response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:33": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:34": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:35": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:36": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD1. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:37": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD2. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:38": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD3. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:39": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD4. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:40": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD5. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:41": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD6. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:42": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD7. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:43": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD8. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:44": {
+      "description": "Expansion-valve opening limit for the condition named Heat Min OD9. The opening scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:45": {
+      "description": "Expansion-valve adjustment when vapor injection switches off. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:46": {
+      "description": "Heating limit associated with the Wing reference signal. The exact sensor is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "5:47": {
+      "description": "Compensation applied to initial defrost valve opening. The adjustment scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:0": {
+      "description": "Configures vapor-injection opening during heating. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:1": {
+      "description": "Configures vapor-injection opening during cooling. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:2": {
+      "description": "Delay associated with EVI Open Dly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:3": {
+      "description": "Manufacturer setting EVI Open Env.Ht in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:4": {
+      "description": "Manufacturer setting EVI Open Exh in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:5": {
+      "description": "Manufacturer setting EVI Open Env.Cl in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:6": {
+      "description": "Difference used by the vapor-injection degree controller. The reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:7": {
+      "description": "Vapor-injection opening setting for Cold I.Open OD%. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:8": {
+      "description": "Vapor-injection opening setting for Heat I.Open OD1%. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:9": {
+      "description": "Vapor-injection opening setting for Heat I.Open OD2%. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:10": {
+      "description": "Vapor-injection opening setting for Heat I.Open OD3%. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:11": {
+      "description": "Vapor-injection opening setting for Heat I.Open OD4%. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:12": {
+      "description": "Vapor-injection opening setting for Cold ExhOV Open. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:13": {
+      "description": "Vapor-injection opening setting for Heat ExhOV Open. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:14": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:15": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:16": {
+      "description": "Integral-response setting for this control loop; it adjusts accumulated-error response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:17": {
+      "description": "Derivative-response setting for this control loop; it relates to error-change response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:18": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:19": {
+      "description": "Control-loop update or adjustment interval. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:20": {
+      "description": "Proportional response factor for this control loop. The gain scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:21": {
+      "description": "Integral-response setting for this control loop; it adjusts accumulated-error response. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:22": {
+      "description": "Manufacturer setting Line SetD 1 in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:23": {
+      "description": "Manufacturer setting Line SetD 2 in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:24": {
+      "description": "Vapor-injection target setting named Setdegree 1. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:25": {
+      "description": "Vapor-injection target setting named Setdegree 2. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:26": {
+      "description": "Vapor-injection target setting named Exh SV Max. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:27": {
+      "description": "Vapor-injection target setting named Exh SV Cold. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:28": {
+      "description": "Vapor-injection target setting named ExhSvTempCoef. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:29": {
+      "description": "Vapor-injection target setting named Exh SV Heat1. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:30": {
+      "description": "Vapor-injection target setting named Exh SV Heat2. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:31": {
+      "description": "Vapor-injection target setting named Exh SV Heat3. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:32": {
+      "description": "Vapor-injection target setting named Exh SV Heat4. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:33": {
+      "description": "Vapor-injection target setting named Exh SV Heat5. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:34": {
+      "description": "Compressor-speed criterion for opening vapor injection. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:35": {
+      "description": "Compressor-speed criterion for closing vapor injection. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:36": {
+      "description": "Vapor-injection opening setting for ExhOV Open Diff. The opening scale and exact condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:37": {
+      "description": "Exhaust-temperature difference setting in vapor-injection control. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:38": {
+      "description": "Vapor-injection service-table value for Heat EVI A1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:39": {
+      "description": "Vapor-injection service-table value for Heat EVI B1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:40": {
+      "description": "Vapor-injection service-table value for Heat EVI E1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:41": {
+      "description": "Vapor-injection service-table value for Heat EVI G1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:42": {
+      "description": "Vapor-injection service-table value for Heat EVI C1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:43": {
+      "description": "Vapor-injection service-table value for Heat EVI D1. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:44": {
+      "description": "Vapor-injection service-table value for Cool EVI. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:45": {
+      "description": "Vapor-injection target setting named Exh SV Min. The temperature or degree scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "6:46": {
+      "description": "Manufacturer setting Freq ExhSV Coef in vapor injection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "6:47": {
+      "description": "Inlet-related vapor-injection opening criterion in cooling. The reference sensor is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:0": {
+      "description": "Interval setting between defrost operations. The timer scale and eligibility rules are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:1": {
+      "description": "Defrost-duration setting. The timer scale and exact duration limit are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:2": {
+      "description": "Defrost timing/count setting. Its exact use and timer scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:3": {
+      "description": "Ambient-temperature criterion used by defrost control. The exact trigger is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:4": {
+      "description": "Coil-temperature criterion used by defrost control. The exact trigger is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:5": {
+      "description": "Coil-temperature criterion used by defrost control. The exact trigger is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:6": {
+      "description": "Outlet-temperature criterion used by defrost control. The exact termination rule is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:7": {
+      "description": "Configures the manufacturer's smart-defrost function. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:8": {
+      "description": "Defrost criterion or sequence setting named Frost D1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:9": {
+      "description": "Defrost criterion or sequence setting named Frost D2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:10": {
+      "description": "Confirmation time for a defrost condition. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:11": {
+      "description": "Defrost criterion or sequence setting named Dfr.Env.T.1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:12": {
+      "description": "Defrost criterion or sequence setting named Dfr.Env.T.2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:13": {
+      "description": "Defrost criterion or sequence setting named Dfr.Env.T.3. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:14": {
+      "description": "Defrost criterion or sequence setting named Dfr.Env.T.4. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:15": {
+      "description": "Defrost criterion or sequence setting named Dfr.Inte. 1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:16": {
+      "description": "Defrost criterion or sequence setting named Dfr.Inte. 2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:17": {
+      "description": "Defrost criterion or sequence setting named Dfr.Inte. 3. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:18": {
+      "description": "Defrost criterion or sequence setting named Dfr.Inte. 4. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:19": {
+      "description": "Defrost criterion or sequence setting named Dfr.Inte. 5. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:20": {
+      "description": "Defrost criterion or sequence setting named Dfr.T.Diff 1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:21": {
+      "description": "Defrost criterion or sequence setting named Dfr.T.Diff 2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:22": {
+      "description": "Defrost criterion or sequence setting named Dfr.T.Diff 3. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:23": {
+      "description": "Defrost criterion or sequence setting named Dfr.T.Diff 4. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:24": {
+      "description": "Defrost criterion or sequence setting named Dfr.T.Diff 5. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:25": {
+      "description": "Low-pressure criterion associated with defrost detection. The exact rule is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:26": {
+      "description": "Defrost timing/count setting. Its exact use and timer scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:27": {
+      "description": "Cycle setting for low-pressure-based defrost control. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:28": {
+      "description": "Coil-temperature criterion for low-pressure-based defrost control.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:29": {
+      "description": "Configures timer-based defrost operation. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:30": {
+      "description": "Emergency setting associated with the EWD defrost function. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:31": {
+      "description": "Defrost criterion or sequence setting named DfrStopCm. V. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:32": {
+      "description": "Defrost criterion or sequence setting named DfrStopCm.T1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:33": {
+      "description": "Defrost criterion or sequence setting named DfrStopV.T1. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:34": {
+      "description": "Defrost criterion or sequence setting named DfrStopCm.T2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:35": {
+      "description": "Defrost criterion or sequence setting named DfrStopV.T2. Its exact trigger, timer or scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:36": {
+      "description": "Compressor frequency setting associated with defrost termination. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:37": {
+      "description": "Drainage/dripping time associated with defrost completion. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "7:38": {
+      "description": "Auxiliary-heater temperature criterion during defrost operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:0": {
+      "description": "Antifreeze operating criterion named Atfr.Inte. 1. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:1": {
+      "description": "Antifreeze operating criterion named Atfr.Inte. 2. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:2": {
+      "description": "Antifreeze operating criterion named Atfr.Pump T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:3": {
+      "description": "Antifreeze operating criterion named Atfr.Heat T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:4": {
+      "description": "Antifreeze operating criterion named Atfr.Comp.T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:5": {
+      "description": "Antifreeze operating criterion named Atfr.Heat Out.T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:6": {
+      "description": "Antifreeze operating criterion named Atfr.Comp Out.T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:7": {
+      "description": "Antifreeze operating criterion named Atfr.Amb.T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:8": {
+      "description": "Antifreeze operating criterion named Atfr.Enter.T. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:9": {
+      "description": "Antifreeze operating criterion named Atfr.AmbDiff. The reference signal, trigger or timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:10": {
+      "description": "Configures antifreeze operation. The numeric enable or mode codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:11": {
+      "description": "Manufacturer setting ExitWarmEnv.Dif in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:12": {
+      "description": "Temperature target associated with hot-water sterilization. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:13": {
+      "description": "Maximum interval/cycle setting for hot-water sterilization. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:14": {
+      "description": "High-temperature hold time for hot-water sterilization. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:15": {
+      "description": "Delay associated with TBH On Dly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:16": {
+      "description": "Water-pump control strategy. The numeric strategy codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:17": {
+      "description": "Water-pump model or drive profile. The model-code table is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:18": {
+      "description": "Water-pump setting labelled LH. Its exact signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:19": {
+      "description": "Target flow setting for water-pump control. The flow unit and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:20": {
+      "description": "Number-of-fan-coils configuration. The encoding is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:21": {
+      "description": "Fan-coil communication address setting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:22": {
+      "description": "Manufacturer setting M.Start.S in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:23": {
+      "description": "Manufacturer setting M.Close.S in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:24": {
+      "description": "Manufacturer setting S.Start.M in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:25": {
+      "description": "Fan-coil operating-mode configuration. The numeric mode codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:26": {
+      "description": "Manufacturer setting Fcu.Egy.Cpst in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:27": {
+      "description": "Manufacturer setting Obj.Egy.Cpst in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:28": {
+      "description": "Manufacturer setting Fcu_Heat_Env in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:29": {
+      "description": "Manufacturer setting Fcu_Cool_Env in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:30": {
+      "description": "Water-pump startup speed setting. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:31": {
+      "description": "Water-pump service/debug configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:32": {
+      "description": "Water-pump drive-rate request. The raw-to-speed or duty conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:33": {
+      "description": "Upper water-pump drive-rate setting. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:34": {
+      "description": "Water-pump control update-period setting. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:35": {
+      "description": "Water-pump drive rate in service/debug operation. Its scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:36": {
+      "description": "External-tank or auxiliary-heat criterion named Exp.Tk.Ta. The sensor assignment and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:37": {
+      "description": "External-tank or auxiliary-heat criterion named Exp.Tk.Ta.L. The sensor assignment and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:38": {
+      "description": "External-tank or auxiliary-heat criterion named Exp.Tk.AHS.On. The sensor assignment and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:39": {
+      "description": "External-tank or auxiliary-heat criterion named Exp.Tk.AHS.Off. The sensor assignment and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:40": {
+      "description": "Manufacturer setting AC_HT_CM_TIME in frost & hydraulics. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "8:41": {
+      "description": "Manufacturer service-password setting. Its encoding and application are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:42": {
+      "description": "Temperature difference associated with water-pump speed control. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:43": {
+      "description": "Water-pump adjustment interval when increasing speed. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:44": {
+      "description": "Water-pump adjustment amount when increasing speed. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:45": {
+      "description": "Water-pump adjustment interval when decreasing speed. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:46": {
+      "description": "Water-pump adjustment amount when decreasing speed. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "8:47": {
+      "description": "Minimum-flow or traffic-limit setting. The physical quantity and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:0": {
+      "description": "Delay before a fault condition is accepted. The timer scale and affected faults are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:1": {
+      "description": "Delay before a water-flow fault is accepted. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:2": {
+      "description": "Automatic fault-reset configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:3": {
+      "description": "Manufacturer automatic-reset allowance setting. The exact code meaning is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:4": {
+      "description": "Delay associated with LP.Alarm Dly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:5": {
+      "description": "Delay associated with LP.Dly Defro. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:6": {
+      "description": "Delay associated with Cool LP Dly.. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:7": {
+      "description": "Delay associated with Heat LP Dly.. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:8": {
+      "description": "Temperature difference used for leaving a protection state. The reference sensor is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:9": {
+      "description": "Ambient-temperature operating/protection criterion named Air Cool Low. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:10": {
+      "description": "Ambient-temperature operating/protection criterion named Air Heat Hihg1. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:11": {
+      "description": "Ambient-temperature operating/protection criterion named CantOnEnvCool. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:12": {
+      "description": "Outlet/inlet temperature-difference protection criterion. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:13": {
+      "description": "Gas inlet/outlet difference protection criterion. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:14": {
+      "description": "Manufacturer setting Comp. Cu.Low in protection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "9:15": {
+      "description": "Delay associated with Cu.Dete. Dly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:16": {
+      "description": "Current measurement or protection input type. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:17": {
+      "description": "High outlet/inlet temperature-difference criterion. The exact action is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:18": {
+      "description": "Low evaporating-temperature protection criterion during cooling.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:19": {
+      "description": "High discharge/exhaust-temperature protection setting. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:20": {
+      "description": "Manufacturer setting Out Exh.H Diff in protection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "9:21": {
+      "description": "Low inlet-gas temperature criterion during cooling.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:22": {
+      "description": "Manufacturer setting PwmSpeedTooLow in protection. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "9:23": {
+      "description": "Delay associated with PwmSpeedDly. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:24": {
+      "description": "Low-pressure check associated with compressor-off operation.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:25": {
+      "description": "Ambient-temperature operating/protection criterion named Air Heat High2. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:26": {
+      "description": "Ambient-temperature operating/protection criterion named Air Heat High3. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:27": {
+      "description": "Ambient-temperature operating/protection criterion named Air Heat High4. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:28": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb. 1. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:29": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb. 2. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:30": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb. 3. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:31": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb.T1. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:32": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb.T2. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:33": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb.T3. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:34": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb.T4. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:35": {
+      "description": "Protection-curve entry C#9_TA_C1. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:36": {
+      "description": "Protection-curve entry C#9_TA_C2. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:37": {
+      "description": "Protection-curve entry C#9_TWout2_C1. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:38": {
+      "description": "Protection-curve entry C#9_TWout2_C2. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:39": {
+      "description": "Protection-curve entry C#9_TA_H1. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:40": {
+      "description": "Protection-curve entry C#9_TA_H2. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:41": {
+      "description": "Protection-curve entry C#9_TWout2_H1. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:42": {
+      "description": "Protection-curve entry C#9_TWout2_H2. The exact condition and raw scaling are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:43": {
+      "description": "Smart-grid input/operating configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:44": {
+      "description": "Smart-grid operating setting. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:45": {
+      "description": "Economy-mode run-time setting. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:46": {
+      "description": "External interlock delay. The timer scale and input polarity are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "9:47": {
+      "description": "High refrigerant-gas concentration protection setting. The concentration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:0": {
+      "description": "Configuration of the compressor low-pressure input. This is a setting, not a pressure measurement.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:1": {
+      "description": "Configuration of the compressor high-pressure input. This is a setting, not a pressure measurement.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:2": {
+      "description": "Configuration of the fan overload input. The input polarity is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:3": {
+      "description": "Configuration of the water-flow input. This is a setting, not a measured flow value.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:4": {
+      "description": "Configuration of the electrical-supply fault input. Its polarity is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:5": {
+      "description": "Configuration of the tank/backup-heater overload input. Its polarity is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:6": {
+      "description": "Configuration of the secondary frequency function. Its exact assignment is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:7": {
+      "description": "Compensation offset for inlet-water temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:8": {
+      "description": "Compensation offset for outlet-water temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:9": {
+      "description": "Compensation offset for ambient temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:10": {
+      "description": "Compensation offset for antifreeze temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:11": {
+      "description": "Compensation offset for the temperature signal named Wing. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:12": {
+      "description": "Compensation offset for outlet-gas temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:13": {
+      "description": "Compensation offset for inlet-gas temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:14": {
+      "description": "Compensation offset for the valve-related temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:15": {
+      "description": "Compensation offset for economizer outlet temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:16": {
+      "description": "Compensation offset for economizer inlet temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:17": {
+      "description": "Compensation offset for compressor-top temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:18": {
+      "description": "Antifreeze sensor/control configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:19": {
+      "description": "Compressor-top sensor/control configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:20": {
+      "description": "Vapor-injection temperature display configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:21": {
+      "description": "Compensation offset for domestic-hot-water temperature. The calibration scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:22": {
+      "description": "Sensor/input configuration named TACtSet. The assignment is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:23": {
+      "description": "Input/output assignment for LDIevu_DI_TYPE. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:24": {
+      "description": "Input/output assignment for LDIsg_DI_TYPE. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:25": {
+      "description": "Input/output assignment for DI4_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:26": {
+      "description": "Input/output assignment for DI6_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:27": {
+      "description": "Manufacturer setting EAH OL in inputs & sensors. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "10:28": {
+      "description": "Controller display-logo configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:29": {
+      "description": "Indoor/outdoor unit function assignment. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:30": {
+      "description": "Input/output assignment for Out_DO1_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:31": {
+      "description": "Configured power value for fan. This is a setting, not measured electrical power.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:32": {
+      "description": "Configured power value for pump. This is a setting, not measured electrical power.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:33": {
+      "description": "Configured power value for eah1. This is a setting, not measured electrical power.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:34": {
+      "description": "Configured power value for idle. This is a setting, not measured electrical power.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:35": {
+      "description": "Configured power value for other run. This is a setting, not measured electrical power.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:36": {
+      "description": "Capacity-estimation adjustment named CAP_EVI_COEF. Its coefficient or compensation scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:37": {
+      "description": "Capacity-estimation adjustment named CAP_INTE_COEF. Its coefficient or compensation scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:38": {
+      "description": "Capacity-estimation adjustment named CAP_HIGH_CPST. Its coefficient or compensation scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:39": {
+      "description": "Capacity-estimation adjustment named CAP_LOW_CPST. Its coefficient or compensation scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:40": {
+      "description": "Shutdown delay associated with power-down operation. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:41": {
+      "description": "Controller language selection. The numeric language codes have not been mapped.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:42": {
+      "description": "Input/output assignment for DO9_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:43": {
+      "description": "Return/recirculation-pump function configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:44": {
+      "description": "Return/recirculation-pump operating time. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:45": {
+      "description": "Return/recirculation-pump behaviour during disinfection. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:46": {
+      "description": "Return/recirculation-pump timer configuration. The encoding is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "10:47": {
+      "description": "Configuration of the second outlet-water temperature sensor. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:0": {
+      "description": "Manufacturer service/debug mode configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:1": {
+      "description": "Heating service-table entry Comp A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:2": {
+      "description": "Heating service-table entry Fan A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:3": {
+      "description": "Heating service-table entry EEV A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:4": {
+      "description": "Heating service-table entry Comp B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:5": {
+      "description": "Heating service-table entry Fan B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:6": {
+      "description": "Heating service-table entry EEV B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:7": {
+      "description": "Heating service-table entry Comp E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:8": {
+      "description": "Heating service-table entry Fan E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:9": {
+      "description": "Heating service-table entry EEV E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:10": {
+      "description": "Heating service-table entry Comp G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:11": {
+      "description": "Heating service-table entry Fan G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:12": {
+      "description": "Heating service-table entry EEV G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:13": {
+      "description": "Heating service-table entry Comp C1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:14": {
+      "description": "Heating service-table entry Fan C1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:15": {
+      "description": "Heating service-table entry EEV C1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:16": {
+      "description": "Heating service-table entry Comp D1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:17": {
+      "description": "Heating service-table entry Fan D1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:18": {
+      "description": "Heating service-table entry EEV D1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:19": {
+      "description": "Cooling service-table entry for comp. The operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:20": {
+      "description": "Cooling service-table entry for fan. The operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:21": {
+      "description": "Cooling service-table entry for eev. The operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:22": {
+      "description": "Heating service-table entry EWD1 A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:23": {
+      "description": "Heating service-table entry Itvl A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:24": {
+      "description": "Heating service-table entry Step A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:25": {
+      "description": "Heating service-table entry Freq A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:26": {
+      "description": "Heating service-table entry Wing A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:27": {
+      "description": "Heating service-table entry Time A1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:28": {
+      "description": "Heating service-table entry EWD1 B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:29": {
+      "description": "Heating service-table entry Itvl B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:30": {
+      "description": "Heating service-table entry Step B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:31": {
+      "description": "Heating service-table entry Freq B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:32": {
+      "description": "Heating service-table entry Wing B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:33": {
+      "description": "Heating service-table entry Time B1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:34": {
+      "description": "Heating service-table entry EWD1 E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:35": {
+      "description": "Heating service-table entry Itvl E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:36": {
+      "description": "Heating service-table entry Step E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:37": {
+      "description": "Heating service-table entry Freq E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:38": {
+      "description": "Heating service-table entry Wing E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:39": {
+      "description": "Heating service-table entry Time E1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:40": {
+      "description": "Heating service-table entry EWD1 G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:41": {
+      "description": "Heating service-table entry Itvl G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:42": {
+      "description": "Heating service-table entry Step G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:43": {
+      "description": "Heating service-table entry Freq G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:44": {
+      "description": "Heating service-table entry Wing G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:45": {
+      "description": "Heating service-table entry Time G1. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:46": {
+      "description": "Water-pump service/setpoint table entry X1. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "11:47": {
+      "description": "Water-pump service/setpoint table entry X2. The raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:0": {
+      "description": "Heating service-table entry Comp A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:1": {
+      "description": "Heating service-table entry Fan A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:2": {
+      "description": "Heating service-table entry EEV A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:3": {
+      "description": "Heating service-table entry Comp B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:4": {
+      "description": "Heating service-table entry Fan B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:5": {
+      "description": "Heating service-table entry EEV B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:6": {
+      "description": "Heating service-table entry Comp E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:7": {
+      "description": "Heating service-table entry Fan E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:8": {
+      "description": "Heating service-table entry EEV E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:9": {
+      "description": "Heating service-table entry Comp G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:10": {
+      "description": "Heating service-table entry Fan G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:11": {
+      "description": "Heating service-table entry EEV G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:12": {
+      "description": "Heating service-table entry Comp C2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:13": {
+      "description": "Heating service-table entry Fan C2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:14": {
+      "description": "Heating service-table entry EEV C2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:15": {
+      "description": "Heating service-table entry Comp D2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:16": {
+      "description": "Heating service-table entry Fan D2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:17": {
+      "description": "Heating service-table entry EEV D2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:18": {
+      "description": "Heating service-table entry EWD1 A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:19": {
+      "description": "Heating service-table entry Itvl A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:20": {
+      "description": "Heating service-table entry Step A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:21": {
+      "description": "Heating service-table entry Freq A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:22": {
+      "description": "Heating service-table entry Wing A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:23": {
+      "description": "Heating service-table entry Time A2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:24": {
+      "description": "Heating service-table entry EWD1 B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:25": {
+      "description": "Heating service-table entry Itvl B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:26": {
+      "description": "Heating service-table entry Step B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:27": {
+      "description": "Heating service-table entry Freq B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:28": {
+      "description": "Heating service-table entry Wing B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:29": {
+      "description": "Heating service-table entry Time B2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:30": {
+      "description": "Heating service-table entry EWD1 E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:31": {
+      "description": "Heating service-table entry Itvl E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:32": {
+      "description": "Heating service-table entry Step E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:33": {
+      "description": "Heating service-table entry Freq E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:34": {
+      "description": "Heating service-table entry Wing E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:35": {
+      "description": "Heating service-table entry Time E2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:36": {
+      "description": "Heating service-table entry EWD1 G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:37": {
+      "description": "Heating service-table entry Itvl G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:38": {
+      "description": "Heating service-table entry Step G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:39": {
+      "description": "Heating service-table entry Freq G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:40": {
+      "description": "Heating service-table entry Wing G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:41": {
+      "description": "Heating service-table entry Time G2. The manufacturer-specific operating point and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:42": {
+      "description": "Vapor-injection service-table value for Heat EVI A2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:43": {
+      "description": "Vapor-injection service-table value for Heat EVI B2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:44": {
+      "description": "Vapor-injection service-table value for Heat EVI E2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:45": {
+      "description": "Vapor-injection service-table value for Heat EVI G2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:46": {
+      "description": "Vapor-injection service-table value for Heat EVI C2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "12:47": {
+      "description": "Vapor-injection service-table value for Heat EVI D2. The named operating point is manufacturer-specific.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:0": {
+      "description": "Low-pressure sensor model/type configuration. The numeric sensor codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:1": {
+      "description": "High-pressure sensor model/type configuration. The numeric sensor codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:2": {
+      "description": "Low-pressure sensor calibration-range lower endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:3": {
+      "description": "Low-pressure sensor calibration-range upper endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:4": {
+      "description": "High-pressure sensor calibration-range lower endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:5": {
+      "description": "High-pressure sensor calibration-range upper endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:6": {
+      "description": "Pressure-control threshold or difference named Cool LP Set. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:7": {
+      "description": "Pressure-control threshold or difference named Heat LP Set. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:8": {
+      "description": "Pressure-control threshold or difference named Cool HP Set. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:9": {
+      "description": "Pressure-control threshold or difference named Heat HP Set. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:10": {
+      "description": "Pressure-control threshold or difference named LP Reset Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:11": {
+      "description": "Pressure-control threshold or difference named HP Reset Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:12": {
+      "description": "Pressure-control threshold or difference named HP Adjust Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:13": {
+      "description": "Pressure-control threshold or difference named HP LimAdd Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:14": {
+      "description": "Pressure-control threshold or difference named HP ForSub Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:15": {
+      "description": "Pressure-control threshold or difference named LP Adjust Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:16": {
+      "description": "Pressure-control threshold or difference named LP LimAdd Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:17": {
+      "description": "Pressure-control threshold or difference named LP ForSub Diff. The pressure scale and exact action are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:18": {
+      "description": "Flow-sensor model/type configuration. The numeric sensor codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:19": {
+      "description": "Flow sensor calibration-range lower endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:20": {
+      "description": "Flow sensor calibration-range upper endpoint. The raw-to-physical conversion is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:21": {
+      "description": "Refrigerant-leak sensor model/profile code. The numeric code table is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:22": {
+      "description": "Base communication address of the refrigerant-leak sensor.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:23": {
+      "description": "Electrical meter model/profile code. The numeric code table is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:24": {
+      "description": "Electrical meter communication address setting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:25": {
+      "description": "Frequency-controlled water-pump configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:26": {
+      "description": "Communication address of the frequency-controlled water pump.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:27": {
+      "description": "Manufacturer setting PM Max Freq in pressure & pump drive. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "13:28": {
+      "description": "Manufacturer setting PM Min Freq in pressure & pump drive. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "13:29": {
+      "description": "PWM water-pump interface type. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:30": {
+      "description": "Voltage-controlled water-pump interface type. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:31": {
+      "description": "Initial water-pump speed request. The drive-rate scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:32": {
+      "description": "Time for holding the initial water-pump speed. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:33": {
+      "description": "Minimum running water-pump drive rate. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:34": {
+      "description": "Pump/inverter motor rated-power configuration. The label names kW but the raw scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:35": {
+      "description": "Motor pole-count configuration for the drive profile.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:36": {
+      "description": "Motor rated-current configuration. The current scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:37": {
+      "description": "Motor rated-frequency configuration. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:38": {
+      "description": "Motor rated-speed configuration. The speed scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:39": {
+      "description": "Motor rated-voltage configuration. The voltage scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:40": {
+      "description": "Inverter response/transition setting named Invt Up T1. The transition condition and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:41": {
+      "description": "Inverter response/transition setting named Invt Dn T1. The transition condition and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:42": {
+      "description": "Inverter response/transition setting named Invt Up T8. The transition condition and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:43": {
+      "description": "Inverter response/transition setting named Invt Dn T8. The transition condition and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:44": {
+      "description": "Inverter response/transition setting named Invt Turn F. The transition condition and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:45": {
+      "description": "Inverter voltage/frequency curve configuration. The curve codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:46": {
+      "description": "PWM feedback polarity/reserved configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "13:47": {
+      "description": "PWM output polarity/reserved configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "14:0": {
+      "description": "Cooling upper frequency-table entry labelled Env 50, In 12. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:1": {
+      "description": "Cooling upper frequency-table entry labelled Env 43, In 12. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:2": {
+      "description": "Cooling upper frequency-table entry labelled Env 35, In 12. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:3": {
+      "description": "Cooling upper frequency-table entry labelled Env 20, In 12. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:4": {
+      "description": "Cooling upper frequency-table entry labelled Env 50, In 20. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:5": {
+      "description": "Cooling upper frequency-table entry labelled Env 43, In 20. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:6": {
+      "description": "Cooling upper frequency-table entry labelled Env 35, In 20. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:7": {
+      "description": "Cooling upper frequency-table entry labelled Env 20, In 20. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:8": {
+      "description": "Cooling upper frequency-table entry labelled Env 50, In 35. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:9": {
+      "description": "Cooling upper frequency-table entry labelled Env 43, In 35. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:10": {
+      "description": "Cooling upper frequency-table entry labelled Env 35, In 35. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:11": {
+      "description": "Cooling upper frequency-table entry labelled Env 20, In 35. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / upper table"
+    },
+    "14:12": {
+      "description": "Cooling lower frequency-table entry labelled Env 50. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / lower table"
+    },
+    "14:13": {
+      "description": "Cooling lower frequency-table entry labelled Env 43. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / lower table"
+    },
+    "14:14": {
+      "description": "Cooling lower frequency-table entry labelled Env 35. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / lower table"
+    },
+    "14:15": {
+      "description": "Cooling lower frequency-table entry labelled Env 20. The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Cooling / lower table"
+    },
+    "14:16": {
+      "description": "Heating upper frequency-table entry labelled Env 28, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:17": {
+      "description": "Heating upper frequency-table entry labelled Env 7, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:18": {
+      "description": "Heating upper frequency-table entry labelled Env 0, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:19": {
+      "description": "Heating upper frequency-table entry labelled Env -6, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:20": {
+      "description": "Heating upper frequency-table entry labelled Env -12, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:21": {
+      "description": "Heating upper frequency-table entry labelled Env -21, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:22": {
+      "description": "Heating upper frequency-table entry labelled Env 28, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:23": {
+      "description": "Heating upper frequency-table entry labelled Env 7, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:24": {
+      "description": "Heating upper frequency-table entry labelled Env 0, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:25": {
+      "description": "Heating upper frequency-table entry labelled Env -6, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:26": {
+      "description": "Heating upper frequency-table entry labelled Env -12, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:27": {
+      "description": "Heating upper frequency-table entry labelled Env -21, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:28": {
+      "description": "Heating upper frequency-table entry labelled Env 28, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:29": {
+      "description": "Heating upper frequency-table entry labelled Env 7, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:30": {
+      "description": "Heating upper frequency-table entry labelled Env 0, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:31": {
+      "description": "Heating upper frequency-table entry labelled Env -6, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:32": {
+      "description": "Heating upper frequency-table entry labelled Env -12, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:33": {
+      "description": "Heating upper frequency-table entry labelled Env -21, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / upper table"
+    },
+    "14:34": {
+      "description": "Heating lower frequency-table entry labelled Env 28, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:35": {
+      "description": "Heating lower frequency-table entry labelled Env 0, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:36": {
+      "description": "Heating lower frequency-table entry labelled Env -12, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:37": {
+      "description": "Heating lower frequency-table entry labelled Env -21, In 20(50). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:38": {
+      "description": "Heating lower frequency-table entry labelled Env 28, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:39": {
+      "description": "Heating lower frequency-table entry labelled Env 0, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:40": {
+      "description": "Heating lower frequency-table entry labelled Env -12, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:41": {
+      "description": "Heating lower frequency-table entry labelled Env -21, In 36(62). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:42": {
+      "description": "Heating lower frequency-table entry labelled Env 28, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:43": {
+      "description": "Heating lower frequency-table entry labelled Env 0, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:44": {
+      "description": "Heating lower frequency-table entry labelled Env -12, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "14:45": {
+      "description": "Heating lower frequency-table entry labelled Env -21, In 50(75). The condition thresholds and speed units are unverified.",
+      "confidence": "label_inferred",
+      "family": "Heating / lower table"
+    },
+    "15:0": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb. 0. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:1": {
+      "description": "Ambient-temperature operating/protection criterion named Air Heat High0. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:2": {
+      "description": "Ambient-temperature operating/protection criterion named Low Amb.T0. Its threshold direction and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:3": {
+      "description": "Air-conditioning water-flow protection setting. The flow scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:4": {
+      "description": "Delay for the close/stop action associated with heating. The exact action is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:5": {
+      "description": "Configures the illuminated logo. The numeric enable codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:6": {
+      "description": "Sets the start hour for logo lighting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:7": {
+      "description": "Sets the start minute for logo lighting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:8": {
+      "description": "Sets the end hour for logo lighting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:9": {
+      "description": "Sets the end minute for logo lighting.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:10": {
+      "description": "Configures the second auxiliary electric-heater stage. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:11": {
+      "description": "Upper temperature-difference criterion for auxiliary electric heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:12": {
+      "description": "Lower temperature-difference criterion for auxiliary electric heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:13": {
+      "description": "Auxiliary electric-heater stage/level configuration. The choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:14": {
+      "description": "Auxiliary heat-source configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:15": {
+      "description": "Delay associated with EXH Open Dly.. The timer unit and exact switching condition are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:16": {
+      "description": "Manufacturer setting EXH Open Diff in protection & auxiliary. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "15:17": {
+      "description": "Manufacturer setting EXH Close Diff in protection & auxiliary. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "15:18": {
+      "description": "Manufacturer setting EXH Open Env. in protection & auxiliary. Its exact function has not yet been verified.",
+      "confidence": "unverified",
+      "family": ""
+    },
+    "15:19": {
+      "description": "High-temperature criterion for the second outlet-water sensor.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:20": {
+      "description": "System water-pump configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:21": {
+      "description": "Indoor/outdoor unit type assignment. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:22": {
+      "description": "R290 climate-control temperature difference. Its reference sensor and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:23": {
+      "description": "On-time for intermittent pump operation. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:24": {
+      "description": "Off-time for intermittent pump operation. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:25": {
+      "description": "Upper allowed domestic-hot-water target. The temperature scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:26": {
+      "description": "Air-conditioning circulation-pump delay. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:27": {
+      "description": "Base frequency of the inverter profile. The frequency scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:28": {
+      "description": "Upper inverter output-voltage setting. The voltage scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:29": {
+      "description": "Upper electrical-supply current setting. The current scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:30": {
+      "description": "Minimum current criterion associated with machine activation. The exact rule is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:31": {
+      "description": "Difference used in current limiting. The current scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:32": {
+      "description": "Difference used by forced current adjustment. The exact action is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:33": {
+      "description": "External-equipment current allowance or setting. The scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:34": {
+      "description": "Photovoltaic MPPT device/profile code. The numeric code table is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:35": {
+      "description": "Base communication address of the photovoltaic MPPT controller.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:36": {
+      "description": "Number/assignment of photovoltaic MPPT controllers. The encoding is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:37": {
+      "description": "Input/output assignment for DI7_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:38": {
+      "description": "Upper ambient-temperature operating criterion for cooling.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:39": {
+      "description": "Upper water-temperature operating criterion for cooling.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:40": {
+      "description": "Water-pump flow target 1. The physical flow unit and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:41": {
+      "description": "Water-pump flow target 2. The physical flow unit and raw scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:42": {
+      "description": "Temperature criterion for starting compensation. The reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:43": {
+      "description": "Temperature compensation amount. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:44": {
+      "description": "Maximum hold/lock time for smart-grid control. The timer scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:45": {
+      "description": "Photovoltaic-related compensation setting. The reference signal and scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:46": {
+      "description": "Input/output assignment for DO7_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "15:47": {
+      "description": "Input/output assignment for DO8_Selfdef. The numeric signal or function choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:0": {
+      "description": "Sensor configuration named TSL. Its physical sensor location and choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:1": {
+      "description": "Solar-loop control configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:2": {
+      "description": "Solar-loop pump activation criterion THWt_TEMP. The sensor reference and temperature scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:3": {
+      "description": "Solar-loop pump activation criterion THWt_DT. The sensor reference and temperature scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:4": {
+      "description": "Solar-loop pump activation criterion WATER_TEMP. The sensor reference and temperature scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:5": {
+      "description": "Solar-loop pump activation criterion WATER_DT. The sensor reference and temperature scale are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:6": {
+      "description": "Solar-loop pump antifreeze configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:7": {
+      "description": "Upper ambient-temperature operating criterion for heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:8": {
+      "description": "Lower ambient-temperature operating criterion for heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:9": {
+      "description": "Upper water-temperature operating criterion for heating.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:10": {
+      "description": "Difference used for leaving a compressor-limit state. The reference signal is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:11": {
+      "description": "External thermostat switch configuration. The input polarity and choice codes are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:12": {
+      "description": "External thermostat operating-mode configuration. The numeric choices are unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    },
+    "16:13": {
+      "description": "Photovoltaic-related water-pump flow compensation. The adjustment scale is unverified.",
+      "confidence": "label_inferred",
+      "family": ""
+    }
+  }
+}

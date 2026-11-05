@@ -1,0 +1,17 @@
+{
+  "domain": "mango_tuya_local",
+  "name": "Mango Tuya Local",
+  "codeowners": [
+    "@artepe"
+  ],
+  "config_flow": true,
+  "dependencies": ["frontend", "panel_custom"],
+  "documentation": "https://github.com/artepe/chinaheatpump-tuya-local-home-assistant",
+  "issue_tracker": "https://github.com/artepe/chinaheatpump-tuya-local-home-assistant/issues",
+  "integration_type": "device",
+  "iot_class": "local_polling",
+  "requirements": [
+    "tinytuya==1.17.4"
+  ],
+  "version": "0.2.1"
+}
