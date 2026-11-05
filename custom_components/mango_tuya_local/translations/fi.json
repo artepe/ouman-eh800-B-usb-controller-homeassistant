@@ -1,0 +1,53 @@
+{
+  "title": "Mango Tuya Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mango Tuya Local",
+        "menu_options": {
+          "pi": "Kayta Pi:n istunnosta tuotuja tunnuksia",
+          "manual": "Anna paikalliset laitetunnukset"
+        }
+      },
+      "manual": {
+        "title": "Lampopumpun paikallinen yhteys",
+        "data": {
+          "name": "Nimi",
+          "host": "Lampopumpun IP-osoite",
+          "device_id": "Tuya device ID",
+          "local_key": "Tuya local key"
+        }
+      },
+      "pi": {
+        "title": "Kayta nykyista Pi-istuntoa",
+        "description": "Aja Pi:lla istunnon vientikomento ja jatka. Valiaikainen tunnustiedosto poistetaan onnistuneen lisayksen jalkeen."
+      },
+      "reconfigure": {
+        "title": "Paivita yhteys",
+        "data": {
+          "host": "Lampopumpun IP-osoite",
+          "local_key": "Uusi local key (tyhja sailyttaa nykyisen)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Lampopumpulta ei saatu profiiliin sopivia parametrikuvauksia. Tarkista IP-osoite, local key ja muut paikalliset yhteydet.",
+      "invalid_credentials": "Anna lampopumpun IP, device ID ja 16-tavuinen local key.",
+      "pi_credentials_missing": "Pi:n paikallinen tunnustiedosto puuttuu tai ei kelpaa. Aja vientikomento ensin."
+    },
+    "abort": {
+      "already_configured": "Lampopumppu on jo lisatty.",
+      "reconfigure_successful": "Yhteys paivitetty."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Lukeminen",
+        "data": {
+          "poll_interval": "Lukuvalli sekunteina (15-300)"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Mango Tuya Local",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Mango Tuya Local",
+        "menu_options": {
+          "pi": "Use credentials exported from the Pi session",
+          "manual": "Enter local device credentials"
+        }
+      },
+      "manual": {
+        "title": "Local heat pump connection",
+        "data": {
+          "name": "Name",
+          "host": "Heat pump IP address",
+          "device_id": "Tuya device ID",
+          "local_key": "Tuya local key"
+        }
+      },
+      "pi": {
+        "title": "Use the existing Pi session",
+        "description": "Run the session export helper on the Pi, then submit this step. The temporary credential file will be removed after successful setup."
+      },
+      "reconfigure": {
+        "title": "Update the local connection",
+        "data": {
+          "host": "Heat pump IP address",
+          "local_key": "New local key (leave empty to keep the current key)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not read matching Mango parameter descriptions. Check the pump IP, local key, and other active local clients.",
+      "invalid_credentials": "Enter a pump IP, device ID and a 16-byte local key.",
+      "pi_credentials_missing": "The local Pi credential export is missing or invalid. Run the export helper first."
+    },
+    "abort": {
+      "already_configured": "This heat pump is already configured.",
+      "reconfigure_successful": "Local connection updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Polling",
+        "data": {
+          "poll_interval": "Polling interval in seconds (15-300)"
+        }
+      }
+    }
+  }
+}
