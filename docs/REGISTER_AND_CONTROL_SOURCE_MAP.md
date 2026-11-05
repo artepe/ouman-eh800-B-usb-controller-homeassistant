@@ -164,6 +164,35 @@ https://github.com/HeishaMon/HeishaMon/blob/main/MQTT-Topics.md
   changing a setpoint/mode is a physical equipment action.
 - Connection depends on model, HeishaMon hardware and firmware.
 
+## Legacy Vallox Digit2 SE: proprietary RS485, separate from MyVallox
+
+The earlier **MyVallox** section describes a Modbus RTU interface.
+**Vallox Digit2 SE / Digit SE 2 is a different protocol family:**
+the older SE system has an A/B RS485 bus with proprietary telegrams,
+**not** Modbus FC03/FC04 register addressing. Its external wiring
+diagram on page 8 labels `A B - + M`. A compatible transparent
+RS485 adapter plus a dedicated Digit-family HA decoder is required.
+
+- `kotope/valloxesp` explicitly reports Digit SE 2 tested, using
+  ESP-01 → MQTT → HA `vallox2mqtt`.
+- `Tom-Bom-badil/home-assistant_helios-vallox` is a HACS-based
+  alternative with USB, Ethernet and ESPHome RS485 bridges. Digit SE
+  is confirmed, Digit SE2 only expected according to its README.
+- **No native OpenLVI parser or setup selection exists yet.**
+  Do not expose the model as generic Modbus and do not reuse MyVallox
+  address 4353/4354/etc. The recommended commissioning order is
+  passive/read-only telemetry, physical panel comparison, then
+  manual test of a single non-critical fan-level command.
+- Full guide: [Vallox Digit2 SE → Home Assistant](VALLOX_DIGIT2_SE_RS485.md)
+  including electrical cautions, model evidence, local connection
+  choices and future driver backlog.
+
+References:
+- https://www.hts.com.pl/wp-content/uploads/2014/12/VALLOX_DIGIT2_SE.pdf
+- https://github.com/kotope/valloxesp
+- https://github.com/Tom-Bom-badil/home-assistant_helios-vallox
+- https://github.com/skjall/home-assistant-vallox-rs485
+
 ## Existing versus researched (not yet installed)
 
 Already in OpenLVI: Ouman EH-800 HTTP, EH-800B USB, small

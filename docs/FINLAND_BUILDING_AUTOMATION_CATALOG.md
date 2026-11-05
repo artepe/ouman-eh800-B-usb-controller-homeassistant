@@ -112,6 +112,28 @@ https://kauppa.ouman.fi/tuote/wl-base-2-1-fin/
 No dangerous PID, manual valve, frost, pump, ventilation stop or
 alarm override outputs are added.
 
+## Vallox Digit2 SE / Digit SE 2 (legacy proprietary RS485)
+
+**A working local Home Assistant route exists through external projects, but
+OpenLVI does not yet contain a Digit2 SE driver.** Do not use the newer
+MyVallox Modbus RTU register map: Digit2 SE uses Vallox's own
+9600/8N1 RS485 telegrams, not Modbus. The factory terminal block is
+`A, B, -, +, M`; the panel supply in the manufacturer's diagram is
+about 21 VDC. It must **not** be connected directly to ESP GPIO pins.
+
+- **Confirmed upstream model claim:** `kotope/valloxesp` lists
+  **Vallox Digit SE 2 tested** with ESP-01 and MQTT plus HA `vallox2mqtt`.
+- **HACS evaluation option:** `Tom-Bom-badil/home-assistant_helios-vallox`
+  supports the Digit/SE bus via local USB/serial-to-LAN/ESPHome RS485
+  transport; its maintainer distinguishes confirmed **Digit SE**
+  from Digit **SE2 (expected, not yet confirmed)**.
+- Read temperatures and fan level first. Optional CO2 and humidity
+  sensors depend on installed hardware; do not write fan-off, heater,
+  frost protection or safety-critical registers blindly.
+- Wiring and step-by-step local setup: [Digit2 SE guide](VALLOX_DIGIT2_SE_RS485.md).
+- Factory [Digit2 SE external wiring diagram](https://www.hts.com.pl/wp-content/uploads/2014/12/VALLOX_DIGIT2_SE.pdf)
+  (page 8) and [official Vallox product page](https://www.vallox.com/en/product/vallox-digit2-se/).
+
 ## Further Finnish-market integration targets (not yet verified)
 
 Ventilation: Swegon, Vallox, Enervent, Koja, FläktGroup, Systemair,
