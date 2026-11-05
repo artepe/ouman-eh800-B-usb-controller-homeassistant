@@ -4,6 +4,15 @@ OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.
 
+## Documentation update — 2026-11-05 (no driver release)
+
+- Added factory-sourced **Vallox Digit2 SE / Digit SE 2** RS485 wiring
+  and local Home Assistant installation guide.
+- Distinguished tested ESP-01/MQTT third-party support from expected
+  Helios/Vallox HACS compatibility; linked both upstream projects.
+- Explicitly excluded the old Digit proprietary RS485 bus from OpenLVI's
+  MyVallox generic Modbus profile. **No new native driver or writes**.
+
 ## OpenLVI Bridge 0.4.3-beta.1 — 2026-11-04 (experimental)
 
 - Added documented **read-only** Modbus point subsets for
