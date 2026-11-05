@@ -1,31 +1,25 @@
-# GitHub About metadata for OpenLVI Bridge
+# Open HVAC repository metadata
 
-The repository name is already **`Open-HVACBridge-homeassistant`**.
-The GitHub sidebar's **About** fields are repository metadata, not README
-content. They must be edited under **About → gear icon** by an administrator;
-the current GitHub connector does not expose a repository-metadata update action.
+The repository name remains **Open-HVACBridge-homeassistant**. The project
+is publicly branded **Open HVAC**, while its multi-vendor integration keeps
+the internal **OpenLVI Bridge** Home Assistant domain.
 
-## Description (copy into GitHub About)
+GitHub's sidebar **About** fields are independent repository metadata.
+An administrator can update them through **About → Edit** if the connection
+does not expose repository-metadata editing.
 
-Open-source Home Assistant integration for HVAC and building automation. Supports Ouman, Danfoss, Swegon and more via USB, Modbus, BACnet and M-Bus.
+## Suggested description
 
-## Website
+Open-source, local-first Home Assistant HVAC integrations. Modular downloads for Ouman, Mango Tuya heat pumps, building automation, ventilation and SCADA.
 
-https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/OPENLVI_BRIDGE.md
+## Suggested website
 
-## Suggested topics (separate GitHub topic tags)
+https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/DOWNLOADS.md
 
-`home-assistant` `hvac` `building-automation` `ouman` `modbus`
-`bacnet` `heat-pump` `energy-monitoring` `smart-building` `open-source`
+## Suggested topics
 
-Only add tags supported by the actual project scope. In particular, the
-repo is **not** a fully hardware-verified universal controller, and the
-BACnet/M-Bus implementations are in beta.
+home-assistant, hvac, building-automation, ouman, modbus, bacnet,
+heat-pump, local-control, tuya-local, open-source
 
-## GitHub sidebar check
-
-- Description is accurate and does not still say 'OUMAN EH800/800B USB CONTROLLER'.
-- Website points to maintained documentation.
-- Topics above have been selected.
-- README prominently distinguishes *tested* legacy EH-800B code from the
-  *experimental* OpenLVI code.
+Do not claim that all listed manufacturer models are production-tested.
+Keep security and hardware validation limitations clearly visible.
