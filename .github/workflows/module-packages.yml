@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: module-packages-${{ github.ref }
+  group: module-packages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -69,7 +69,7 @@ jobs:
           python-version: '3.13'
       - name: Publish isolated source snapshots
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python tools/sync_download_branches.py
 
   release:
@@ -86,8 +86,8 @@ jobs:
           path: dist
       - name: Attach every module as a separate GitHub Release asset
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }
-          GH_REPO: ${{ github.repository }
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
             dist/open-hvac-*.zip dist/SHA256SUMS.txt dist/catalog.json \
