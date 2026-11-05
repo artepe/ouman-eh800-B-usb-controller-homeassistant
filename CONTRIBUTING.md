@@ -1,44 +1,56 @@
-# Contributing to OpenLVI Bridge
+# Contributing to Open HVAC
 
-Contributions are welcome for local Home Assistant integrations, safe
-device-specific register maps, BACnet object lists and verified diagnostics.
+Open HVAC welcomes Home Assistant developers, automation professionals
+and owners of test equipment. All contributions should support independently
+maintainable, local-first modules.
 
-## Before submitting changes
+## Branches and review
 
-1. Open an issue identifying **manufacturer, model, firmware/application key,
-   interface module and exact documentation source**. Do not share customer
-   credentials or private site topology.
-2. Keep vendor profiles separate. Never infer register meaning from a
-   different firmware, module or Modbus address base.
-3. New/unknown vendor points must default to **read-only**. Never add manual
-   valve, pump, freeze protection, alarm override or PID writes without
-   isolated physical bench validation, a reversible test plan and reviewer
-   approval. Custom JSON/XML/CSV imports cannot authorize writes.
-4. Use mock transport tests for scalings, signed 16/32-bit values, holding
-   versus input registers, disconnected device handling and invalid input.
-5. Document hardware wiring, physical communications modules, polling
-   limits, firmware compatibility, and measurements *actually* checked
-   against the device display. Describe untested behaviour as experimental.
-6. Do not modify `custom_components/ouman_eh800` v0.1.2 in unrelated
-   contributions; it is the separate tested legacy implementation.
+- Start changes in a **feature/** branch and open a pull request to **main**.
+- **download/** branches are generated module distributions; do not edit them.
+- Historical **stable/** branches represent pinned hardware-tested versions.
+- New modules must have their own device domain, documentation and status in
+  [modules/catalog.json](modules/catalog.json).
+- The module ZIP workflow checks that distribution packages include only the
+  explicitly approved source folders.
 
-## Local checks
+## Device support acceptance
 
-```bash
-python3 -m compileall -q custom_components/openlvi tools
-python3 -m unittest discover -s tests -p 'test_*profiles.py' -v
-python3 -m unittest discover -s tests -p 'test_openlvi_extended.py' -v
-node --check www/openlvi-scada-card.js
-```
+1. Identify manufacturer, model, exact firmware/application key, communication
+   interface and documentation source. Redact credentials and site addresses.
+2. Keep each manufacturer profile separate. Do not assume Modbus offsets
+   or signal scaling from another firmware version.
+3. Make unknown commands and user-supplied maps **read-only**. Do not add PID,
+   valve, pump, frost override or alarm bypass commands without controlled
+   physical verification, a safe rollback procedure and reviewer approval.
+4. Test both normal and disconnected-device states with mocks, then verify
+   real sensor values against the physical controller display.
+5. Label untested models and registers **experimental** rather than implying
+   that adding a manufacturer name equals hardware support.
+6. Do not change the tested Ouman v0.1.2 driver as part of unrelated features.
 
-GitHub Actions runs these tests automatically on pull requests and `main`.
-Unit tests alone do **not** certify Home Assistant startup, BACnet/IP binding
-or physical meter/controller interoperability.
+## Run local checks
 
-## Project map
+    python3 -m compileall -q custom_components/openlvi tools
+    python3 -m unittest discover -s tests -p 'test_*profiles.py' -v
+    python3 -m unittest discover -s tests -p 'test_openlvi_extended.py' -v
+    python3 -m unittest discover -s tests -p 'test_module_distribution.py' -v
+    python3 tools/package_modules.py --out dist
+    python3 tools/package_modules.py --out dist --verify
+    node --check www/openlvi-scada-card.js
 
-- `custom_components/openlvi/`: experimental multi-vendor HA integration.
-- `custom_components/ouman_eh800/`: legacy tested Ouman EH-800B USB.
-- `docs/`: model/firmware references, installation, known limitations.
-- `examples/` and `www/`: Lovelace examples and SCADA card.
-- `tools/`: point-map import utility; no blind network probing.
+GitHub Actions tests packages and source before updating download branches.
+Tests do not certify physical HVAC safety or interoperability.
+
+## Source map
+
+- custom_components/openlvi/ — experimental multi-vendor bridge.
+- custom_components/mango_tuya_local/ — independent LAN Tuya heat pump.
+- custom_components/ouman_eh800/ — legacy Ouman EH-800B USB.
+- blueprints/ and www/ — optional control templates and SCADA.
+- esp32_s3/ — independent hardware demo.
+- modules/ — package catalog and distribution policies.
+- docs/ — detailed implementation, installation and warnings.
+
+See [Architecture](docs/ARCHITECTURE.md),
+[Downloads](docs/DOWNLOADS.md) and [Security](SECURITY.md).

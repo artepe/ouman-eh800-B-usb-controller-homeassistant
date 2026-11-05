@@ -1,5 +1,16 @@
 # Changelog
 
+## Modular download distribution — 2026-11-05
+
+- New professional Open HVAC overview with explicit per-module validation.
+- Six independent, source-allowlisted ZIP distributions: OpenLVI Bridge,
+  Mango Tuya Local, legacy Ouman EH-800B, CO2 blueprints, SCADA and ESP32-S3.
+- New GitHub Actions module packaging, SHA256 checksums and per-module
+  download branches generated from the reviewed main branch.
+- Version-tagged GitHub releases may publish each ZIP independently.
+- No changes to existing Ouman, Tuya or other hardware-driver code.
+- EZVIZ and all camera-cloud proxies remain excluded.
+
 OpenLVI Bridge and the older Ouman EH-800B integration are maintained as
 **two separate components**. Versions below are descriptive software
 milestones, not compatibility certifications.

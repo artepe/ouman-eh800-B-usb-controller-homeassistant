@@ -25,3 +25,6 @@ secrets.yaml
 *credentials*.json
 *token*.json
 .storage/
+
+# Locally generated module ZIPs
+dist/
