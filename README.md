@@ -42,7 +42,8 @@ requiring a vendor cloud service for supported interfaces.
   **No autonomous AI equipment control or full 3D digital twin is included.**
 
 - **New manufacturer research:** verified documentation links and candidate registers for
-  NIBE S-series, MyVallox, extended Swegon CASA, Danfoss ECL, Corrigo 5,
+  NIBE S-series, MyVallox, **legacy Vallox Digit2 SE RS485**, extended
+  Swegon CASA, Danfoss ECL, Corrigo 5,
   Grundfos, Wilo and others; **not automatically installed as working
   controllers**. See [source map](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md).
 - **LoRaWAN research:** Milesight UG65, ChirpStack v4 and The Things Stack v3
@@ -78,6 +79,7 @@ requiring a vendor cloud service for supported interfaces.
 | **Ouman A203, S203, C203, H23** | Small firmware-specific Modbus register subsets | Automated tests only |
 | **Danfoss ECL Comfort 210 / 296 / 310 / 310B** | Modbus PNU read subset; application-key-aware sample | Automated tests only |
 | **Swegon CASA Genius 4.x** | SEM/SEC Modbus subset (fan RPM/%, settings, selected modes) | Automated tests only |
+| **Vallox Digit2 SE / Digit SE 2** | Documented **external** Home Assistant via proprietary RS485 (HACS Helios/Vallox or ESP-01 MQTT `valloxesp`) | Upstream ESP-01 project lists Digit SE 2 tested; **no native OpenLVI driver**. [Connection guide](docs/VALLOX_DIGIT2_SE_RS485.md) |
 | **Regin Corrigo E Ventilation 3.2** | Read-only Modbus temperature/airflow subset | Automated tests only |
 | **BACnet/IP equipment** | Read-only target-device object discovery (up to 32 points) or supplied point list | Not yet verified on a real BACnet controller |
 | **Kamstrup MULTICAL 403/603/803** | Wired serial M-Bus telegram decoding through powered M-Bus master | Not yet verified on a real meter |
@@ -128,6 +130,7 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 
 | Resource | Purpose |
 |---|---|
+| [Vallox Digit2 SE RS485 → Home Assistant](docs/VALLOX_DIGIT2_SE_RS485.md) | Factory A/B/M/-/+ wiring, HACS/ESP-01 connection paths, model-specific testing status and safety checks; external integration, not plug-and-play within OpenLVI |
 | [Finland BMS / floor heating manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) | Uponor, Roth, Tosibox, Siemens, Honeywell, Ouman, Wavin and additional Finnish market devices |
 | [Sustained CO2 notification blueprint](blueprints/automation/openlvi/co2_high_alert.yaml) | Independent high-CO2 notification without fan writes |
 | [R290 and refrigerant property calculator](tools/refrigerant_state_calculator.py) | Optional offline CoolProp state analysis from measured absolute P/T |
