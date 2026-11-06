@@ -14,7 +14,7 @@ Copy `custom_components/openlvi` to
 The interactive wizard asks:
 1. **Manufacturer**: Ouman, Danfoss, Regin, Swegon, Kamstrup,
    Enervent, Vallox, Fidelix, Siemens, Schneider Electric, Grundfos,
-   Wilo, Belimo, Produal, Koja or NIBE.
+   Wilo, Belimo, Produal, Koja, NIBE or Jäspi (AIR with MODBUS 40 only).
 2. **Model**, installed **firmware**, and for Danfoss the **ECL application key**.
 3. **Transport**: HTTP (EH-800), USB (EH-800B), Modbus TCP/RTU,
    read-only BACnet/IP, or wired M-Bus for Kamstrup.
@@ -47,6 +47,7 @@ their exact, site-specific, read-only register map.
 | Ouman A203/S203/C203/H23 | Modbus RTU/TCP | temperature subsets, version-specific room targets | limited room targets, optional |
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
+| Jäspi Tehowatti AIR + MODBUS 40 | Modbus RTU or verified RTU-to-LAN gateway | No built-in point map; exact site/firmware register JSON required | custom profile read only |
 | Swegon CASA Genius SW4.x with SEM/SEC | Modbus RTU or gateway | fan RPM and %, temperature setpoint, mode, CO2 thresholds, heat recovery | selected operating modes 1/2/3 only, optional |
 | BACnet/IP (e.g. Siemens, Schneider, Belimo) | Private local network, UDP 47808 | Explicit read-only object list or bounded discovery on one selected device (up to 32 objects) | read only |
 | Kamstrup MULTICAL 403/603/803 | Powered wired M-Bus master with serial interface | Telegram records and transmitted units | read only |
@@ -55,6 +56,11 @@ their exact, site-specific, read-only register map.
 The model list is not a claim that all these controllers offer Modbus
 without accessories. Confirm physical interface availability, interface
 options/licensing and wiring against the exact unit.
+
+For the *different* conventional Jäspi Tehowatti electric boiler, see
+[documented dry-contact temperature setback example](JASPI_TEHOWATTI.md).
+Its heating input is not a Modbus register interface. Tehowatti AIR
+requires an installed MODBUS 40 module (not just an Ethernet connection).
 
 ### Vendor documentation
 
