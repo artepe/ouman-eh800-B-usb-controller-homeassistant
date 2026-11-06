@@ -1,0 +1,69 @@
+# Open HVAC: Roth Touchline PL (8-channel) passive monitoring only.
+#
+# Reads the state of the controller's *documented* potential-free
+# heat-source relay NO/COM contact. This is an OUTPUT of the Roth controller.
+# It is NOT a general-purpose input, Modbus connection or thermostat bus.
+#
+# Electrical safety:
+# - ONLY use if the NO/COM output is confirmed completely unused, voltage-
+#   free and electrically isolated, by a qualified installer.
+# - Do NOT parallel an existing boiler, pump, mains or other connected circuit.
+# - Do NOT apply external voltage to GPIO or connect to any 230V terminals.
+# - Route SELV wiring separately from mains. Retain all thermostat, pump,
+#   frost and overtemperature protections.
+#
+# For an unused verified isolated contact:
+#   Roth COM  -> ESP32 GND
+#   Roth NO   -> ESP32 GPIO23
+# The internal pull-up reads open as OFF, closed as ON.
+# GPIO23 is a sample pin, confirm the ESP32 board pinout before wiring.
+#
+# Store secrets in ESPHome secrets.yaml:
+# wifi_ssid, wifi_password, roth_pl_api_key, roth_pl_ota_password.
+# Generate the base64 API key with: openssl rand -base64 32
+#
+# Bench / on-site validation is still required: no actual PL controller
+# has been tested with Open HVAC.
+substitutions:
+  device_name: roth-pl-contact-monitor
+  friendly_name: "Roth Touchline PL"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  comment: "Read-only PL heat-source contact state (no thermostat setpoint control)"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: !secret roth_pl_api_key
+
+ota:
+  - platform: esphome
+    password: !secret roth_pl_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+binary_sensor:
+  - platform: gpio
+    name: "Heat-source relay closed (NO-COM)"
+    id: heat_source_relay_closed
+    icon: mdi:heat-wave
+    pin:
+      number: GPIO23
+      mode: INPUT_PULLUP
+      inverted: true
+    filters:
+      - delayed_on: 200ms
+      - delayed_off: 200ms
+    # ON = NO/COM physically closed, OFF = contact open.
+    # Whether closed means active heat demand must be verified
+    # on the actual controller; pump exercise can affect outputs.
