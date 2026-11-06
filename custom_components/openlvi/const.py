@@ -36,6 +36,7 @@ VENDOR_MODELS = {
     "Produal": ("Proxima",),
     "Koja": ("KojaControl",),
     "NIBE": ("S-series",),
+    "Jäspi": ("Tehowatti AIR (MODBUS 40)",),
     "Uponor": ("Smatrix Base PRO X-148", "Smatrix Base PRO X-147 KNX", "Smatrix Pulse R-208"),
     "Roth": ("Touchline SL Modbus", "Touchline SL WiFi"),
     "Wavin": ("Sentio",),
