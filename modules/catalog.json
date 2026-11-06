@@ -81,6 +81,19 @@
       "documentation": "esp32_s3/README.md",
       "target": "manual",
       "caution": "Prototype. Not a safety controller or production-ready bridge."
+    },
+    {
+      "slug": "jaspi-tehowatti-contact",
+      "name": "Jäspi Tehowatti Dry Contact",
+      "kind": "firmware-example",
+      "status": "manufacturer-documented / hardware-unverified",
+      "summary": "Local ESPHome relay example for the traditional Tehowatti electric boiler's NO temperature-setback contact.",
+      "paths": [
+        "examples/esphome/jaspi-tehowatti-contact.yaml"
+      ],
+      "documentation": "docs/JASPI_TEHOWATTI.md",
+      "target": "manual (ESPHome firmware on separate ESP32 and isolated NO relay)",
+      "caution": "Only the existing temperature setback input; electrical wiring requires qualified verification. No internal registers or safety bypass."
     }
   ]
 }
