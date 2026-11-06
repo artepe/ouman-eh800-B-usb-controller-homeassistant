@@ -39,9 +39,20 @@ https://verkkokauppa.nurkantakaa.fi/jaspi-tehowatti-ecowatti/
   to a standard ESP32. Use a separate correctly powered, **isolated,
   active-HIGH NO dry-contact relay module** and verify its boot behavior.
   The sample uses GPIO23 and `restore_mode: ALWAYS_OFF`. Replace the GPIO
-  and polarity only after verifying the exact relay board. ESPHome Wi-Fi
-  credentials go in `secrets.yaml`. This exposes a "Temperature setback"
-  switch to Home Assistant over the **local** ESPHome API.
+  and polarity only after verifying the exact relay board. Supply the
+  Wi-Fi credentials, a generated 32-byte base64 ESPHome API encryption
+  key and a strong OTA password in `secrets.yaml`. For example:
+
+  ```yaml
+  wifi_ssid: "local-network-name"
+  wifi_password: "replace-with-wifi-password"
+  tehowatti_api_key: "replace-with-generated-32-byte-base64-key"
+  tehowatti_ota_password: "replace-with-strong-unique-password"
+  ```
+
+  Generate the API key with `openssl rand -base64 32`. Keep the actual
+  secrets outside Git. This exposes a "Temperature setback" switch to
+  Home Assistant over the **local, encrypted** ESPHome API.
 
 **Commissioning:** with the external relay disconnected, verify the
 normal boiler operation. Then have a qualified installer connect the
