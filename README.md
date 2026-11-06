@@ -6,7 +6,7 @@ Shelly 0-10 V supplemental ventilation and sustained CO2 alert blueprints.
 
 **Validation:** experimental  
 **Module:** co2-blueprints  
-**Source commit:** 6267d1b3924c5613b88ccf53fca905cfe8f4b580
+**Source commit:** e1f3479114544a9dd0b87c9d8da1aa52d98a5719
 
 ## Install
 
