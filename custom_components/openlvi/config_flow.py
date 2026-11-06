@@ -59,14 +59,27 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._data.update(user_input)
             return await self.async_step_connection()
+        # MODBUS 40 is an optional Modbus RTU accessory, not a built-in
+        # Tehowatti Ethernet API. Only offer local RTU or a verified gateway.
+        if self._data.get(CONF_VENDOR) == "Jäspi":
+            transport_options = {
+                "modbus_rtu": "Modbus RTU (MODBUS 40 + RS-485 / USB)",
+                "modbus_tcp": "Modbus TCP (verified RTU-to-LAN gateway only)",
+            }
+            default_transport = "modbus_rtu"
+        else:
+            transport_options = {
+                "modbus_tcp": "Modbus TCP (direct or gateway)",
+                "modbus_rtu": "Modbus RTU (RS-485 / USB)",
+                "bacnet_ip": "BACnet/IP (read-only, UDP)",
+            }
+            default_transport = "modbus_tcp"
         return self.async_show_form(
             step_id="transport",
             data_schema=vol.Schema({
-                vol.Required(CONF_TRANSPORT, default="modbus_tcp"): vol.In({
-                    "modbus_tcp": "Modbus TCP (direct or gateway)",
-                    "modbus_rtu": "Modbus RTU (RS-485 / USB)",
-                    "bacnet_ip": "BACnet/IP (read-only, UDP)",
-                }),
+                vol.Required(CONF_TRANSPORT, default=default_transport): vol.In(
+                    transport_options
+                ),
             }),
         )
 
