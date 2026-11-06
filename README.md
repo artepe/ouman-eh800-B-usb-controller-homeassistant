@@ -6,7 +6,7 @@ Read-only isometric Lovelace SCADA card and example configuration.
 
 **Validation:** experimental  
 **Module:** scada-dashboard  
-**Source commit:** 6267d1b3924c5613b88ccf53fca905cfe8f4b580
+**Source commit:** e1f3479114544a9dd0b87c9d8da1aa52d98a5719
 
 ## Install
 
