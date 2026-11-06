@@ -57,6 +57,8 @@ The model list is not a claim that all these controllers offer Modbus
 without accessories. Confirm physical interface availability, interface
 options/licensing and wiring against the exact unit.
 
+See the [Siemens RVD Modbus installation and register guide](SIEMENS_RVD_MODBUS.md) for RS-485 setup, register scaling and safety limits.
+
 ### Vendor documentation
 
 - [Danfoss ECL 210/296/310 communication description](https://assets.danfoss.com/documents/198690/AQ074886472234en-010601.pdf):
