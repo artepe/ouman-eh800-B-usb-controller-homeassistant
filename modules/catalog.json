@@ -94,6 +94,19 @@
       "documentation": "docs/JASPI_TEHOWATTI.md",
       "target": "manual (ESPHome firmware on separate ESP32 and isolated NO relay)",
       "caution": "Only the existing temperature setback input; electrical wiring requires qualified verification. No internal registers or safety bypass."
+    },
+    {
+      "slug": "roth-touchline-pl-contact-monitor",
+      "name": "Roth Touchline PL Relay Monitor",
+      "kind": "firmware-example",
+      "status": "manufacturer-documented / hardware-unverified",
+      "summary": "ESPHome read-only monitoring of the unused, isolated Roth Touchline PL heat-source relay output (NO/COM); not a zone control driver.",
+      "paths": [
+        "examples/esphome/roth-touchline-pl-relay-monitor.yaml"
+      ],
+      "documentation": "docs/ROTH_TOUCHLINE_PL.md",
+      "target": "manual (separate ESP32, qualified and electrically isolated dry-contact wiring)",
+      "caution": "Strictly passive and read-only. DO NOT connect ESP32 to 230 V zone outputs, pump supply or existing energized boiler circuits. No Modbus/API support is claimed."
     }
   ]
 }
