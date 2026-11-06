@@ -11,7 +11,8 @@
 # This example assumes a HIGH level energizes the relay; most low-trigger
 # modules need a different configuration and must not be used blindly.
 #
-# Store wifi_ssid and wifi_password in the ESPHome secrets.yaml.
+# Store Wi-Fi details, generated ESPHome API key and OTA password in
+# ESPHome secrets.yaml. See docs/JASPI_TEHOWATTI.md.
 substitutions:
   device_name: jaspi-tehowatti-bridge
   friendly_name: "Jäspi Tehowatti"
@@ -29,9 +30,12 @@ esp32:
 logger:
 
 api:
+  encryption:
+    key: !secret tehowatti_api_key
 
 ota:
   - platform: esphome
+    password: !secret tehowatti_ota_password
 
 wifi:
   ssid: !secret wifi_ssid
