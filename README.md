@@ -86,6 +86,7 @@ Support is tied to a **specific protocol and firmware**, not merely a brand name
 | Mango Energy R290 heat pump | Captured Tuya 3.5 profile with 770 parameter routes | Partial device evidence; other routes experimental |
 | Ouman EH-800, A203, S203, C203, H23 | HTTP / limited model-specific Modbus profiles | Experimental |
 | Swegon CASA Genius, Danfoss ECL, Regin Corrigo | Documented Modbus subsets | Automated tests only |
+| Siemens RVD120 / RVD140 district heating controllers | Local RS-485 Modbus RTU, read-only P2510 register subset | Offline tests only; hardware verification pending |
 | BACnet/IP and wired M-Bus devices | Selected read-only discovery / telemetry | Experimental |
 | Vallox, Siemens, Honeywell, NIBE, Uponor, Tosibox and others | Candidate integrations and/or site-specific maps | Research; not universal plug-and-play |
 
