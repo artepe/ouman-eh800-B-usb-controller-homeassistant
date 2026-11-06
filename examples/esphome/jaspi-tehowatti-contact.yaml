@@ -1,0 +1,55 @@
+# Open HVAC - Jäspi Tehowatti (traditional electric boiler) example.
+# Hardware: standard ESP32 + externally powered, electrically isolated,
+# active-HIGH relay module with a normally-open (NO) dry contact.
+# THIS IS NOT A BOILER CONTROLLER OR A MODBUS DEVICE.
+# Relay contact closed = the boiler's documented temperature setback input
+# is asserted; open = normal heating. Confirm on the physical controller.
+# Do not connect an ESP32 pin, mains voltage or relay supply to the boiler
+# input. Have a qualified electrical installer verify the model/terminals.
+#
+# Change GPIO23 ONLY after checking the chosen relay and boot-safe pin state.
+# This example assumes a HIGH level energizes the relay; most low-trigger
+# modules need a different configuration and must not be used blindly.
+#
+# Store Wi-Fi details, generated ESPHome API key and OTA password in
+# ESPHome secrets.yaml. See docs/JASPI_TEHOWATTI.md.
+substitutions:
+  device_name: jaspi-tehowatti-bridge
+  friendly_name: "Jäspi Tehowatti"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  comment: "Local temperature setback using the documented dry-contact input"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: !secret tehowatti_api_key
+
+ota:
+  - platform: esphome
+    password: !secret tehowatti_ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+
+switch:
+  - platform: gpio
+    id: tehowatti_setback_contact
+    name: "Temperature setback"
+    icon: mdi:home-thermometer-outline
+    pin:
+      number: GPIO23
+      inverted: false
+    restore_mode: ALWAYS_OFF
+    # Off = de-energized relay and NO dry contact OPEN.
+    # On  = energized relay and NO dry contact CLOSED.
+    # ALWAYS_OFF returns to the original normal-heating input state at boot.
