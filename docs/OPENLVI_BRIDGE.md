@@ -47,6 +47,7 @@ their exact, site-specific, read-only register map.
 | Ouman A203/S203/C203/H23 | Modbus RTU/TCP | temperature subsets, version-specific room targets | limited room targets, optional |
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
+| Siemens RVD120 / RVD140 (P2510 series A/C) | RS-485 Modbus RTU or RTU-to-TCP gateway | temperatures, selected pressures, fault, pump/relay and read-only targets | read-only; bench testing pending |
 | Swegon CASA Genius SW4.x with SEM/SEC | Modbus RTU or gateway | fan RPM and %, temperature setpoint, mode, CO2 thresholds, heat recovery | selected operating modes 1/2/3 only, optional |
 | BACnet/IP (e.g. Siemens, Schneider, Belimo) | Private local network, UDP 47808 | Explicit read-only object list or bounded discovery on one selected device (up to 32 objects) | read only |
 | Kamstrup MULTICAL 403/603/803 | Powered wired M-Bus master with serial interface | Telegram records and transmitted units | read only |
