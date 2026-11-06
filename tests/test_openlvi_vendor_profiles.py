@@ -48,6 +48,19 @@ class OpenLVIVendorProfiles(unittest.TestCase):
         self.assertEqual(mod.decode([0xffce], pts["outdoor_temp"]), -5)
         self.assertTrue(all(not p.writable for p in pts.values()))
 
+    def test_tehowatti_air_requires_site_register_list_and_never_writes(self):
+        with self.assertRaises(ValueError):
+            mod.profile_for("Tehowatti AIR (MODBUS 40)", "", "", "")
+        # This is a synthetic register to verify the generic profile parser,
+        # NOT an assertion about any actual Tehowatti address.
+        sample = ('{"registers":[{"key":"test_value","name":"Test only",'
+                  '"address":1,"kind":"u16","writable":true}]}')
+        points = mod.profile_for("Tehowatti AIR (MODBUS 40)", "", sample, "")
+        self.assertEqual(len(points), 1)
+        self.assertFalse(points[0].writable)
+        with self.assertRaises(ValueError):
+            mod.encode(10, points[0])
+
     def test_unmapped_vendor_requires_exact_register_list(self):
         with self.assertRaises(ValueError):
             mod.profile_for("Corrigo 5", "", "", "")
