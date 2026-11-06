@@ -90,6 +90,8 @@ Support is tied to a **specific protocol and firmware**, not merely a brand name
 | BACnet/IP and wired M-Bus devices | Selected read-only discovery / telemetry | Experimental |
 | Vallox, Siemens, Honeywell, NIBE, Uponor, Tosibox and others | Candidate integrations and/or site-specific maps | Research; not universal plug-and-play |
 
+For Siemens RVD120/RVD140, see the [RS-485 and register setup guide](docs/SIEMENS_RVD_MODBUS.md).
+
 For exact point maps, limitations and references, read the
 [engineering reference](docs/ENGINEERING_REFERENCE.md),
 [manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) and
