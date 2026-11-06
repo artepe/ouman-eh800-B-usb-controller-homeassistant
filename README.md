@@ -6,7 +6,7 @@ Multi-vendor local Modbus, USB, BACnet and M-Bus bridge. Ouman USB protocol read
 
 **Validation:** experimental  
 **Module:** openlvi-bridge  
-**Source commit:** e1f3479114544a9dd0b87c9d8da1aa52d98a5719
+**Source commit:** 2206b0ade1a6e53c03cde0a973a45dde8bfa6e54
 
 ## Install
 
