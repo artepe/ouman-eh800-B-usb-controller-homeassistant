@@ -47,6 +47,7 @@ automatically maintained from the main project and contain no unrelated modules.
 | **CO₂ Blueprints** | Shelly 0–10 V auxiliary ventilation and CO₂ alerts | Experimental | [Blueprint ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/co2-blueprints) |
 | **OpenLVI SCADA** | Read-only isometric Lovelace visualization | Experimental | [SCADA ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/scada-dashboard) |
 | **ESP32-S3 Ouman Demo** | Prototype controller dashboard and examples | Prototype | [ESP32 ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/esp32-s3-ouman-demo) |
+| **Jäspi Tehowatti dry contact** | ESPHome example: local temperature setback for conventional electric boiler, not Modbus | Documented interface; hardware unverified | [Tehowatti ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/jaspi-tehowatti-contact) |
 
 **Other download options:** [GitHub Actions module ZIPs](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/module-packages.yml)
 (build artifacts), [versioned releases](https://github.com/artepe/Open-HVACBridge-homeassistant/releases) (when published)
@@ -70,7 +71,7 @@ and [SHA256 package checksums](docs/DOWNLOADS.md). See the
    according to its device-specific guide. Start with **read-only checks**.
 5. Confirm values on the physical equipment before using any control entity.
 
-Installation guides: [OpenLVI](docs/OPENLVI_BRIDGE.md) ·
+Installation guides: [Jäspi Tehowatti](docs/JASPI_TEHOWATTI.md) · [OpenLVI](docs/OPENLVI_BRIDGE.md) ·
 [Mango Tuya](docs/MANGO_TUYA_LOCAL.md) ·
 [Ouman EH-800B](docs/STABLE_RELEASE_v0.1.2.md) ·
 [SCADA](docs/OPENLVI_EXTENSIONS.md) ·
@@ -87,6 +88,8 @@ Support is tied to a **specific protocol and firmware**, not merely a brand name
 | Ouman EH-800, A203, S203, C203, H23 | HTTP / limited model-specific Modbus profiles | Experimental |
 | Swegon CASA Genius, Danfoss ECL, Regin Corrigo | Documented Modbus subsets | Automated tests only |
 | BACnet/IP and wired M-Bus devices | Selected read-only discovery / telemetry | Experimental |
+| Jäspi Tehowatti electric boiler | Isolated NO dry-contact temperature setback (Shelly / ESPHome) | Manufacturer documented, not hardware tested |
+| Jäspi Tehowatti AIR with MODBUS 40 | Modbus RTU; requires user-provided verified read-only register list | Vendor model in OpenLVI; no automatic point map |
 | Vallox, Siemens, Honeywell, NIBE, Uponor, Tosibox and others | Candidate integrations and/or site-specific maps | Research; not universal plug-and-play |
 
 For exact point maps, limitations and references, read the
