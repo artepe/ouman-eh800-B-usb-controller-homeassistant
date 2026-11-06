@@ -21,6 +21,7 @@ class Register:
     area: str = "holding"  # holding (FC03) or input (FC04)
     offset: float = 0.0  # Read-only engineering-unit correction, e.g. centikelvin
     invalid_raw_values: tuple[int, ...] = ()  # Explicit 16-bit no-data markers
+    read_scale: float | None = None  # Documented vendor multiplier; read only
 
     @property
     def count(self):
@@ -136,11 +137,13 @@ def decode(registers: list[int], point: Register) -> float | None:
     bits = 32 if point.count == 2 else 16
     if point.kind.startswith("s") and raw & (1 << (bits - 1)):
         raw -= 1 << bits
-    return raw / (10 ** point.decimals) + point.offset
+    scaled = (raw * point.read_scale if point.read_scale is not None
+              else raw / (10 ** point.decimals))
+    return scaled + point.offset
 
 def encode(value: float, point: Register) -> list[int]:
-    if point.offset or point.invalid_raw_values:
-        raise ValueError("Offset and no-data marker points are read-only")
+    if point.offset or point.invalid_raw_values or point.read_scale is not None:
+        raise ValueError("Scaled, offset and no-data marker points are read-only")
     if not point.writable or point.minimum is None or point.maximum is None:
         raise ValueError("This point is not in the verified write allowlist")
     if not point.minimum <= value <= point.maximum:
@@ -282,6 +285,9 @@ def profile_for(model: str, firmware: str, profile_json: str, application_key: s
         if version >= (5, 6, 0):
             points.extend(TOSIBOX_FIRMWARE)
         return points
+    if model in ("RVD120", "RVD140"):
+        from .siemens_rvd import make_profile
+        return make_profile(Register, model)
     if model in DANFOSS_MODELS:
         # Globally documented PNU read; application-specific points enabled
         # only after exact installed application key is entered by operator.

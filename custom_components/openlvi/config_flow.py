@@ -40,6 +40,8 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if self._data[CONF_VENDOR] == "Ouman" and model in ("EH-800", "EH-800B"):
                 self._data[CONF_TRANSPORT] = "http" if model == "EH-800" else "usb"
                 return await self.async_step_connection()
+            if self._data[CONF_VENDOR] == "Siemens" and model in ("RVD120", "RVD140"):
+                self._data[CONF_ALLOW_WRITES] = False
             if self._data[CONF_VENDOR] == "Kamstrup":
                 self._data[CONF_TRANSPORT] = "mbus_serial"
                 self._data[CONF_ALLOW_WRITES] = False
@@ -62,7 +64,7 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="transport",
             data_schema=vol.Schema({
-                vol.Required(CONF_TRANSPORT, default="modbus_tcp"): vol.In({
+                vol.Required(CONF_TRANSPORT, default=("modbus_rtu" if self._data.get(CONF_MODEL) in ("RVD120", "RVD140") else "modbus_tcp")): vol.In({
                     "modbus_tcp": "Modbus TCP (direct or gateway)",
                     "modbus_rtu": "Modbus RTU (RS-485 / USB)",
                     "bacnet_ip": "BACnet/IP (read-only, UDP)",
@@ -145,8 +147,8 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         else:
             schema = {
                 vol.Required(CONF_PORT, default="/dev/ttyUSB0"): str,
-                vol.Required(CONF_BAUDRATE, default=9600): vol.In([9600, 19200, 38400, 57600, 115200]),
-                vol.Required(CONF_PARITY, default="N"): vol.In(["N", "E", "O"]),
+                vol.Required(CONF_BAUDRATE, default=9600): vol.In([1200, 2400, 4800, 9600, 19200, 38400, 57600, 115200]),
+                vol.Required(CONF_PARITY, default=("E" if self._data.get(CONF_MODEL) in ("RVD120", "RVD140") else "N")): vol.In(["N", "E", "O"]),
                 vol.Required(CONF_UNIT_ID, default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=247)),
                 vol.Optional(CONF_PROFILE, default=""): selector.TextSelector(
                     selector.TextSelectorConfig(multiline=True)),

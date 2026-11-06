@@ -57,7 +57,12 @@ class ModbusDriver:
                 if value is not None:
                     values[point.key] = value
             except Exception as err:
-                _LOGGER.warning("Ouman point %s unavailable: %s", point.key, err)
+                _LOGGER.warning("Modbus point %s unavailable: %s", point.key, err)
+        if self.data[CONF_MODEL] in ("RVD120", "RVD140"):
+            # Siemens P2510 address 1021 supplies model code 140/142.
+            expected = 140 if self.data[CONF_MODEL] == "RVD120" else 142
+            if values.get("controller_model_code") != expected:
+                raise ValueError("RVD model identity missing or mismatched at P2510 address 1021")
         return values
 
     async def async_write(self, point: Register, value: float):

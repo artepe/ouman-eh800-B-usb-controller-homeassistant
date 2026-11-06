@@ -6,6 +6,7 @@ on:
       - 'custom_components/openlvi/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
+      - 'tests/test_openlvi_siemens_rvd.py'
       - 'tests/test_openlvi_usb_controls.py'
       - 'tests/test_openlvi_ai_guide.py'
       - 'tests/test_openlvi_localization.py'
@@ -24,6 +25,7 @@ on:
       - 'custom_components/openlvi/**'
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
+      - 'tests/test_openlvi_siemens_rvd.py'
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
@@ -48,6 +50,7 @@ jobs:
       - name: Test register decoding and write allowlist
         run: |
           python -m unittest discover -s tests -p 'test_*profiles.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_siemens_rvd.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_usb_controls.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_ai_guide.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_localization.py' -v
