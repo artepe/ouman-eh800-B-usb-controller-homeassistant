@@ -87,6 +87,7 @@ Support is tied to a **specific protocol and firmware**, not merely a brand name
 | Ouman EH-800B | USB monitoring; legacy and experimental control paths | Legacy tested on one unit |
 | Mango Energy R290 heat pump | Captured Tuya 3.5 profile with 770 parameter routes | Partial device evidence; other routes experimental |
 | Ouman EH-800, A203, S203, C203, H23 | HTTP / limited model-specific Modbus profiles | Experimental |
+| Ouman EH-203 | MODBUS-200/-DIN RTU or verified TCP gateway; read-only documented points | Experimental, [hardware unverified](docs/OUMAN_EH203.md) |
 | Swegon CASA Genius, Danfoss ECL, Regin Corrigo | Documented Modbus subsets | Automated tests only |
 | BACnet/IP and wired M-Bus devices | Selected read-only discovery / telemetry | Experimental |
 | Jäspi Tehowatti electric boiler | Isolated NO dry-contact temperature setback (Shelly / ESPHome) | Manufacturer documented, not hardware tested |

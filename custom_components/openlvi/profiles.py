@@ -64,6 +64,66 @@ PROFILE_MAPS = {
         Register("l2_room_target", "L2 room temperature setpoint", 453, "s16", 1, "°C", 5, 35, True),
     ],
 }
+# Ouman MODBUS-200 / MODBUS-200-DIN for the *legacy* EH-203.
+# Unlike newer A203/S203 documentation, this official EH-200 table starts
+# at register ZERO (year is address 0). Our ModbusDriver subtracts one from
+# Register.address before talking to pymodbus. Add one here, ONCE.
+# The table is not compatible with the EH-800(B), A203, S203 or C203 maps.
+EH203_SOURCE = "https://ouman.fi/documentbank/MODBUS-200__manual__en.pdf"
+
+
+def eh203_register(key: str, name: str, documented_address: int,
+                   *, decimals: int = 2, unit: str | None = "°C") -> Register:
+    """Convert an official EH-200 zero-based address to OpenLVI one-based."""
+    kind = "s16" if unit == "°C" else "u16"
+    return Register(key, name, documented_address + 1, kind, decimals, unit)
+
+
+# Measurement scaling follows the manufacturer's two-decimal temperature
+# range (e.g. -50.00 .. +50.00 C). Valve position is integral percent.
+# Alarm/status words are exposed RAW, not misleading interpreted alerts.
+# The selected points are explicitly marked FC03 readable in the manual.
+EH203_READ_ONLY = (
+    eh203_register("outdoor", "Outdoor temperature", 231),
+    eh203_register("l1_supply", "H1 supply water temperature", 232),
+    eh203_register("l1_room", "H1 room temperature", 233),
+    eh203_register("l1_return", "H1 return water temperature", 234),
+    eh203_register("dhw", "Domestic hot water temperature", 235),
+    eh203_register("dhw_anticipation", "Domestic hot water anticipation", 236),
+    eh203_register("l2_supply", "H2 supply water temperature", 237),
+    eh203_register("measurement_6", "Measurement 6 temperature", 238),
+    eh203_register("measurement_9", "Measurement 9 temperature", 239),
+    eh203_register("measurement_10", "Measurement 10 temperature", 240),
+    eh203_register("measurement_11", "Measurement 11 temperature", 241),
+    eh203_register("l1_valve", "H1 valve position", 242, decimals=0, unit="%"),
+    eh203_register("l2_valve", "H2 valve position", 243, decimals=0, unit="%"),
+    eh203_register("dhw_valve", "Domestic hot water valve position", 244, decimals=0, unit="%"),
+    eh203_register("digital_states_raw", "Digital states (raw bitmask)", 253, decimals=0, unit=None),
+    eh203_register("alarms_254_raw", "Alarms register 254 (raw bitmask)", 254, decimals=0, unit=None),
+    eh203_register("alarms_255_raw", "Alarms register 255 (raw bitmask)", 255, decimals=0, unit=None),
+    eh203_register("general_alarm_raw", "General alarm (raw bitmask)", 272, decimals=0, unit=None),
+)
+
+
+def eh203_profile(firmware: str) -> list[Register]:
+    """Documented, monitoring-only EH-203 Modbus subset.
+
+    Firmware must be supplied explicitly; versions before 1.22 and unknown
+    major releases require a site-specific, read-only custom profile.
+    v2.0-only points (290-292, 308-311) are deliberately not assumed,
+    because their value scaling has not been hardware-verified.
+    """
+    import re
+
+    match = re.fullmatch(r"([12])\.(\d{1,2})(?:[A-Za-z])?", firmware.strip())
+    if not match:
+        raise ValueError("EH-203 requires its documented 1.x/2.x firmware version (e.g. 2.18c)")
+    major, minor = int(match.group(1)), int(match.group(2))
+    if major == 1 and minor < 22:
+        raise ValueError("EH-203 versions before 1.22 require a verified custom register profile")
+    return list(EH203_READ_ONLY)
+
+
 SUPPORTED_TYPES = frozenset(("s16", "u16", "s32", "u32"))
 
 def parse_profile(raw: str) -> list[Register]:
@@ -268,6 +328,8 @@ def profile_for(model: str, firmware: str, profile_json: str, application_key: s
     """Select only matching vendor registers; custom JSON stays read-only."""
     if profile_json.strip():
         return parse_profile(profile_json)
+    if model == "EH-203":
+        return eh203_profile(firmware)
     if model in PROFILE_MAPS:
         return _ouman_profile_for(model, firmware, "")
     if model == "Smatrix Base PRO X-148":
