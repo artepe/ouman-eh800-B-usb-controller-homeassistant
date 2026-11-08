@@ -6,7 +6,7 @@ ESPHome read-only monitoring of the unused, isolated Roth Touchline PL heat-sour
 
 **Validation:** manufacturer-documented / hardware-unverified  
 **Module:** roth-touchline-pl-contact-monitor  
-**Source commit:** 2206b0ade1a6e53c03cde0a973a45dde8bfa6e54
+**Source commit:** 723d2e635ad6f405ad796384619af98df8b71343
 
 ## Install
 
