@@ -37,6 +37,9 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             self._data.update(user_input)
             model = self._data[CONF_MODEL]
+            if self._data[CONF_VENDOR] == "Ouman" and model == "EH-203":
+                # EH-203 has no reviewed write allowlist: force monitoring only.
+                self._data[CONF_ALLOW_WRITES] = False
             if self._data[CONF_VENDOR] == "Ouman" and model in ("EH-800", "EH-800B"):
                 self._data[CONF_TRANSPORT] = "http" if model == "EH-800" else "usb"
                 return await self.async_step_connection()
@@ -61,7 +64,14 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return await self.async_step_connection()
         # MODBUS 40 is an optional Modbus RTU accessory, not a built-in
         # Tehowatti Ethernet API. Only offer local RTU or a verified gateway.
-        if self._data.get(CONF_VENDOR) == "Jäspi":
+        if (self._data.get(CONF_VENDOR) == "Ouman"
+                and self._data.get(CONF_MODEL) == "EH-203"):
+            transport_options = {
+                "modbus_rtu": "MODBUS-200 / -200-DIN RS-485 (local USB adapter)",
+                "modbus_tcp": "MODBUS-200 through an RTU-to-TCP gateway",
+            }
+            default_transport = "modbus_rtu"
+        elif self._data.get(CONF_VENDOR) == "Jäspi":
             transport_options = {
                 "modbus_rtu": "Modbus RTU (MODBUS 40 + RS-485 / USB)",
                 "modbus_tcp": "Modbus TCP (verified RTU-to-LAN gateway only)",
@@ -158,7 +168,10 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         else:
             schema = {
                 vol.Required(CONF_PORT, default="/dev/ttyUSB0"): str,
-                vol.Required(CONF_BAUDRATE, default=9600): vol.In([9600, 19200, 38400, 57600, 115200]),
+                vol.Required(CONF_BAUDRATE, default=9600): vol.In(
+                    [4800, 9600, 19200, 38400]
+                    if self._data.get(CONF_MODEL) == "EH-203"
+                    else [9600, 19200, 38400, 57600, 115200]),
                 vol.Required(CONF_PARITY, default="N"): vol.In(["N", "E", "O"]),
                 vol.Required(CONF_UNIT_ID, default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=247)),
                 vol.Optional(CONF_PROFILE, default=""): selector.TextSelector(
