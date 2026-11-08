@@ -10,6 +10,7 @@ on:
       - 'tests/test_openlvi_ai_guide.py'
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
+      - 'tests/test_openlvi_eh203.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
       - 'tests/test_openlvi_building_extensions.py'
       - 'tests/test_openlvi_r290_calculator.py'
@@ -26,6 +27,7 @@ on:
       - 'tests/test_openlvi_vendor_profiles.py'
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
+      - 'tests/test_openlvi_eh203.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
       - 'tests/test_openlvi_building_extensions.py'
       - 'tests/test_openlvi_r290_calculator.py'
@@ -52,6 +54,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_openlvi_ai_guide.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_localization.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_register_offsets.py' -v
+          python -m unittest discover -s tests -p 'test_openlvi_eh203.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_lorawan_inspector.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_building_extensions.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_r290_calculator.py' -v
