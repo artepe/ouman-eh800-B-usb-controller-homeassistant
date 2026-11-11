@@ -1,0 +1,40 @@
+name: Ouflex laboratory
+on:
+  pull_request:
+    paths:
+      - 'custom_components/ouman_ouflex/**'
+      - 'tools/ouflex_*.py'
+      - 'tests/test_ouflex*.py'
+      - 'tests/ha/**'
+      - '.github/workflows/ouflex.yml'
+  push:
+    branches: ['feature/ouflex-*']
+permissions:
+  contents: read
+jobs:
+  portable:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ['3.9', '3.13']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Unit, contract and real loopback TCP tests
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          OUFLEX_REQUIRE_TCP: '1'
+        run: python -m unittest discover -s tests -p 'test_ouflex*.py' -v
+  home-assistant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - name: Install official HA test framework and matching core
+        run: python -m pip install pytest-homeassistant
+      - name: Full HA config flow, setup, entity services and disconnect tests
+        run: python -m pytest -c tests/ha/pytest.ini tests/ha -v

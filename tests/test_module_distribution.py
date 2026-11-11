@@ -16,7 +16,7 @@ import package_modules as mod  # noqa: E402
 class ModuleDistributionTests(unittest.TestCase):
     def test_catalog_has_safe_unique_modules(self):
         modules = mod.module_catalog()
-        self.assertEqual(len(modules), 9)
+        self.assertEqual(len(modules), 10)
         self.assertEqual(len({x["slug"] for x in modules}), len(modules))
         self.assertNotIn("ezviz", json.dumps(modules).lower())
 
@@ -36,6 +36,9 @@ class ModuleDistributionTests(unittest.TestCase):
         self.assertIn("custom_components/openlvi", core_paths)
         self.assertIn("custom_components/ouman_eh800", core_paths)
         self.assertEqual(mango_paths, {"custom_components/mango_tuya_local"})
+        self.assertEqual(set(modules["ouman-ouflex"]["paths"]),
+                         {"custom_components/ouman_ouflex"})
+        self.assertNotIn("custom_components/ouman_ouflex", core_paths)
         self.assertEqual(set(modules["jaspi-tehowatti-contact"]["paths"]),
                          {"examples/esphome/jaspi-tehowatti-contact.yaml"})
         self.assertEqual(set(modules["roth-touchline-pl-contact-monitor"]["paths"]),
@@ -67,3 +70,4 @@ class ModuleDistributionTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

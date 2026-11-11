@@ -1,0 +1,24 @@
+{
+  "title": "Ouman Ouflex (experimental)",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Ouflex application map",
+        "description": "Import a normalized map from ouflex_lab import-map. No default application registers are assumed. Setup performs reads only.",
+        "data": {"host": "IP address", "port": "TCP port", "unit_id": "Unit ID", "map_json": "Normalized map JSON"}
+      }
+    },
+    "error": {"invalid_map": "Invalid or unsupported application map", "cannot_connect": "No valid Modbus response from first mapped point"},
+    "abort": {"already_configured": "This endpoint is already configured"}
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Ouflex write access",
+        "description": "Controls require an exact map policy and individual physical verification. Imported RW flags alone do not enable writes.",
+        "data": {"allow_writes": "Enable verified register writes", "write_policy": "Reviewed write policy JSON"}
+      }
+    },
+    "error": {"invalid_policy": "Write policy must match the application identity and map digest"}
+  }
+}
