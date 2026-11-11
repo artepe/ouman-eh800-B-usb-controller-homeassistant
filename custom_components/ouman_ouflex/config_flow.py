@@ -56,7 +56,29 @@ class OuflexFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 class OuflexOptions(config_entries.OptionsFlow):
     async def async_step_init(self, user_input=None):
-        return self.async_show_menu(step_id='init', menu_options=['register_browser', 'register_map', 'write_access'])
+        return self.async_show_menu(step_id='init', menu_options=['refresh_from_ftp', 'register_browser', 'register_map', 'write_access'])
+
+    async def async_step_refresh_from_ftp(self, user_input=None):
+        errors = {}
+        if user_input is not None:
+            if not user_input.get('confirm', False):
+                errors['base'] = 'not_confirmed'
+            else:
+                try:
+                    doc = await self.hass.async_add_executor_job(
+                        fetch_application_map, self.config_entry.data['host'])
+                    _, points = load_map(json.dumps(doc))
+                    updated = {**self.config_entry.options,
+                               'map_json': json.dumps(doc, ensure_ascii=False),
+                               'selected_points': [p.key for p in points],
+                               'allow_writes': False, 'write_policy': '{}'}
+                    return self.async_create_entry(title='', data=updated)
+                except Exception:
+                    errors['base'] = 'ftp_import_failed'
+        return self.async_show_form(step_id='refresh_from_ftp',
+                                    errors=errors, data_schema=vol.Schema({
+            vol.Required('confirm', default=False): bool,
+        }))
 
     async def async_step_register_browser(self, user_input=None):
         doc, points = load_map(self.config_entry.options.get('map_json', self.config_entry.data['map_json']))
