@@ -33,6 +33,9 @@ class FrameworkCoordinator:
         self.data={}
         self.last_update_success=True
 
+    def async_set_updated_data(self,data):
+        self.data=data
+
     async def async_request_refresh(self):
         self.data=await self._async_update_data()
 
