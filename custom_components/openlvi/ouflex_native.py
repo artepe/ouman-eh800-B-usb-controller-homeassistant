@@ -1,8 +1,8 @@
 """Site-specific Ouflex reader inside the existing Open HVAC Bridge.
 
 Reuses the independently reviewed Ounet XML/FTP parser delivered in this
-repository's Ouflex module. All Modbus traffic here is read-only. No project
-firmware, setpoints or raw site XML are published or uploaded.
+repository's Ouflex module. FTP mapping and polling are read-only; optional single-point bench writes
+require explicit operator review and are checked against the XML map digest.
 """
 from __future__ import annotations
 
@@ -11,7 +11,8 @@ import json
 import logging
 
 from .const import CONF_HOST, CONF_ALLOW_WRITES
-from .profiles import Register, decode
+from .profiles import Register, decode, encode
+from .ouflex_write import authorize
 from .transport import ModbusDriver
 
 _LOGGER = logging.getLogger(__name__)
@@ -37,12 +38,13 @@ class OuflexNativeDriver(ModbusDriver):
         self.points = []
         self.binary_points = {}
         self.ouflex_doc = None
+        self._authorized = None
 
     async def async_connect(self):
         # This separate module is shipped alongside openlvi in the OpenHVAC
         # development branch. If missing, fail clearly instead of inventing a map.
         from custom_components.ouman_ouflex.ftp_map import fetch_application_map
-        from custom_components.ouman_ouflex.pointmap import load_map
+        from custom_components.ouman_ouflex.pointmap import load_map, map_digest
 
         doc = await self.hass.async_add_executor_job(
             fetch_application_map, self.data[CONF_HOST])
@@ -50,9 +52,12 @@ class OuflexNativeDriver(ModbusDriver):
         if not native_points:
             raise ValueError("No documented Ouflex points in XML")
         self.ouflex_doc = doc
+        self._authorized = authorize(native_points, map_digest(doc), self.data)
+        self.data[CONF_ALLOW_WRITES] = self._authorized is not None
         self.points = [
-            Register(key=p.key, name=p.name, address=p.address, kind=p.kind,
-                     decimals=p.decimals, unit=p.unit, writable=False, area=p.area)
+            (self._authorized if self._authorized and self._authorized.key == p.key
+             else Register(key=p.key, name=p.name, address=p.address, kind=p.kind,
+                           decimals=p.decimals, unit=p.unit, writable=False, area=p.area))
             for p in native_points
         ]
         self.binary_points = {
@@ -116,4 +121,29 @@ class OuflexNativeDriver(ModbusDriver):
         return values
 
     async def async_write(self, point, value):
-        raise ValueError("Ouflex automatic FTP import is always read-only")
+        """One reviewed and map-locked numeric point; initial read, write, verify.
+
+        On an error after a possible write, attempt to restore the original
+        documented numeric value. Keep the result observable to the user.
+        """
+        if not self._authorized or point.key != self._authorized.key:
+            raise ValueError("Ouflex point is not enabled for reviewed writes")
+        if not self.data.get("ouflex_write_isolated", False):
+            raise ValueError("Bench write requires physically isolated controller")
+        async with self.io_lock:
+            original = await self._read_point(point)
+            if original is None or original < point.minimum or original > point.maximum:
+                raise ValueError("Original setpoint is outside documented bounds")
+            encode(value, point)
+            try:
+                await self._async_write(point, value)
+            except Exception as failure:
+                try:
+                    await self._async_write(point, original)
+                except Exception as restore_error:
+                    raise ValueError(
+                        "Ouflex write uncertain; automatic restore FAILED: "
+                        + str(restore_error)) from failure
+                raise ValueError(
+                    "Ouflex write failed; original value restored: " + str(failure)
+                ) from failure
