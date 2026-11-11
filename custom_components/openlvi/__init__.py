@@ -8,7 +8,7 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, SupportsResponse
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import DOMAIN
+from .const import DOMAIN, CONF_ALLOW_WRITES
 from .transport import make_transport
 from .diagnostics import derive_plant_metrics, diagnostic_notes
 from .engineering import derive_cop_metrics
@@ -49,7 +49,12 @@ class OumanCoordinator(DataUpdateCoordinator):
             raise UpdateFailed(f"OpenLVI local read failed: {err}") from err
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
-    driver = make_transport(hass, entry.data)
+    # Options can enable/disable allowlisted writes without re-adding a device.
+    # Never persist an enabled mode into the base config during discovery.
+    effective_config = dict(entry.data)
+    effective_config[CONF_ALLOW_WRITES] = bool(entry.options.get(
+        CONF_ALLOW_WRITES, entry.data.get(CONF_ALLOW_WRITES, False)))
+    driver = make_transport(hass, effective_config)
     try:
         await driver.async_connect()
         coordinator = OumanCoordinator(hass, driver, entry)
