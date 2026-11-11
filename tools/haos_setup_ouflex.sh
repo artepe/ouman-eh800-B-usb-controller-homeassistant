@@ -15,20 +15,33 @@ info() { printf '%s\n' "$*"; }
 [[ -f "$COMPONENT/ftp_map.py" ]] || die "Uusi FTP-tuonti puuttuu: paivita OpenHVAC feature/ouflex-advanced-research"
 command -v curl >/dev/null || die "curl puuttuu"
 command -v jq >/dev/null || die "jq puuttuu; asenna/avaa Terminal & SSH, jossa jq on saatavilla"
-[[ -n "${SUPERVISOR_TOKEN:-}" ]] || die "SUPERVISOR_TOKEN puuttuu. Kayta HAOS Terminal & SSH -lisaosaa."
+# Prefer an administrator's own Home Assistant token when present.
+# The Supervisor token is only usable if the SSH add-on explicitly permits
+# homeassistant_api (401 is otherwise expected from its Core API proxy).
+if [[ -n "${HA_TOKEN:-}" ]]; then
+  API_BASE="${HA_API_BASE:-http://192.168.10.231:8123/api}"
+  API_TOKEN="$HA_TOKEN"
+  AUTH_MODE="personal"
+elif [[ -n "${SUPERVISOR_TOKEN:-}" ]]; then
+  API_BASE="http://supervisor/core/api"
+  API_TOKEN="$SUPERVISOR_TOKEN"
+  AUTH_MODE="supervisor"
+else
+  die "API-token puuttuu. Luo Home Assistantin profiilista Long-Lived Access Token ja kaynnista HA_TOKEN-muuttujalla."
+fi
 
 api() {
   local method="$1" endpoint="$2" payload="${3:-}"
   if [[ "$method" == GET ]]; then
-    curl -fsS --connect-timeout 5 --max-time 30 \
-      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
-      "http://supervisor/core/api$endpoint"
+    curl -fsS --connect-timeout 5 --max-time 40 \
+      -H "Authorization: Bearer $API_TOKEN" \
+      "$API_BASE$endpoint"
   else
     curl -fsS --connect-timeout 5 --max-time 120 \
-      -H "Authorization: Bearer $SUPERVISOR_TOKEN" \
+      -H "Authorization: Bearer $API_TOKEN" \
       -H "Content-Type: application/json" \
       -X POST --data-binary "$payload" \
-      "http://supervisor/core/api$endpoint"
+      "$API_BASE$endpoint"
   fi
 }
 
@@ -37,7 +50,12 @@ summary() {
 }
 
 info "=== Home Assistant API ==="
-api GET "/config" >/dev/null || die "Core API -yhteys ei toimi. SSH-lisaosalta voi puuttua homeassistant_api-oikeus."
+if ! api GET "/config" >/dev/null; then
+  if [[ "$AUTH_MODE" == "supervisor" ]]; then
+    die "SSH-lisaosan Supervisor-token ei paase Core APIin (401). Luo yllapitajan Long-Lived Access Token ja anna se HA_TOKEN-muuttujana; kayta suoraa Core API -osoitetta."
+  fi
+  die "Home Assistant API -yhteys epaonnistui. Tarkista tokenin oikeudet ja HA_API_BASE (oletus http://192.168.10.231:8123/api)."
+fi
 info "API-yhteys OK."
 
 info "=== Haetaan Ouflex-asennukset ==="
