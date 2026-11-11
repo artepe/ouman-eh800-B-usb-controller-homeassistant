@@ -6,7 +6,7 @@ Local ESPHome relay example for the traditional Tehowatti electric boiler's NO t
 
 **Validation:** manufacturer-documented / hardware-unverified  
 **Module:** jaspi-tehowatti-contact  
-**Source commit:** 723d2e635ad6f405ad796384619af98df8b71343
+**Source commit:** 71b6ac3d654735f476dbd939f047b03b2d434b98
 
 ## Install
 
