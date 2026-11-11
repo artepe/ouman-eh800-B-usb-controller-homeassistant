@@ -80,4 +80,7 @@ class OuflexCoordinator(DataUpdateCoordinator):
             raise ValueError('Point is not physically verified and enabled for writing')
         async with self.lock:
             self.last_write = await self.hass.async_add_executor_job(self.session.write, point.key, value, 16)
+        # Publish the confirmed device read-back immediately; HA may debounce
+        # a full refresh when several controls are used in quick succession.
+        self.async_set_updated_data({**(self.data or {}), point.key: self.last_write["interpreted"]})
         await self.async_request_refresh()
