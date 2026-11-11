@@ -13,7 +13,7 @@ Swedish, Estonian, Polish and Russian. [Language guide](../docs/LOCALIZATION.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](../LICENSE)
 
 > [!IMPORTANT]
-> **OpenLVI Bridge is experimental (0.4.3-beta.1).** Automated tests have passed, but
+> **OpenLVI Bridge is experimental (0.5.0-beta.1).** Automated tests have passed, but
 > the multi-vendor drivers **have not been validated on physical controllers**.
 > The separate **Ouman EH-800B USB v0.1.2** integration is the last version
 > reported working on the project's actual EH-800B. Do not replace a working
@@ -37,15 +37,11 @@ requiring a vendor cloud service for supported interfaces.
   validated command. Other models require their separate write opt-in.
   PID 56/57/58, manual valve 92 and unknown properties remain excluded.
   Never bypass native controller safety interlocks.
-- **English AI guide:** automatic read-only baseline, on-device review button
-  and optional local Ollama Qwen2.5 0.5B to explain settings. The AI does
-  **not** write heating controller settings. [Guide](../docs/OPENLVI_AI_GUIDE.md).
 - **Tools:** manually reviewed CSV/XML → read-only Modbus JSON point maps,
   2.5D isometric SCADA card, and *rule-based* advisory energy diagnostics.
-  **No autonomous AI equipment control or full 3D digital twin is included.**
 
 - **New manufacturer research:** verified documentation links and candidate registers for
-  NIBE S-series, MyVallox, extended Swegon CASA, Danfoss ECL, Corrigo 5,
+  MyVallox, extended Swegon CASA, Danfoss ECL, Corrigo 5,
   Grundfos, Wilo and others; **not automatically installed as working
   controllers**. See [source map](../docs/REGISTER_AND_CONTROL_SOURCE_MAP.md).
 - **LoRaWAN research:** Milesight UG65, ChirpStack v4 and The Things Stack v3
@@ -67,10 +63,9 @@ requiring a vendor cloud service for supported interfaces.
   COP, plus refrigerant thermodynamic cycle estimate from real enthalpies.
   No fictional flow rate or refrigerant states.
   [COP guide](../docs/THERMAL_AND_REFRIGERANT_COP.md).
-- **Finland device catalog:** Ouman, Siemens, Honeywell, Uponor, Roth,
-  Wavin, Danfoss, Resideo and more, with documented interfaces,
-  compatibility limits and links.
-  [Manufacturer catalog](../docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md).
+- **Device support list:** built-in, possible (own register map) and
+  removed devices, with sources and the integration to use instead.
+  [Device support](../docs/DEVICE_SUPPORT.md).
 
 ## Supported interfaces and validation status
 
@@ -84,7 +79,7 @@ requiring a vendor cloud service for supported interfaces.
 | **Regin Corrigo E Ventilation 3.2** | Read-only Modbus temperature/airflow subset | Automated tests only |
 | **BACnet/IP equipment** | Read-only target-device object discovery (up to 32 points) or supplied point list | Not yet verified on a real BACnet controller |
 | **Kamstrup MULTICAL 403/603/803** | Wired serial M-Bus telegram decoding through powered M-Bus master | Not yet verified on a real meter |
-| **Grundfos, Wilo, Belimo, Schneider, Siemens, Fidelix, Produal, Koja, Enervent, Vallox, NIBE and others** | Model selections, generic Modbus/BACnet connection with a *site-specific read-only point map* | **Not plug-and-play**; hardware/options vary |
+| **Grundfos, Wilo, Belimo, Schneider, Siemens, Fidelix, Produal, Enervent, Vallox and others** | Model selections, generic Modbus/BACnet connection with a *site-specific read-only point map* | **Not plug-and-play**; hardware/options vary |
 
 **A name in the setup wizard does not mean that every model is fully
 integrated.** Verify the device firmware, Modbus point list, BACnet object
@@ -147,7 +142,7 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 
 | Resource | Purpose |
 |---|---|
-| [Finland BMS / floor heating manufacturer catalog](../docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) | Uponor, Roth, Tosibox, Siemens, Honeywell, Ouman, Wavin and additional Finnish market devices |
+| [Device support list](../docs/DEVICE_SUPPORT.md) | Supported, possible and removed devices with sources and alternatives |
 | [Sustained CO2 notification blueprint](../blueprints/automation/openlvi/co2_high_alert.yaml) | Independent high-CO2 notification without fan writes |
 | [R290 and refrigerant property calculator](../tools/refrigerant_state_calculator.py) | Optional offline CoolProp state analysis from measured absolute P/T |
 | [CO2 auxiliary 0-10 V fan blueprint](../blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml) | Manual-enable, CO2 ramp and cold weather auxiliary fan cutoff |
@@ -162,7 +157,6 @@ Do not assume HACS compatibility or automatic detection of every manufacturer.
 | [CSV/XML point-map importer](../tools/openlvi_pointmap_import.py) | Converts reviewed vendor point tables to read-only JSON |
 | [Stable EH-800B v0.1.2](../docs/STABLE_RELEASE_v0.1.2.md) | USB integration with real-device test history |
 | [PID/valve caution](../docs/PID_KNOWN_ISSUES.md) | Known risks of legacy writable PID properties |
-| [English AI advisor and Ollama setup](../docs/OPENLVI_AI_GUIDE.md) | Optional small model, button, sensor and `openlvi.ask_assistant` action |
 | [Changelog](../CHANGELOG.md) and [contributing](../CONTRIBUTING.md) | Development status and safe additions |
 
 ## Safety boundaries
@@ -182,7 +176,7 @@ correct sensor placement, and a separately decoded volume-flow measurement.
 
 ## Status and license
 
-- **OpenLVI Bridge:** `custom_components/openlvi` — **0.4.3-beta.1**,
+- **OpenLVI Bridge:** `custom_components/openlvi` — **0.5.0-beta.1**,
   experimental, in the main branch; real-hardware acceptance tests pending.
 - **Ouman USB:** `custom_components/ouman_eh800` — **0.1.2**,
   last physically tested installation version. Both remain separate.

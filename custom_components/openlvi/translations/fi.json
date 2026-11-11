@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Valitse säädinmalli",
-        "description": "Valitse tarkka malli ja ohjelmistoversio. EH-800B USB:n hyväksytyt L1-säädöt näkyvät automaattisesti; muut tarvitsevat erillisen kirjoitusluvan.",
+        "description": "Valitse tarkka malli ja ohjelmistoversio. ✓ = valmis lukukartta tai ajuri dokumentoidulle ohjelmistoversiolle. Muille malleille tarvitaan oma tarkistettu rekisterikartta tai BACnet/IP-objektien haku. EH-800B USB:n hyväksytyt L1-säädöt näkyvät automaattisesti; muut tarvitsevat erillisen kirjoitusluvan.",
         "data": {
           "model": "Malli",
           "firmware": "Ohjelmistoversio",
@@ -54,18 +54,12 @@
   "options": {
     "step": {
       "init": {
-        "title": "Paikallinen englanninkielinen AI-opas",
-        "description": "Valinnainen paikallisverkon Ollama. Englanninkielinen perusopas toimii ilmankin. AI ei muuta säätimen asetuksia.",
+        "title": "Kirjoituslupa",
+        "description": "Asetusarvojen kirjoitus on oletuksena pois. Ota se käyttöön vasta, kun arvot on tarkistettu säätimeltä.",
         "data": {
-          "ai_url": "Paikallinen Ollama-osoite (esim. http://192.168.10.5:11434)",
-          "ai_model": "Pieni paikallinen malli",
-          "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein",
           "allow_writes": "Salli tarkistetut asetusarvokirjoitukset (oletuksena pois, tuntemattomat pisteet vain luettavia)"
         }
       }
-    },
-    "error": {
-      "invalid_ai_connection": "Vain paikallisverkon http://IPv4:11434 sallitaan"
     }
   },
   "entity": {
@@ -163,9 +157,6 @@
       "diagnostics": {
         "name": "OpenLVI-diagnostiikka"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI:n englanninkielinen AI-opas"
-      },
       "derived_water_heating_power_kw": {
         "name": "Vesipuolen lämmitysteho"
       },
@@ -218,11 +209,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 hienosäätö"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Tarkista asetukset englanniksi"
       }
     }
   }

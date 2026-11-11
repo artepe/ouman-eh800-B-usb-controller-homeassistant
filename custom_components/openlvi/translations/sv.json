@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Välj regulatormodell",
-        "description": "Välj exakt modell och firmware. EH-800B USB visar granskade L1-inställningar automatiskt; andra kräver uttryckligt skrivgodkännande.",
+        "description": "Välj exakt modell och firmware. ✓ = inbyggd läskarta eller drivrutin för dokumenterad firmware. Andra modeller kräver en egen verifierad registerkarta eller identifiering av BACnet/IP-objekt. EH-800B USB visar granskade L1-inställningar automatiskt; andra kräver uttryckligt skrivgodkännande.",
         "data": {
           "model": "Modell",
           "firmware": "Firmware",
@@ -54,18 +54,12 @@
   "options": {
     "step": {
       "init": {
-        "title": "Lokal AI-guide på engelska",
-        "description": "Valfri Ollama på privat nätverk. Den engelska grundguiden fungerar utan Ollama. AI ändrar inga inställningar.",
+        "title": "Skrivbehörighet",
+        "description": "Skrivning av börvärden är avstängd som standard. Aktivera den först när värdena har kontrollerats på regulatorn.",
         "data": {
-          "ai_url": "Lokal Ollama-adress (t.ex. http://192.168.10.5:11434)",
-          "ai_model": "Liten lokal modell",
-          "ai_auto_review": "Granska mätningar vid start och ungefär var sjätte timme",
           "allow_writes": "Tillåt granskade börvärdesskrivningar (av som standard, okända punkter skrivskyddade)"
         }
       }
-    },
-    "error": {
-      "invalid_ai_connection": "Endast privat http://IPv4:11434 stöds"
     }
   },
   "entity": {
@@ -163,9 +157,6 @@
       "diagnostics": {
         "name": "OpenLVI-diagnostik"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI AI-guide på engelska"
-      },
       "derived_water_heating_power_kw": {
         "name": "Vattensidans värmeeffekt"
       },
@@ -218,11 +209,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 finjustering"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Granska inställningar på engelska"
       }
     }
   }

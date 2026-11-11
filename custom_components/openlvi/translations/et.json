@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Vali kontrolleri mudel",
-        "description": "Vali täpne mudel ja püsivara. EH-800B USB kontrollitud L1 seaded kuvatakse automaatselt; teistel on vaja kirjutamisluba.",
+        "description": "Vali täpne mudel ja püsivara. ✓ = sisseehitatud lugemiskaart või draiver dokumenteeritud püsivarale. Teised mudelid vajavad oma kontrollitud registrikaarti või BACnet/IP objektide tuvastamist. EH-800B USB kontrollitud L1 seaded kuvatakse automaatselt; teistel on vaja kirjutamisluba.",
         "data": {
           "model": "Mudel",
           "firmware": "Püsivara",
@@ -54,18 +54,12 @@
   "options": {
     "step": {
       "init": {
-        "title": "Kohalik ingliskeelne AI-juhend",
-        "description": "Valikuline Ollama eravõrgus. Ingliskeelne põhijuhend töötab ka ilma Ollamata. AI ei muuda kontrolleri seadeid.",
+        "title": "Kirjutusõigus",
+        "description": "Seadeväärtuste kirjutamine on vaikimisi väljas. Luba see alles pärast väärtuste kontrollimist kontrolleris.",
         "data": {
-          "ai_url": "Kohalik Ollama aadress (nt http://192.168.10.5:11434)",
-          "ai_model": "Väike kohalik mudel",
-          "ai_auto_review": "Kontrolli mõõtmisi käivitamisel ja umbes iga kuue tunni järel",
           "allow_writes": "Luba kontrollitud seadeväärtuste kirjutamine (vaikimisi väljas; tundmatud punktid kirjutuskaitstud)"
         }
       }
-    },
-    "error": {
-      "invalid_ai_connection": "Lubatud on ainult privaatne http://IPv4:11434"
     }
   },
   "entity": {
@@ -163,9 +157,6 @@
       "diagnostics": {
         "name": "OpenLVI diagnostika"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI ingliskeelne AI-juhend"
-      },
       "derived_water_heating_power_kw": {
         "name": "Veepoole küttevõimsus"
       },
@@ -218,11 +209,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 peenhäälestus"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Vaata seadistused inglise keeles üle"
       }
     }
   }

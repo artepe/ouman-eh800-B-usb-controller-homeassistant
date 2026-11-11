@@ -46,18 +46,6 @@ does **not** certify that all 770 points are writable or safe. Do not
 mass-change parameters or use uncontrolled pörssisähkö automation to
 override compressor / EEV / defrost protections.
 
-## DEVIreg 330 and dry-contact modules
-
-DEVIreg 330 (+5…+45°C) has no writeable Modbus interface. Price
-setback is implemented by an **already commissioned** mains-rated
-relay/thermostat timer input. Follow the separate one-circuit blueprint;
-there is no generic Modbus write toggle to turn on.
-
-Jäspi Tehowatti contact and Roth Touchline PL monitor are **separate
-hardware/blueprint examples**, not writeable register interfaces. Their
-behavior and physical wiring must remain governed by their respective
-documented safety controls.
-
 ## Legacy Ouman EH-800B 0.1.2
 
 The pinned **legacy v0.1.2** YAML platform is deliberately unchanged.

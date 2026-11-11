@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Wybierz model sterownika",
-        "description": "Wybierz dokładny model i firmware. Sprawdzone ustawienia L1 EH-800B USB są udostępniane automatycznie; inne wymagają zgody na zapis.",
+        "description": "Wybierz dokładny model i firmware. ✓ = wbudowana mapa odczytu lub sterownik dla udokumentowanego firmware. Inne modele wymagają własnej zweryfikowanej mapy rejestrów lub wykrywania obiektów BACnet/IP. Sprawdzone ustawienia L1 EH-800B USB są udostępniane automatycznie; inne wymagają zgody na zapis.",
         "data": {
           "model": "Model",
           "firmware": "Firmware",
@@ -54,18 +54,12 @@
   "options": {
     "step": {
       "init": {
-        "title": "Lokalny asystent AI po angielsku",
-        "description": "Opcjonalny lokalny Ollama. Angielski przewodnik podstawowy działa bez Ollama. AI nie zmienia ustawień.",
+        "title": "Uprawnienia zapisu",
+        "description": "Zapis nastaw jest domyślnie wyłączony. Włącz go dopiero po sprawdzeniu wartości na sterowniku.",
         "data": {
-          "ai_url": "Lokalny adres Ollama (np. http://192.168.10.5:11434)",
-          "ai_model": "Mały model lokalny",
-          "ai_auto_review": "Sprawdzaj pomiary przy uruchomieniu i około co sześć godzin",
           "allow_writes": "Zezwól na sprawdzone zapisy nastaw (domyślnie wyłączone; nieznane punkty tylko do odczytu)"
         }
       }
-    },
-    "error": {
-      "invalid_ai_connection": "Dozwolony tylko prywatny http://IPv4:11434"
     }
   },
   "entity": {
@@ -163,9 +157,6 @@
       "diagnostics": {
         "name": "Diagnostyka OpenLVI"
       },
-      "english_ai_guide": {
-        "name": "Angielski przewodnik AI OpenLVI"
-      },
       "derived_water_heating_power_kw": {
         "name": "Moc grzewcza po stronie wody"
       },
@@ -218,11 +209,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 korekta precyzyjna"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Sprawdź ustawienia po angielsku"
       }
     }
   }

@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Choose controller model",
-        "description": "Select the exact model and firmware. EH-800B USB exposes its reviewed L1 controls automatically; other controllers require explicit write permission.",
+        "description": "Select the exact model and firmware. ✓ = built-in read-only point map or driver for the documented firmware. Other models need your own verified register map or BACnet/IP object discovery. EH-800B USB exposes its reviewed L1 controls automatically; other controllers require explicit write permission.",
         "data": {
           "model": "Model",
           "firmware": "Firmware",
@@ -54,18 +54,12 @@
   "options": {
     "step": {
       "init": {
-        "title": "Local English AI advisor",
-        "description": "Optional private-LAN Ollama model. An English rule-based guide works without Ollama. AI never changes controller settings.",
+        "title": "Write permission",
+        "description": "Setpoint writes are off by default. Enable them only after confirming the values on the physical controller.",
         "data": {
-          "ai_url": "Local Ollama URL (e.g. http://192.168.10.5:11434)",
-          "ai_model": "Small local model",
-          "ai_auto_review": "Review measurements at startup and about every six hours",
           "allow_writes": "Enable reviewed setpoint writes (off by default; unknown points remain read-only)"
         }
       }
-    },
-    "error": {
-      "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported"
     }
   },
   "entity": {
@@ -163,9 +157,6 @@
       "diagnostics": {
         "name": "OpenLVI diagnostics"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI English AI guide"
-      },
       "derived_water_heating_power_kw": {
         "name": "Water-side heating output"
       },
@@ -218,11 +209,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 fine adjustment"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Review settings in English"
       }
     }
   }

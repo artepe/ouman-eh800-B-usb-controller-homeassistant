@@ -43,5 +43,4 @@ maintainer via [@artepe](https://github.com/artepe).
   secrets. Sanitize diagnostic logs and screenshots before sharing.
 
 The project does not claim automatic discovery of every device, automatic
-safety validation, reliable AI fault diagnosis or autonomous AI-based
-physical control. The optional local model provides advisory text only.
+safety validation, fault diagnosis or autonomous physical control.

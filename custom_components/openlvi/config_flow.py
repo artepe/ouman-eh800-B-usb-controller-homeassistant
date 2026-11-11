@@ -3,23 +3,30 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import selector
 from .const import (
-    DOMAIN, VENDOR_MODELS, CONF_VENDOR, CONF_MODEL, CONF_FIRMWARE,
-    CONF_APPLICATION, CONF_TRANSPORT, CONF_HOST, CONF_PORT, CONF_BAUDRATE,
-    CONF_PARITY, CONF_UNIT_ID, CONF_PROFILE, CONF_ALLOW_WRITES,
+    DOMAIN, VENDOR_MODELS, BUILTIN_SUPPORT_MODELS, CONF_VENDOR, CONF_MODEL,
+    CONF_FIRMWARE, CONF_APPLICATION, CONF_TRANSPORT, CONF_HOST, CONF_PORT,
+    CONF_BAUDRATE, CONF_PARITY, CONF_UNIT_ID, CONF_PROFILE, CONF_ALLOW_WRITES,
     CONF_URL, CONF_USERNAME, CONF_PASSWORD, CONF_BACNET_LOCAL_ADDRESS,
     CONF_BACNET_DEVICE_ID, CONF_BACNET_LOCAL_INSTANCE,
 )
 from .profiles import profile_for
 from .transport import make_transport
-from .ai_guide import (CONF_AI_URL, CONF_AI_MODEL, CONF_AI_AUTO,
-                       DEFAULT_MODEL, validate_local_ai_url, validate_model)
+
+
+def model_options(vendor: str) -> dict[str, str]:
+    """Label models with built-in support; stored model values are unchanged."""
+    return {
+        model: f"{model} ✓" if model in BUILTIN_SUPPORT_MODELS else model
+        for model in VENDOR_MODELS[vendor]
+    }
+
 
 class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     @staticmethod
     def async_get_options_flow(config_entry):
-        return OpenLVIAIOptionsFlow()
+        return OpenLVIOptionsFlow()
 
     def __init__(self):
         self._data = {}
@@ -51,7 +58,7 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="model",
             data_schema=vol.Schema({
-                vol.Required(CONF_MODEL): vol.In(VENDOR_MODELS[self._data[CONF_VENDOR]]),
+                vol.Required(CONF_MODEL): vol.In(model_options(self._data[CONF_VENDOR])),
                 vol.Optional(CONF_FIRMWARE, default=""): str,
                 vol.Optional(CONF_APPLICATION, default=""): str,
                 vol.Optional(CONF_ALLOW_WRITES, default=False): bool,
@@ -179,34 +186,21 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
-    """Configure only the local AI advisor, without re-adding the controller."""
+class OpenLVIOptionsFlow(config_entries.OptionsFlow):
+    """Enable or disable reviewed writes without re-adding the controller."""
 
     async def async_step_init(self, user_input=None):
-        errors = {}
         if user_input is not None:
-            try:
-                url = validate_local_ai_url(user_input.get(CONF_AI_URL, ""))
-                model = validate_model(user_input.get(CONF_AI_MODEL, DEFAULT_MODEL))
-                return self.async_create_entry(
-                    title="", data={
-                        CONF_AI_URL: url,
-                        CONF_AI_MODEL: model,
-                        CONF_AI_AUTO: bool(user_input.get(CONF_AI_AUTO, False)),
-                        CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)),
-                    }
-                )
-            except ValueError:
-                errors["base"] = "invalid_ai_connection"
+            return self.async_create_entry(
+                title="", data={
+                    CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)),
+                }
+            )
         current = self.config_entry.options
         return self.async_show_form(
             step_id="init",
             data_schema=vol.Schema({
-                vol.Optional(CONF_AI_URL, default=current.get(CONF_AI_URL, "")): str,
-                vol.Required(CONF_AI_MODEL, default=current.get(CONF_AI_MODEL, DEFAULT_MODEL)): str,
-                vol.Optional(CONF_AI_AUTO, default=current.get(CONF_AI_AUTO, False)): bool,
                 vol.Optional(CONF_ALLOW_WRITES, default=current.get(
                     CONF_ALLOW_WRITES, self.config_entry.data.get(CONF_ALLOW_WRITES, False))): bool,
             }),
-            errors=errors,
         )

@@ -1,4 +1,4 @@
-"""Contract checks for Danfoss MCX and DEVIreg zone price support."""
+"""Contract checks for read-only Danfoss MCX support."""
 from pathlib import Path
 import importlib.util
 import json
@@ -38,17 +38,6 @@ class DanfossMCXTests(unittest.TestCase):
         self.assertFalse(points[0].writable)
         with self.assertRaises(ValueError):
             profiles.encode(21.0, points[0])
-
-    def test_blueprint_is_one_circuit_and_fails_to_normal(self):
-        p = ROOT / "blueprints/automation/openlvi/devireg330_price_setback.yaml"
-        content = p.read_text(encoding="utf-8")
-        for marker in ("domain: automation", "entity_id: !input setback_switch",
-                       "switch.turn_on", "switch.turn_off", "max_age_minutes",
-                       "platform: homeassistant", "platform: time_pattern",
-                       "not is_number(price)"):
-            self.assertIn(marker, content)
-        self.assertNotIn("modbus.write_register", content)
-        self.assertNotIn("switch.toggle", content)
 
 if __name__ == "__main__":
     unittest.main()

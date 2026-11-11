@@ -47,9 +47,6 @@ automatically maintained from the main project and contain no unrelated modules.
 | **CO₂ Blueprints** | Shelly 0–10 V auxiliary ventilation and CO₂ alerts | Experimental | [Blueprint ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/co2-blueprints) |
 | **OpenLVI SCADA** | Read-only isometric Lovelace visualization | Experimental | [SCADA ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/scada-dashboard) |
 | **ESP32-S3 Ouman Demo** | Prototype controller dashboard and examples | Prototype | [ESP32 ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/esp32-s3-ouman-demo) |
-| **Jäspi Tehowatti dry contact** | ESPHome example: local temperature setback for conventional electric boiler, not Modbus | Documented interface; hardware unverified | [Tehowatti ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/jaspi-tehowatti-contact) |
-| **Roth Touchline PL monitor** | ESPHome sample for passive local heat-source relay status (NO/COM), no per-zone controls | Documented contacts; hardware unverified | [Roth PL ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/roth-touchline-pl-contact-monitor) |
-| **DEVIreg 330 price setback** | Independent circuit price automation via an already commissioned external timer/setback relay | Manufacturer-documented; hardware unverified | [DEVIreg ZIP branch](https://github.com/artepe/Open-HVACBridge-homeassistant/tree/download/devireg330-price-setback) |
 
 **Other download options:** [GitHub Actions module ZIPs](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/workflows/module-packages.yml)
 (build artifacts), [versioned releases](https://github.com/artepe/Open-HVACBridge-homeassistant/releases) (when published)
@@ -75,7 +72,7 @@ and [SHA256 package checksums](docs/DOWNLOADS.md). See the
 
 **Write permission:** Both OpenLVI and Mango Tuya Local default to read-only for device setpoints. Open **Settings → Devices & services → (integration) → Configure**, explicitly enable **Allow reviewed writes** or **Enable parameter writes**, and save. Only the specific driver's existing bounded write operations become available. No permission toggle creates undocumented Modbus registers, grants MCX coil control, or changes physical safety protections. See [write permission guide](docs/WRITE_PERMISSION.md).
 
-Installation guides: [Danfoss MCX / DEVIreg 330](docs/DANFOSS_MCX_DEVIREG330.md) · [Roth Touchline PL](docs/ROTH_TOUCHLINE_PL.md) · [Jäspi Tehowatti](docs/JASPI_TEHOWATTI.md) · [OpenLVI](docs/OPENLVI_BRIDGE.md) ·
+Installation guides: [OpenLVI](docs/OPENLVI_BRIDGE.md) · [Danfoss MCX](docs/DANFOSS_MCX.md) · [Jäspi Tehowatti AIR](docs/JASPI_TEHOWATTI.md) ·
 [Mango Tuya](docs/MANGO_TUYA_LOCAL.md) ·
 [Ouman EH-800B](docs/STABLE_RELEASE_v0.1.2.md) ·
 [SCADA](docs/OPENLVI_EXTENSIONS.md) ·
@@ -90,18 +87,19 @@ Support is tied to a **specific protocol and firmware**, not merely a brand name
 | Ouman EH-800B | USB monitoring; legacy and experimental control paths | Legacy tested on one unit |
 | Mango Energy R290 heat pump | Captured Tuya 3.5 profile with 770 parameter routes | Partial device evidence; other routes experimental |
 | Ouman EH-800, A203, S203, C203, H23 | HTTP / limited model-specific Modbus profiles | Experimental |
-| Swegon CASA Genius, Danfoss ECL, Regin Corrigo | Documented Modbus subsets | Automated tests only |
-| BACnet/IP and wired M-Bus devices | Selected read-only discovery / telemetry | Experimental |
-| Jäspi Tehowatti electric boiler | Isolated NO dry-contact temperature setback (Shelly / ESPHome) | Manufacturer documented, not hardware tested |
-| Jäspi Tehowatti AIR with MODBUS 40 | Modbus RTU; requires user-provided verified read-only register list | Vendor model in OpenLVI; no automatic point map |
-| Roth Touchline PL, 8-channel 230V | Standalone ESPHome read-only monitoring of unused isolated heat-source relay; **no Modbus** | Manufacturer-documented output; hardware unverified |
-| Danfoss MCX programmable controllers | Optional RS485 Modbus RTU with application-exported, operator-supplied read-only point list | Hardware/program unknown; no automatic register map or writes |
-| DEVIreg 330 (+5...+45 C) | External 5 C setback, via separate correctly installed relay and per-zone HA price blueprint; **not Modbus** | Manufacturer-documented feature; hardware unverified |
-| Vallox, Siemens, Honeywell, NIBE, Uponor, Tosibox and others | Candidate integrations and/or site-specific maps | Research; not universal plug-and-play |
+| Swegon CASA Genius, Danfoss ECL, Regin Corrigo E | Documented Modbus subsets | Automated tests only |
+| Uponor Smatrix Base PRO X-148, Roth Touchline SL, Tosibox | Documented read-only Modbus subsets | Automated tests only |
+| Kamstrup MULTICAL 403/603/803 | Wired M-Bus telegrams | Not verified on a real meter |
+| Other listed Modbus and BACnet/IP controllers (e.g. Ouflex, Danfoss MCX, Vallox, Siemens Desigo, Wavin Sentio) | Your own verified read-only register map, or BACnet/IP object discovery | No built-in map; not plug-and-play |
+
+Devices without a local Modbus, BACnet/IP or M-Bus route (for example Danfoss
+Icon2, Evohome, KNX-only and contact-only devices) are not supported; the
+[device support list](docs/DEVICE_SUPPORT.md) names the integration to use
+instead.
 
 For exact point maps, limitations and references, read the
-[engineering reference](docs/ENGINEERING_REFERENCE.md),
-[manufacturer catalog](docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md) and
+[device support list](docs/DEVICE_SUPPORT.md),
+[engineering reference](docs/ENGINEERING_REFERENCE.md) and
 [register/source map](docs/REGISTER_AND_CONTROL_SOURCE_MAP.md).
 
 ## Architecture
