@@ -4,7 +4,7 @@
 
 This project bundles the **complete Home Assistant component** `custom_components/mango_tuya_local`
 from [Mango Tuya Local](https://github.com/artepe/chinaheatpump-tuya-local-home-assistant)
-(archive source revision `beca3f9fd5cb72ca5b1d0420959ddadb91755a6b`, upstream version **0.2.1 beta**).
+(original imported source revision `beca3f9fd5cb72ca5b1d0420959ddadb91755a6b`; local opt-in-write updates aligned with upstream development version **0.2.2 beta**).
 The upstream implementation is MIT licensed; see [copied license](third_party/mango-tuya-local.LICENSE).
 Changes to the source integration should be compared with upstream before updating.
 
@@ -39,9 +39,12 @@ USB integrations nor building automation profiles are modified.
    **private** and must not be committed to GitHub. The upstream repository also
    documents its Pi session exporter for environments where that data already
    exists. Do not copy secrets into the Open HVAC repository.
-5. Allow the first full parameter scan to complete. Check read-only telemetry
-   against the physical controller and confirm the LAN link before attempting
-   any parameter write.
+5. Allow the first full parameter scan to complete. Read-only parameter
+   monitoring works without write access. To enable actual edits, open
+   **Settings → Devices & services → Mango Tuya Local → Configure**
+   and explicitly enable **Enable parameter writes**; save to reload. The
+   default is OFF, and the setting can be switched OFF again. Confirm the
+   LAN link and preserve device safety limits before attempting any write.
 6. The **Mango Control** sidebar appears automatically. No separate OpenLVI
    profile or YAML configuration is needed.
 
