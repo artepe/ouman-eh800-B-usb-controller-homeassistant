@@ -240,6 +240,13 @@ class UsbDriver:
 
 def make_transport(hass, data):
     protocol = data[CONF_TRANSPORT]
+    # The classic Ouflex exposes a per-installation Ounet Modbus point map
+    # via read-only FTP. An already configured Discovery Mode entry can now
+    # load its real 240 points without adding a second integration or API token.
+    if (protocol == "modbus_tcp" and data.get(CONF_MODEL) == "Ouflex"
+            and not str(data.get(CONF_PROFILE, "")).strip()):
+        from .ouflex_native import OuflexNativeDriver
+        return OuflexNativeDriver(hass, data)
     if data.get(CONF_DISCOVERY, False):
         if protocol != "modbus_tcp":
             raise ValueError("Discovery Mode requires Modbus TCP")
