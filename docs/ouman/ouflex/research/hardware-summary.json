@@ -1,0 +1,37 @@
+{
+  "scope": "Physical Ouflex read responses; no hardware writes or display comparison",
+  "device_version": "2.3.3",
+  "application_version": "1.1.2",
+  "documented_points": 240,
+  "successful_point_reads": 240,
+  "unique_scalar_words": 379,
+  "scalar_datatypes": {
+    "u16": 99,
+    "s32": 139,
+    "s16": 2
+  },
+  "entity_candidates": {
+    "sensor": 203,
+    "binary_sensor": 16,
+    "alarm": 21
+  },
+  "calendar_words": 720,
+  "calendar_block_reads": 24,
+  "calendar_successful_reads": 24,
+  "point_read_duration_ms": {
+    "min": 34.178,
+    "max": 428.744,
+    "mean": 94.541
+  },
+  "function_probes": {
+    "FC01": "exception 1",
+    "FC02": "exception 1",
+    "FC03": "success",
+    "FC04": "exception 1",
+    "FC43/14": "exception 1"
+  },
+  "unit_2": "No response to FC03 PDU 0 count 1; no broader unit scan",
+  "writes_performed": false,
+  "lcd_modified": false,
+  "raw_evidence_published": false
+}

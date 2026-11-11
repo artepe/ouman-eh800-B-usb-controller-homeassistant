@@ -1,0 +1,74 @@
+{
+  "title": "Open HVAC – Ouman Ouflex (experimental)",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Ouflex and import application points",
+        "description": "Automatically read the device-specific Ounet XML via private LAN FTP; do not enter a JSON map unless disabling automatic import. All imported points start read-only.",
+        "data": {
+          "host": "IP address",
+          "port": "TCP port",
+          "unit_id": "Unit ID",
+          "map_json": "Existing normalized map JSON (manual mode only)",
+          "auto_ftp_map": "Automatically import all Ouflex points from FTP"
+        }
+      }
+    },
+    "error": {
+      "invalid_map": "Invalid or unsupported application map",
+      "cannot_connect": "No valid Modbus response from first mapped point"
+    },
+    "abort": {
+      "already_configured": "This endpoint is already configured"
+    }
+  },
+  "options": {
+    "step": {
+      "write_access": {
+        "title": "Ouflex write access",
+        "description": "Controls require an exact map policy and individual physical verification. Imported RW flags alone do not enable writes.",
+        "data": {
+          "allow_writes": "Enable verified register writes",
+          "write_policy": "Reviewed write policy JSON"
+        }
+      },
+      "init": {
+        "title": "Ouflex registers",
+        "menu_options": {
+          "register_browser": "Select mapped registers",
+          "register_map": "Import application description",
+          "write_access": "Verified write access",
+          "refresh_from_ftp": "Refresh all points from Ouflex FTP"
+        }
+      },
+      "register_browser": {
+        "title": "Register browser",
+        "description": "Select documented points to create entities. Labels include source address, address base and type. Writes require separate verification.",
+        "data": {
+          "selected_points": "Points to add to Home Assistant"
+        }
+      },
+      "register_map": {
+        "title": "Import register map",
+        "description": "Paste normalized JSON or the observed Ounet controllertemplate XML. Import disables writes and resets the selection. Site details are discarded.",
+        "data": {
+          "map_json": "JSON map or Ounet XML",
+          "firmware": "Firmware from deviceversion.txt"
+        }
+      },
+      "refresh_from_ftp": {
+        "title": "Refresh Ouflex application map from FTP",
+        "description": "Fetch the Ouflex point map directly from its private LAN FTP server. Replaces the current map and selection, and disables all write permissions. No Modbus writes or FTP uploads.",
+        "data": {
+          "confirm": "Confirm read-only import of all documented points"
+        }
+      }
+    },
+    "error": {
+      "invalid_policy": "Write policy must match the application identity and map digest",
+      "invalid_map": "Invalid map or point selection",
+      "not_confirmed": "Confirm the import first",
+      "ftp_import_failed": "Could not read or parse the Ouflex FTP application map"
+    }
+  }
+}

@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "project": "Open HVAC / OpenLVI Bridge",
+  "project": "Open HVAC",
   "modules": [
     {
       "slug": "openlvi-bridge",
-      "name": "OpenLVI Bridge Core",
+      "name": "Open HVAC Bridge Core",
       "kind": "integration",
       "status": "experimental",
       "summary": "Multi-vendor local Modbus, USB, BACnet and M-Bus bridge. Ouman USB protocol reader bundled.",
@@ -120,6 +120,19 @@
       "documentation": "docs/DANFOSS_MCX_DEVIREG330.md",
       "target": "/config/blueprints/automation/openlvi",
       "caution": "No Modbus on DEVIreg 330. The external timer input is mains-referenced; install a correctly rated and physically fail-safe relay through qualified electrical work. Restores normal mode on stale prices but cannot protect against HA outages."
+    },
+    {
+      "slug": "ouman-ouflex",
+      "name": "Open HVAC Ouflex",
+      "kind": "integration",
+      "status": "experimental / hardware-read verified",
+      "summary": "Ouman Ouflex app-specific Modbus integration: read-only automatic FTP Ounet XML point map import and register browser; protected writes only after verification.",
+      "paths": [
+        "custom_components/ouman_ouflex"
+      ],
+      "documentation": "docs/ouman/ouflex/research/README.md",
+      "target": "/config",
+      "caution": "FTP autoload requires anonymous read access on private LAN and per-device Ounet XML. Writes disabled until separately physically verified."
     }
   ]
 }

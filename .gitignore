@@ -28,3 +28,7 @@ secrets.yaml
 
 # Locally generated module ZIPs
 dist/
+
+
+# Private Ouflex evidence archives (USB serials, site data, application files)
+ouflex-results/
