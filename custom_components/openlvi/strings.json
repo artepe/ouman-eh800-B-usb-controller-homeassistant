@@ -106,19 +106,19 @@
         "description": "```json\n{diagnostics}\n```"
       },
       "ouflex_write": {
-        "title": "Ouflex Modbus writing — one verified setpoint",
-        "description": "Choose one documented numeric holding register. Enable only after its Modbus write access has been verified and the controller is physically isolated from live actuators. Writes use FC06/FC16 with read-back; on failure restoration is attempted. Import alone never authorizes writes.",
+        "title": "Ouflex — writable setpoint controls",
+        "description": "Select up to 64 documented numeric holding points and expose them as Home Assistant number controls. Only use on a physically isolated test controller, after independently verifying each selected point's Modbus write behavior, scaling and limits. Values are read back; a failed write triggers a best-effort restore. Clearing Enable disables all Ouflex writes.",
         "data": {
-          "ouflex_write_enabled": "Enable the selected setpoint for writing",
-          "ouflex_write_key": "Setpoint from this Ouflex application map",
-          "ouflex_write_isolated": "I have physically disconnected all active outputs and control connections",
-          "ouflex_write_reviewed": "I have independently verified the selected register's writable function, range and meaning"
+          "ouflex_write_enabled": "Enable selected Ouflex setpoint controls",
+          "ouflex_write_keys": "Choose setpoints (multiple selections)",
+          "ouflex_write_isolated": "I confirm this Ouflex is physically disconnected from controlled equipment",
+          "ouflex_write_reviewed": "I independently checked all selected points and their write limits"
         }
       }
     },
     "error": {
       "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported",
-      "invalid_profile": "Select one confirmed setpoint and acknowledge both physical isolation and register verification",
+      "invalid_profile": "Select 1–64 verified setpoints and confirm physical isolation and write verification",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
     },
