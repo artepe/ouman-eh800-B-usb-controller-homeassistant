@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Välj regulatormodell",
-        "description": "Välj exakt modell och firmware. EH-800B USB visar granskade L1-inställningar automatiskt; andra kräver uttryckligt skrivgodkännande.",
+        "description": "Välj exakt modell och firmware. ✓ = inbyggd läskarta eller drivrutin för dokumenterad firmware. Andra modeller kräver en egen verifierad registerkarta eller identifiering av BACnet/IP-objekt. EH-800B USB visar granskade L1-inställningar automatiskt; andra kräver uttryckligt skrivgodkännande.",
         "data": {
           "model": "Modell",
           "firmware": "Firmware",
@@ -60,22 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Lokal AI-guide på engelska",
-        "description": "Valfri Ollama på privat nätverk. Den engelska grundguiden fungerar utan Ollama. AI ändrar inga inställningar.",
-        "data": {
-          "ai_url": "Lokal Ollama-adress (t.ex. http://192.168.10.5:11434)",
-          "ai_model": "Liten lokal modell",
-          "ai_auto_review": "Granska mätningar vid start och ungefär var sjätte timme",
-          "allow_writes": "Tillåt granskade börvärdesskrivningar (av som standard, okända punkter skrivskyddade)"
-        }
-      },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "OpenLVI — inställningar och undersökning",
         "menu_options": {
-          "register_map": "Register map and Unit ID",
-          "research": "Modbus register research tool",
-          "advisor": "Local AI advisor"
+          "register_map": "Registerkarta och Unit ID",
+          "research": "Verktyg för Modbus-registerundersökning",
+          "ouflex_write": "Ouflex: aktivera granskad skrivning av börvärden",
+          "writes": "Skrivbehörighet"
         }
       },
       "register_map": {
@@ -103,13 +94,32 @@
       "research_result": {
         "title": "Research results",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
+        "title": "Skrivbehörighet",
+        "description": "Skrivning av börvärden är avstängd som standard. Aktivera den först när värdena har kontrollerats på regulatorn.",
+        "data": {
+          "allow_writes": "Tillåt granskade börvärdesskrivningar (av som standard, okända punkter skrivskyddade)"
+        }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — skrivbara börvärden",
+        "description": "Välj upp till 64 dokumenterade numeriska holding-punkter som visas som nummerkontroller i Home Assistant. Använd endast på en fysiskt isolerad testregulator, efter att varje vald punkts Modbus-skrivning, skalning och gränser har verifierats separat. Värden läses tillbaka; en misslyckad skrivning försöker återställa det tidigare värdet. Om aktiveringen tas bort stängs alla Ouflex-skrivningar av.",
+        "data": {
+          "ouflex_write_enabled": "Aktivera valda Ouflex-börvärden",
+          "ouflex_write_keys": "Välj börvärden (flera val)",
+          "ouflex_write_isolated": "Jag bekräftar att denna Ouflex är fysiskt frånkopplad från styrd utrustning",
+          "ouflex_write_reviewed": "Jag har själv kontrollerat alla valda punkter och deras skrivgränser"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Endast privat http://IPv4:11434 stöds",
       "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Det gick inte att läsa Ouflex-XML från lokal FTP"
     }
   },
   "entity": {
@@ -207,9 +217,6 @@
       "diagnostics": {
         "name": "OpenLVI-diagnostik"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI AI-guide på engelska"
-      },
       "derived_water_heating_power_kw": {
         "name": "Vattensidans värmeeffekt"
       },
@@ -265,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 finjustering"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Granska inställningar på engelska"
       }
     }
   }

@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Choose controller model",
-        "description": "Select the exact model and firmware. EH-800B USB exposes its reviewed L1 controls automatically; other controllers require explicit write permission.",
+        "description": "Select the exact model and firmware. ✓ = built-in read-only point map or driver for the documented firmware. Other models need your own verified register map or BACnet/IP object discovery. EH-800B USB exposes its reviewed L1 controls automatically; other controllers require explicit write permission.",
         "data": {
           "model": "Model",
           "firmware": "Firmware",
@@ -60,23 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Local English AI advisor",
-        "description": "Optional private-LAN Ollama model. An English rule-based guide works without Ollama. AI never changes controller settings.",
-        "data": {
-          "ai_url": "Local Ollama URL (e.g. http://192.168.10.5:11434)",
-          "ai_model": "Small local model",
-          "ai_auto_review": "Review measurements at startup and about every six hours",
-          "allow_writes": "Enable reviewed setpoint writes (off by default; unknown points remain read-only)"
-        }
-      },
       "init": {
         "title": "Open HVAC — settings and research",
         "menu_options": {
           "register_map": "Register map and Unit ID",
           "research": "Modbus register research tool",
-          "advisor": "Local AI advisor",
-          "ouflex_write": "Ouflex: enable reviewed setpoint writing"
+          "ouflex_write": "Ouflex: enable reviewed setpoint writing",
+          "writes": "Write permission"
         }
       },
       "register_map": {
@@ -114,10 +104,16 @@
           "ouflex_write_isolated": "I confirm this Ouflex is physically disconnected from controlled equipment",
           "ouflex_write_reviewed": "I independently checked all selected points and their write limits"
         }
+      },
+      "writes": {
+        "title": "Write permission",
+        "description": "Setpoint writes are off by default. Enable them only after confirming the values on the physical controller.",
+        "data": {
+          "allow_writes": "Enable reviewed setpoint writes (off by default; unknown points remain read-only)"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported",
       "invalid_profile": "Select 1–64 verified setpoints and confirm physical isolation and write verification",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
@@ -221,9 +217,6 @@
       "diagnostics": {
         "name": "Open HVAC diagnostics"
       },
-      "english_ai_guide": {
-        "name": "Open HVAC English AI guide"
-      },
       "derived_water_heating_power_kw": {
         "name": "Water-side heating output"
       },
@@ -279,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 fine adjustment"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Review settings in English"
       }
     }
   }

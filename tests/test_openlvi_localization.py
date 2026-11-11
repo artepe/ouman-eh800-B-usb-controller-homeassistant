@@ -26,10 +26,9 @@ SENSOR_KEYS = (
     "derived_refrigerant_cycle_heating_cop_estimate",
     "derived_refrigerant_heating_power_kw",
     "derived_refrigerant_compressor_heating_cop",
-    "diagnostics", "english_ai_guide", "modbus_connection",
+    "diagnostics", "modbus_connection",
 )
 NUMBER_KEYS = tuple("eh800b_" + x for x in SETPOINT_KEYS)
-BUTTON_KEYS = ("review_settings_en",)
 
 
 def load_json(name):
@@ -70,7 +69,7 @@ class LocaleTests(unittest.TestCase):
                 obj = load_json(f"translations/{lang}.json")["entity"]
                 self.assertEqual(set(obj["sensor"]), set(SENSOR_KEYS))
                 self.assertEqual(set(obj["number"]), set(NUMBER_KEYS))
-                self.assertEqual(set(obj["button"]), set(BUTTON_KEYS))
+                self.assertNotIn("button", obj)
 
     def test_entity_unique_identifiers_and_writes_unchanged(self):
         number = (COMPONENT / "number.py").read_text(encoding="utf-8")
@@ -87,7 +86,7 @@ class LocaleTests(unittest.TestCase):
         self.assertIn('f"eh800b_{point.key}"', sensor)
 
     def test_manifest_version_and_legacy_unchanged(self):
-        self.assertEqual(load_json("manifest.json")["version"], "0.4.4-beta.1")
+        self.assertEqual(load_json("manifest.json")["version"], "0.5.0-beta.1")
         legacy = json.loads((ROOT / "custom_components/ouman_eh800/manifest.json")
                             .read_text(encoding="utf-8"))
         self.assertEqual(legacy["version"], "0.1.2")

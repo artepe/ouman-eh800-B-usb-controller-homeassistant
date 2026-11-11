@@ -77,14 +77,41 @@ class BuildingProfilesTests(unittest.TestCase):
 
     def test_extended_model_list_is_discovery_not_auto_writes(self):
         for manufacturer in ("Ouman", "Tosibox", "Uponor", "Roth", "Wavin",
-                             "Honeywell", "Resideo", "Siemens", "Danfoss"):
+                             "Honeywell", "Siemens", "Danfoss"):
             self.assertIn(manufacturer, constants.VENDOR_MODELS)
         with self.assertRaises(ValueError):
-            profiles.profile_for("Smatrix Pulse R-208", "", "")
+            profiles.profile_for("Sentio", "", "")
         with self.assertRaises(ValueError):
-            profiles.profile_for("Evohome", "", "")
+            profiles.profile_for("EAGLEHAWK", "", "")
         with self.assertRaises(ValueError):
             profiles.profile_for("Desigo PXC4", "", "")
+
+    def test_builtin_marker_matches_available_profiles(self):
+        firmware = {"A203": "2.0.2", "S203": "3.0.10", "C203": "3.0.10",
+                    "H23": "4.0.5", "CASA Genius": "4.3",
+                    "Corrigo E Ventilation": "3.2"}
+        own_drivers = {"EH-800", "EH-800B", "MULTICAL 403", "MULTICAL 603",
+                       "MULTICAL 803"}
+        listed = {m for models in constants.VENDOR_MODELS.values() for m in models}
+        self.assertTrue(constants.BUILTIN_SUPPORT_MODELS <= listed)
+        for model in sorted(listed - own_drivers):
+            fw = "5.5.0" if model.startswith("TOSIBOX ") else firmware.get(model, "")
+            with self.subTest(model=model):
+                if model in constants.BUILTIN_SUPPORT_MODELS:
+                    self.assertTrue(profiles.profile_for(model, fw, ""))
+                else:
+                    with self.assertRaises(ValueError):
+                        profiles.profile_for(model, fw, "")
+
+    def test_devices_without_local_modbus_or_bacnet_ip_are_not_listed(self):
+        listed = {m for models in constants.VENDOR_MODELS.values() for m in models}
+        for model in ("Icon2", "Ally Gateway", "Evohome", "HCC100",
+                      "Smatrix Pulse R-208", "Smatrix Base PRO X-147 KNX",
+                      "Touchline SL WiFi", "S-series", "Synco OZW672",
+                      "Synco RMU7xx", "BACnet actuator", "KojaControl",
+                      "Smart Home UG600", "WLM3", "RU23", "FLEX I/O",
+                      "Oulink ETH", "M-LINK"):
+            self.assertNotIn(model, listed)
 
 
 class EngineeringTests(unittest.TestCase):

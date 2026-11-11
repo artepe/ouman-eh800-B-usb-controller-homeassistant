@@ -5,9 +5,9 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.helpers import selector
 from .const import (
-    DOMAIN, VENDOR_MODELS, CONF_VENDOR, CONF_MODEL, CONF_FIRMWARE,
-    CONF_APPLICATION, CONF_TRANSPORT, CONF_HOST, CONF_PORT, CONF_BAUDRATE,
-    CONF_PARITY, CONF_UNIT_ID, CONF_PROFILE, CONF_ALLOW_WRITES,
+    DOMAIN, VENDOR_MODELS, BUILTIN_SUPPORT_MODELS, CONF_VENDOR, CONF_MODEL,
+    CONF_FIRMWARE, CONF_APPLICATION, CONF_TRANSPORT, CONF_HOST, CONF_PORT,
+    CONF_BAUDRATE, CONF_PARITY, CONF_UNIT_ID, CONF_PROFILE, CONF_ALLOW_WRITES,
     CONF_URL, CONF_USERNAME, CONF_PASSWORD, CONF_BACNET_LOCAL_ADDRESS,
     CONF_BACNET_DEVICE_ID, CONF_BACNET_LOCAL_INSTANCE,
     CONF_DISCOVERY, CONF_PROFILE_CONFIRMED,
@@ -15,15 +15,25 @@ from .const import (
 from .profiles import profile_for
 from .transport import make_transport
 from .modbus_research import probe, research, unit_ids, read_parameters
-from .ai_guide import (CONF_AI_URL, CONF_AI_MODEL, CONF_AI_AUTO,
-                       DEFAULT_MODEL, validate_local_ai_url, validate_model)
+
+# Options saved by the removed AI guide; dropped when write permission is saved.
+LEGACY_AI_OPTIONS = ("ai_url", "ai_model", "ai_auto_review")
+
+
+def model_options(vendor: str) -> dict[str, str]:
+    """Label models with built-in support; stored model values are unchanged."""
+    return {
+        model: f"{model} ✓" if model in BUILTIN_SUPPORT_MODELS else model
+        for model in VENDOR_MODELS[vendor]
+    }
+
 
 class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     VERSION = 1
 
     @staticmethod
     def async_get_options_flow(config_entry):
-        return OpenLVIAIOptionsFlow()
+        return OpenLVIOptionsFlow()
 
     def __init__(self):
         self._data = {}
@@ -57,7 +67,7 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="model",
             data_schema=vol.Schema({
-                vol.Required(CONF_MODEL): vol.In(VENDOR_MODELS[self._data[CONF_VENDOR]]),
+                vol.Required(CONF_MODEL): vol.In(model_options(self._data[CONF_VENDOR])),
                 vol.Optional(CONF_FIRMWARE, default=""): str,
                 vol.Optional(CONF_APPLICATION, default=""): str,
                 vol.Optional(CONF_ALLOW_WRITES, default=False): bool,
@@ -218,16 +228,16 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
 
-class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
-    """Local advisor, confirmed register map and manual read-only research."""
+class OpenLVIOptionsFlow(config_entries.OptionsFlow):
+    """Write permission, confirmed register map and manual read-only research."""
 
     async def async_step_init(self, user_input=None):
         if self.config_entry.data.get(CONF_TRANSPORT) == "modbus_tcp":
-            menus = ["register_map", "research", "advisor"]
+            menus = ["register_map", "research", "writes"]
             if self.config_entry.data.get(CONF_MODEL) == "Ouflex":
                 menus.insert(0, "ouflex_write")
             return self.async_show_menu(step_id="init", menu_options=menus)
-        return await self.async_step_advisor(user_input)
+        return await self.async_step_writes(user_input)
 
     async def async_step_ouflex_write(self, user_input=None):
         """Choose multiple reviewed setpoints for an isolated Ouflex test rig."""
@@ -374,35 +384,24 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
             description_placeholders={'diagnostics': json.dumps(self._research_results, ensure_ascii=False, indent=2)})
 
 
-    async def async_step_advisor(self, user_input=None):
-        errors = {}
+    async def async_step_writes(self, user_input=None):
+        """Enable or disable reviewed writes without re-adding the controller."""
         if user_input is not None:
-            try:
-                url = validate_local_ai_url(user_input.get(CONF_AI_URL, ""))
-                model = validate_model(user_input.get(CONF_AI_MODEL, DEFAULT_MODEL))
-                current_discovery = self.config_entry.options.get(
-                    CONF_DISCOVERY, self.config_entry.data.get(CONF_DISCOVERY, False))
-                return self.async_create_entry(
-                    title="", data={
-                        **self.config_entry.options,
-                        CONF_AI_URL: url,
-                        CONF_AI_MODEL: model,
-                        CONF_AI_AUTO: bool(user_input.get(CONF_AI_AUTO, False)),
-                        CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)) and not current_discovery,
-                    }
-                )
-            except ValueError:
-                errors["base"] = "invalid_ai_connection"
+            current_discovery = self.config_entry.options.get(
+                CONF_DISCOVERY, self.config_entry.data.get(CONF_DISCOVERY, False))
+            kept = {key: value for key, value in self.config_entry.options.items()
+                    if key not in LEGACY_AI_OPTIONS}
+            return self.async_create_entry(
+                title="", data={
+                    **kept,
+                    CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)) and not current_discovery,
+                }
+            )
         current = self.config_entry.options
         return self.async_show_form(
-            step_id="advisor",
+            step_id="writes",
             data_schema=vol.Schema({
-                vol.Optional(CONF_AI_URL, default=current.get(CONF_AI_URL, "")): str,
-                vol.Required(CONF_AI_MODEL, default=current.get(CONF_AI_MODEL, DEFAULT_MODEL)): str,
-                vol.Optional(CONF_AI_AUTO, default=current.get(CONF_AI_AUTO, False)): bool,
                 vol.Optional(CONF_ALLOW_WRITES, default=current.get(
                     CONF_ALLOW_WRITES, self.config_entry.data.get(CONF_ALLOW_WRITES, False))): bool,
             }),
-            errors=errors,
         )
-

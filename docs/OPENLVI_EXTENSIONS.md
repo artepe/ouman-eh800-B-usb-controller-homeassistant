@@ -15,7 +15,6 @@ was physically connected during authoring. The existing
 | BACnet object discovery | Targeted one-device object-list read (max 32 objects), no network-wide broadcast scan, no writes |
 | Diagnostics | Temperature differences, optional water-only thermal power, rules to flag suspicious measurement values; advisory, not autonomous control |
 | SCADA | Separate **isometric 2.5D** Lovelace custom card that follows entity states without write controls; not a full 3D digital twin |
-| AI prediction | **Not implemented**; the diagnostic rules are deterministic and do not make AI claims |
 | Energy analytics | Instantaneous water-side kW when `l1_supply`, `l1_return`, and separately decoded `flow_m3h` exist. Historical consumption needs HA recorder/energy meter; never manufacture totals |
 
 ## Installation for evaluation
@@ -118,8 +117,8 @@ Formula: P[kW] = 1.163 * flow[m³/h] * (supply°C − return°C),
 factor. Historical kWh requires a meter or integration over time.
 
 The `OpenLVI diagnostics` sensor reports deterministic suspicious
-temperature and supply-setpoint deviations. It is *advisory*, not an AI,
-not a guaranteed fault detector, and it never commands a controller.
+temperature and supply-setpoint deviations. It is *advisory*, not a
+guaranteed fault detector, and it never commands a controller.
 
 ## Required hardware and sources
 

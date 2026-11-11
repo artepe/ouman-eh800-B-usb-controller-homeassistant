@@ -1,8 +1,8 @@
 # OpenLVI language support
 
 OpenLVI Bridge is **English-first**. Its source text, stable device identifiers,
-default controller labels, setup flow, documentation, protocol descriptions and
-AI guidance are written in English. The English translations in
+default controller labels, setup flow, documentation and protocol descriptions
+are written in English. The English translations in
 `custom_components/openlvi/strings.json` are authoritative.
 
 ## Supported optional interface languages
@@ -19,16 +19,15 @@ controller language selection page (firmware variants may differ):
 | `pl` | Polish | `translations/pl.json` |
 | `ru` | Russian | `translations/ru.json` |
 
-The translations cover setup and AI-options forms, all 28 EH-800B USB
-measurement labels, 11 allowed L1 control labels, diagnostic and AI sensor
-names, and the manual review button.
+The translations cover the setup and options forms, all 28 EH-800B USB
+measurement labels, 11 allowed L1 control labels and the diagnostic
+sensor names.
 
 Home Assistant displays localized names according to the **individual user's
 Home Assistant profile language**. To keep *everything visible in English*,
 choose **English** in Home Assistant user profile → Language.
 A non-English HA profile can use the corresponding translation; unsupported
-languages fall back to English. The AI **explanation text itself remains in
-English**, by design, even when a translated button title is shown.
+languages fall back to English.
 
 **This setting does not change the physical Ouman controller's display
 language.** The actual device uses its own menu. The integration does not

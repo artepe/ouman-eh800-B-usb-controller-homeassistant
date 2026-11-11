@@ -16,7 +16,7 @@ import package_modules as mod  # noqa: E402
 class ModuleDistributionTests(unittest.TestCase):
     def test_catalog_has_safe_unique_modules(self):
         modules = mod.module_catalog()
-        self.assertEqual(len(modules), 10)
+        self.assertEqual(len(modules), 7)
         self.assertEqual(len({x["slug"] for x in modules}), len(modules))
         self.assertNotIn("ezviz", json.dumps(modules).lower())
 
@@ -39,12 +39,6 @@ class ModuleDistributionTests(unittest.TestCase):
         self.assertEqual(set(modules["ouman-ouflex"]["paths"]),
                          {"custom_components/ouman_ouflex"})
         self.assertNotIn("custom_components/ouman_ouflex", core_paths)
-        self.assertEqual(set(modules["jaspi-tehowatti-contact"]["paths"]),
-                         {"examples/esphome/jaspi-tehowatti-contact.yaml"})
-        self.assertEqual(set(modules["roth-touchline-pl-contact-monitor"]["paths"]),
-                         {"examples/esphome/roth-touchline-pl-relay-monitor.yaml"})
-        self.assertEqual(set(modules["devireg330-price-setback"]["paths"]),
-                         {"blueprints/automation/openlvi/devireg330_price_setback.yaml"})
 
     def test_path_traversal_rejected(self):
         for bad in ("../secret", "/etc/passwd", "a/../b", ".env", "a\\b", "a//b"):

@@ -7,12 +7,11 @@ on:
       - 'tests/test_ouman_universal_profiles.py'
       - 'tests/test_openlvi_vendor_profiles.py'
       - 'tests/test_openlvi_usb_controls.py'
-      - 'tests/test_openlvi_ai_guide.py'
       - 'tests/test_openlvi_localization.py'
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
       - 'tests/test_openlvi_building_extensions.py'
-      - 'tests/test_danfoss_mcx_devireg330.py'
+      - 'tests/test_danfoss_mcx.py'
       - 'tests/test_openlvi_r290_calculator.py'
       - 'tools/refrigerant_state_calculator.py'
       - 'custom_components/openlvi/engineering.py'
@@ -29,7 +28,7 @@ on:
       - 'tests/test_openlvi_register_offsets.py'
       - 'tests/test_openlvi_lorawan_inspector.py'
       - 'tests/test_openlvi_building_extensions.py'
-      - 'tests/test_danfoss_mcx_devireg330.py'
+      - 'tests/test_danfoss_mcx.py'
       - 'tests/test_openlvi_r290_calculator.py'
       - 'tools/refrigerant_state_calculator.py'
       - 'custom_components/openlvi/engineering.py'
@@ -51,12 +50,11 @@ jobs:
         run: |
           python -m unittest discover -s tests -p 'test_*profiles.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_usb_controls.py' -v
-          python -m unittest discover -s tests -p 'test_openlvi_ai_guide.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_localization.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_register_offsets.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_lorawan_inspector.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_building_extensions.py' -v
-          python -m unittest discover -s tests -p 'test_danfoss_mcx_devireg330.py' -v
+          python -m unittest discover -s tests -p 'test_danfoss_mcx.py' -v
           python -m unittest discover -s tests -p 'test_openlvi_r290_calculator.py' -v
       - name: Validate Modbus client keyword against pinned library
         run: |

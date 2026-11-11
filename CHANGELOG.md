@@ -1,5 +1,26 @@
 # Changelog
 
+## OpenLVI Bridge 0.5.0-beta.1 — 2026-11-11 (experimental)
+
+- Removed the optional English AI guide: the `openlvi.ask_assistant`
+  service, the guide sensor and button, and the AI settings in the options
+  flow. The options flow now only controls write permission. Leftover guide
+  entities show as unavailable and can be deleted.
+- The setup wizard now lists only devices with a local Modbus, BACnet/IP,
+  M-Bus, HTTP or USB route. Removed: Danfoss Icon2 and Ally Gateway, Resideo
+  Evohome/HCC100/HCC80/HCE80, SALUS UG600, Roth Touchline SL WiFi, Uponor
+  X-147 KNX and Pulse R-208, Siemens Synco OZW672 and RMU7xx, NIBE S-series,
+  Belimo BACnet actuators, Koja KojaControl, OJ Electronics WLM2/WLM3, and
+  the Ouman accessories RU23, FLEX I/O, Oulink ETH and M-LINK (plus a
+  duplicate EC-104 entry). Existing configuration entries are not changed.
+- Models with a built-in driver or point map are marked with ✓ in the wizard.
+- Removed the contact-only modules (Jäspi Tehowatti dry contact, Roth
+  Touchline PL monitor, DEVIreg 330 price setback); these devices have no
+  data interface.
+- New [device support list](docs/DEVICE_SUPPORT.md) with sources and
+  alternative integrations; it replaces the Finnish building automation
+  catalog.
+
 ## Modular download distribution — 2026-11-05
 
 - New professional Open HVAC overview with explicit per-module validation.

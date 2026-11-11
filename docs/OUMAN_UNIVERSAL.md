@@ -30,7 +30,11 @@ verify the folder's `manifest.json` and Python dependencies.
 | C203 16MB fw **3.0.10** | Modbus RTU / TCP gateway | Temperature subset and room setpoints | Room setpoint only, **opt-in** |
 | H23 8MB fw **4.0.5** | Modbus RTU / TCP gateway | Temperature subset and room setpoints | Room setpoint only, **opt-in** |
 | Ouflex, Ouflex A / A XL / AX, M / M BA / C | TCP / RTU as supported by device or gateway | **Requires site-specific point map** from BA Tool/Ounet | No |
-| H21, S105, EH-203/105/686, RU23, EC-104, FLEX I/O | Modbus, hardware adapter/gateway where required | **Requires exact firmware and register profile** | No |
+| H21, S105, EH-203/105/686, EC-104, WL-BASE 2.1 | Modbus, hardware adapter/gateway where required | **Requires exact firmware and register profile** | No |
+
+RU23 (Ouflex display), FLEX I/O modules and the Oulink ETH / M-LINK adapters
+are not standalone controllers and are not listed in the setup wizard; select
+the controller they are attached to. See [device support](DEVICE_SUPPORT.md).
 
 Model selection **does not certify** that a physical controller has any
 particular connector or firmware. On site, verify network/bus wiring and

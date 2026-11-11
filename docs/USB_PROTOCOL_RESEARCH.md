@@ -72,8 +72,8 @@ disagrees, do not continue changing values.
 
 A side-effect-free `GET PROPERTY` command has **not been verified**.
 Do not use `SET PROPERTY` as a read. The PID P/I/D sensor data in this
-project are marked as **stored snapshot values** from the user's own
-`ouman_properties.txt` and may not reflect actual live settings.
+project are marked as **stored snapshot values** from the test
+controller's `ouman_properties.txt` and may not reflect actual live settings.
 
 For a capture from a hardware controller, run
 `python tools/capture_raw_usb.py --port /dev/serial/by-id/... --command MEASUREMENTS --output my_capture.json`

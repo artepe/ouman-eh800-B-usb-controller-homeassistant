@@ -1,9 +1,9 @@
 # Controller recovery and backups
 
-The original Home Assistant integration on the user's EH-800B had a
-`ouman_eh800.restore_original` service. Its source is included in
-`custom_components/ouman_eh800/restore.py` in the review branch.
-The service is **registered but never run automatically**.
+An earlier development version of the EH-800B USB integration had a
+`ouman_eh800.restore_original` service. It is **not** part of the
+stable v0.1.2 integration in this repository. When present, the service
+is **registered but never run automatically**.
 
 ## Before considering a restore
 

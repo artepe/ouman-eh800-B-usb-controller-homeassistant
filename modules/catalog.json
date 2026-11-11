@@ -51,7 +51,7 @@
       "paths": [
         "blueprints/automation/openlvi"
       ],
-      "documentation": "docs/FINLAND_BUILDING_AUTOMATION_CATALOG.md",
+      "documentation": "docs/THERMAL_AND_REFRIGERANT_COP.md",
       "target": "/config",
       "caution": "Auxiliary ventilation only. Not a replacement for mandatory air-handling or fire-safety controls."
     },
@@ -81,45 +81,6 @@
       "documentation": "esp32_s3/README.md",
       "target": "manual",
       "caution": "Prototype. Not a safety controller or production-ready bridge."
-    },
-    {
-      "slug": "jaspi-tehowatti-contact",
-      "name": "Jäspi Tehowatti Dry Contact",
-      "kind": "firmware-example",
-      "status": "manufacturer-documented / hardware-unverified",
-      "summary": "Local ESPHome relay example for the traditional Tehowatti electric boiler's NO temperature-setback contact.",
-      "paths": [
-        "examples/esphome/jaspi-tehowatti-contact.yaml"
-      ],
-      "documentation": "docs/JASPI_TEHOWATTI.md",
-      "target": "manual (ESPHome firmware on separate ESP32 and isolated NO relay)",
-      "caution": "Only the existing temperature setback input; electrical wiring requires qualified verification. No internal registers or safety bypass."
-    },
-    {
-      "slug": "roth-touchline-pl-contact-monitor",
-      "name": "Roth Touchline PL Relay Monitor",
-      "kind": "firmware-example",
-      "status": "manufacturer-documented / hardware-unverified",
-      "summary": "ESPHome read-only monitoring of the unused, isolated Roth Touchline PL heat-source relay output (NO/COM); not a zone control driver.",
-      "paths": [
-        "examples/esphome/roth-touchline-pl-relay-monitor.yaml"
-      ],
-      "documentation": "docs/ROTH_TOUCHLINE_PL.md",
-      "target": "manual (separate ESP32, qualified and electrically isolated dry-contact wiring)",
-      "caution": "Strictly passive and read-only. DO NOT connect ESP32 to 230 V zone outputs, pump supply or existing energized boiler circuits. No Modbus/API support is claimed."
-    },
-    {
-      "slug": "devireg330-price-setback",
-      "name": "DEVIreg 330 price setback blueprint",
-      "kind": "blueprint",
-      "status": "manufacturer-documented / hardware-unverified",
-      "summary": "Per-circuit Home Assistant spot-price setback automation for independently commissioned DEVIreg 330 (+5 to +45 C) external timer inputs.",
-      "paths": [
-        "blueprints/automation/openlvi/devireg330_price_setback.yaml"
-      ],
-      "documentation": "docs/DANFOSS_MCX_DEVIREG330.md",
-      "target": "/config/blueprints/automation/openlvi",
-      "caution": "No Modbus on DEVIreg 330. The external timer input is mains-referenced; install a correctly rated and physically fail-safe relay through qualified electrical work. Restores normal mode on stale prices but cannot protect against HA outages."
     },
     {
       "slug": "ouman-ouflex",

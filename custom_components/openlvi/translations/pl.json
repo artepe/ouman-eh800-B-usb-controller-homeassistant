@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Wybierz model sterownika",
-        "description": "Wybierz dokładny model i firmware. Sprawdzone ustawienia L1 EH-800B USB są udostępniane automatycznie; inne wymagają zgody na zapis.",
+        "description": "Wybierz dokładny model i firmware. ✓ = wbudowana mapa odczytu lub sterownik dla udokumentowanego firmware. Inne modele wymagają własnej zweryfikowanej mapy rejestrów lub wykrywania obiektów BACnet/IP. Sprawdzone ustawienia L1 EH-800B USB są udostępniane automatycznie; inne wymagają zgody na zapis.",
         "data": {
           "model": "Model",
           "firmware": "Firmware",
@@ -60,22 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Lokalny asystent AI po angielsku",
-        "description": "Opcjonalny lokalny Ollama. Angielski przewodnik podstawowy działa bez Ollama. AI nie zmienia ustawień.",
-        "data": {
-          "ai_url": "Lokalny adres Ollama (np. http://192.168.10.5:11434)",
-          "ai_model": "Mały model lokalny",
-          "ai_auto_review": "Sprawdzaj pomiary przy uruchomieniu i około co sześć godzin",
-          "allow_writes": "Zezwól na sprawdzone zapisy nastaw (domyślnie wyłączone; nieznane punkty tylko do odczytu)"
-        }
-      },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "OpenLVI — ustawienia i badanie",
         "menu_options": {
-          "register_map": "Register map and Unit ID",
-          "research": "Modbus register research tool",
-          "advisor": "Local AI advisor"
+          "register_map": "Mapa rejestrów i Unit ID",
+          "research": "Narzędzie do badania rejestrów Modbus",
+          "ouflex_write": "Ouflex: włącz sprawdzony zapis nastaw",
+          "writes": "Uprawnienia zapisu"
         }
       },
       "register_map": {
@@ -103,13 +94,32 @@
       "research_result": {
         "title": "Research results",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
+        "title": "Uprawnienia zapisu",
+        "description": "Zapis nastaw jest domyślnie wyłączony. Włącz go dopiero po sprawdzeniu wartości na sterowniku.",
+        "data": {
+          "allow_writes": "Zezwól na sprawdzone zapisy nastaw (domyślnie wyłączone; nieznane punkty tylko do odczytu)"
+        }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — zapisywalne nastawy",
+        "description": "Wybierz do 64 udokumentowanych numerycznych punktów holding, które zostaną udostępnione jako kontrolki liczbowe w Home Assistant. Używaj tylko na fizycznie odizolowanym sterowniku testowym, po niezależnym sprawdzeniu zapisu Modbus, skalowania i limitów każdego wybranego punktu. Wartości są odczytywane ponownie; nieudany zapis powoduje próbę przywrócenia poprzedniej wartości. Wyłączenie tej opcji blokuje wszystkie zapisy Ouflex.",
+        "data": {
+          "ouflex_write_enabled": "Włącz wybrane nastawy Ouflex",
+          "ouflex_write_keys": "Wybierz nastawy (wielokrotny wybór)",
+          "ouflex_write_isolated": "Potwierdzam, że ten Ouflex jest fizycznie odłączony od sterowanych urządzeń",
+          "ouflex_write_reviewed": "Wszystkie wybrane punkty i ich limity zapisu zostały niezależnie sprawdzone"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Dozwolony tylko prywatny http://IPv4:11434",
       "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Nie można odczytać pliku XML Ouflex z lokalnego FTP"
     }
   },
   "entity": {
@@ -207,9 +217,6 @@
       "diagnostics": {
         "name": "Diagnostyka OpenLVI"
       },
-      "english_ai_guide": {
-        "name": "Angielski przewodnik AI OpenLVI"
-      },
       "derived_water_heating_power_kw": {
         "name": "Moc grzewcza po stronie wody"
       },
@@ -265,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 korekta precyzyjna"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Sprawdź ustawienia po angielsku"
       }
     }
   }

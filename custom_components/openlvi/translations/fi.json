@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Valitse säädinmalli",
-        "description": "Valitse tarkka malli ja ohjelmistoversio. EH-800B USB:n hyväksytyt L1-säädöt näkyvät automaattisesti; muut tarvitsevat erillisen kirjoitusluvan.",
+        "description": "Valitse tarkka malli ja ohjelmistoversio. ✓ = valmis lukukartta tai ajuri dokumentoidulle ohjelmistoversiolle. Muille malleille tarvitaan oma tarkistettu rekisterikartta tai BACnet/IP-objektien haku. EH-800B USB:n hyväksytyt L1-säädöt näkyvät automaattisesti; muut tarvitsevat erillisen kirjoitusluvan.",
         "data": {
           "model": "Malli",
           "firmware": "Ohjelmistoversio",
@@ -60,22 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Paikallinen englanninkielinen AI-opas",
-        "description": "Valinnainen paikallisverkon Ollama. Englanninkielinen perusopas toimii ilmankin. AI ei muuta säätimen asetuksia.",
-        "data": {
-          "ai_url": "Paikallinen Ollama-osoite (esim. http://192.168.10.5:11434)",
-          "ai_model": "Pieni paikallinen malli",
-          "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein",
-          "allow_writes": "Salli tarkistetut asetusarvokirjoitukset (oletuksena pois, tuntemattomat pisteet vain luettavia)"
-        }
-      },
       "init": {
         "title": "OpenLVI — asetukset ja tutkimus",
         "menu_options": {
           "register_map": "Rekisterikartta ja Unit ID",
           "research": "Modbus-rekisterien tutkimustyökalu",
-          "advisor": "Paikallinen AI-avustaja"
+          "ouflex_write": "Ouflex: ota tarkistettu asetusarvojen kirjoitus käyttöön",
+          "writes": "Kirjoituslupa"
         }
       },
       "register_map": {
@@ -103,13 +94,32 @@
       "research_result": {
         "title": "Tutkimustulokset",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
+        "title": "Kirjoituslupa",
+        "description": "Asetusarvojen kirjoitus on oletuksena pois. Ota se käyttöön vasta, kun arvot on tarkistettu säätimeltä.",
+        "data": {
+          "allow_writes": "Salli tarkistetut asetusarvokirjoitukset (oletuksena pois, tuntemattomat pisteet vain luettavia)"
+        }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — kirjoitettavat asetusarvot",
+        "description": "Valitse enintään 64 dokumentoitua numeerista holding-pistettä, jotka näytetään Home Assistantin numero-ohjaimina. Käytä vain fyysisesti erotetussa testisäätimessä, kun jokaisen valitun pisteen Modbus-kirjoitus, skaalaus ja rajat on tarkistettu erikseen. Arvot luetaan takaisin; epäonnistunut kirjoitus yrittää palauttaa edellisen arvon. Käyttöönoton poistaminen estää kaikki Ouflex-kirjoitukset.",
+        "data": {
+          "ouflex_write_enabled": "Ota valitut Ouflex-asetusarvot käyttöön",
+          "ouflex_write_keys": "Valitse asetusarvot (useita voi valita)",
+          "ouflex_write_isolated": "Vahvistan, että tämä Ouflex on fyysisesti irti ohjattavista laitteista",
+          "ouflex_write_reviewed": "Tarkistin itse kaikki valitut pisteet ja niiden kirjoitusrajat"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Vain paikallisverkon http://IPv4:11434 sallitaan",
       "invalid_profile": "Rekisterikartta tai sen vahvistus puuttuu tai on virheellinen. Voit lisätä Ouflexin ilman karttaa valitsemalla Discovery Mode.",
       "invalid_research": "Tarkista Unit ID:t, osoitepohja, rekisterimäärä ja osoitteen lähteen vahvistus.",
       "entry_not_loaded": "Lataa integraatio ennen tutkimustyökalun käyttöä."
+    },
+    "abort": {
+      "cannot_connect": "Ouflexin XML-tiedostoa ei voitu lukea paikallisesta FTP:stä"
     }
   },
   "entity": {
@@ -207,9 +217,6 @@
       "diagnostics": {
         "name": "OpenLVI-diagnostiikka"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI:n englanninkielinen AI-opas"
-      },
       "derived_water_heating_power_kw": {
         "name": "Vesipuolen lämmitysteho"
       },
@@ -265,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 hienosäätö"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Tarkista asetukset englanniksi"
       }
     }
   }

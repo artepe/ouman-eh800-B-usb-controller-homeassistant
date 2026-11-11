@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Выберите модель контроллера",
-        "description": "Выберите точную модель и прошивку. Проверенные настройки L1 EH-800B USB доступны автоматически; другим моделям требуется разрешение на запись.",
+        "description": "Выберите точную модель и прошивку. ✓ = встроенная карта чтения или драйвер для документированной прошивки. Для других моделей нужна собственная проверенная карта регистров или обнаружение объектов BACnet/IP. Проверенные настройки L1 EH-800B USB доступны автоматически; другим моделям требуется разрешение на запись.",
         "data": {
           "model": "Модель",
           "firmware": "Прошивка",
@@ -60,22 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Локальный ИИ-помощник на английском",
-        "description": "Необязательная локальная Ollama. Английское руководство работает и без неё. ИИ не изменяет настройки контроллера.",
-        "data": {
-          "ai_url": "Локальный адрес Ollama (например, http://192.168.10.5:11434)",
-          "ai_model": "Небольшая локальная модель",
-          "ai_auto_review": "Проверять измерения при запуске и примерно каждые шесть часов",
-          "allow_writes": "Разрешить проверенные записи уставок (по умолчанию выключено; неизвестные точки только для чтения)"
-        }
-      },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "OpenLVI — настройки и исследование",
         "menu_options": {
-          "register_map": "Register map and Unit ID",
-          "research": "Modbus register research tool",
-          "advisor": "Local AI advisor"
+          "register_map": "Карта регистров и Unit ID",
+          "research": "Инструмент исследования регистров Modbus",
+          "ouflex_write": "Ouflex: включить проверенную запись уставок",
+          "writes": "Разрешение записи"
         }
       },
       "register_map": {
@@ -103,13 +94,32 @@
       "research_result": {
         "title": "Research results",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
+        "title": "Разрешение записи",
+        "description": "Запись уставок по умолчанию выключена. Включайте её только после проверки значений на контроллере.",
+        "data": {
+          "allow_writes": "Разрешить проверенные записи уставок (по умолчанию выключено; неизвестные точки только для чтения)"
+        }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — записываемые уставки",
+        "description": "Выберите до 64 документированных числовых holding-точек, которые будут доступны как числовые элементы управления в Home Assistant. Используйте только на физически изолированном тестовом контроллере после независимой проверки записи Modbus, масштабирования и пределов каждой выбранной точки. Значения считываются обратно; при неудачной записи выполняется попытка восстановить прежнее значение. Отключение этой опции запрещает все записи Ouflex.",
+        "data": {
+          "ouflex_write_enabled": "Включить выбранные уставки Ouflex",
+          "ouflex_write_keys": "Выберите уставки (множественный выбор)",
+          "ouflex_write_isolated": "Подтверждаю, что этот Ouflex физически отключён от управляемого оборудования",
+          "ouflex_write_reviewed": "Все выбранные точки и их пределы записи проверены независимо"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Поддерживается только частный http://IPv4:11434",
       "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Не удалось прочитать XML Ouflex с локального FTP"
     }
   },
   "entity": {
@@ -207,9 +217,6 @@
       "diagnostics": {
         "name": "Диагностика OpenLVI"
       },
-      "english_ai_guide": {
-        "name": "Англоязычный ИИ-помощник OpenLVI"
-      },
       "derived_water_heating_power_kw": {
         "name": "Тепловая мощность водяного контура"
       },
@@ -265,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 точная настройка"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Проверить настройки на английском"
       }
     }
   }

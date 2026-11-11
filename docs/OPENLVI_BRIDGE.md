@@ -1,6 +1,6 @@
 # OpenLVI Bridge — multi-vendor Home Assistant integration
 
-**Experimental beta 0.4.3-beta.1; NOT hardware validated.** Maintained in the repository
+**Experimental beta 0.5.0-beta.1; NOT hardware validated.** Maintained in the repository
 [Open-HVACBridge-homeassistant](https://github.com/artepe/Open-HVACBridge-homeassistant).
 The proven Ouman EH-800B USB component (`custom_components/ouman_eh800`
 v0.1.2) remains unchanged. Do not replace a live controller's working setup.
@@ -12,10 +12,9 @@ Copy `custom_components/openlvi` to
 **Settings → Devices & services → Add integration → OpenLVI Bridge**.
 
 The interactive wizard asks:
-1. **Manufacturer**: Ouman, Danfoss, Regin, Swegon, Kamstrup,
-   Enervent, Vallox, Fidelix, Siemens, Schneider Electric, Grundfos,
-   Wilo, Belimo, Produal, Koja, NIBE or Jäspi (AIR with MODBUS 40 only).
-2. **Model**, installed **firmware**, and for Danfoss the **ECL application key**.
+1. **Manufacturer**: see the [device support list](DEVICE_SUPPORT.md) for
+   every listed manufacturer and model and what each one needs.
+2. **Model** (✓ = built-in support), installed **firmware**, and for Danfoss the **ECL application key**.
 3. **Transport**: HTTP (EH-800), USB (EH-800B), Modbus TCP/RTU,
    read-only BACnet/IP, or wired M-Bus for Kamstrup.
 4. IP/USB details, unit ID, serial parity, BACnet device instance
@@ -23,7 +22,7 @@ The interactive wizard asks:
 
 **English is the default interface language.** Optional Home Assistant
 translations (Finnish, Swedish, Estonian, Polish and Russian) are stored
-separately and are selected by the user's Home Assistant language preference.
+separately and are selected by each user's Home Assistant language preference.
 The controller's actual language setting is not changed. See
 [Language support](LOCALIZATION.md).
 
@@ -47,6 +46,7 @@ their exact, site-specific, read-only register map.
 | Ouman EH-800 | local HTTP | detected active HTTP API endpoints | limited numeric setpoints, optional |
 | Ouman EH-800B | local USB Mini-B | up to 28 measurements + 11 L1 setup controls | explicitly entered and bounded setpoints only; PID and direct valve position blocked |
 | Ouman A203/S203/C203/H23 | Modbus RTU/TCP | temperature subsets, version-specific room targets | limited room targets, optional |
+| Ouman Ouflex | Modbus TCP with read-only FTP | application point map read from the controller ([details](#ouman-ouflex-and-discovery-mode)); reads verified on one controller | off; reviewed setpoints only on an isolated test controller |
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
 | Danfoss MCX (site-programmed) | Modbus RTU on a confirmed RS485-capable variant, or verified RTU-to-TCP gateway | **Requires exported application-specific register JSON; no built-in addresses** | read only; write control not offered |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
@@ -54,19 +54,15 @@ their exact, site-specific, read-only register map.
 | Swegon CASA Genius SW4.x with SEM/SEC | Modbus RTU or gateway | fan RPM and %, temperature setpoint, mode, CO2 thresholds, heat recovery | selected operating modes 1/2/3 only, optional |
 | BACnet/IP (e.g. Siemens, Schneider, Belimo) | Private local network, UDP 47808 | Explicit read-only object list or bounded discovery on one selected device (up to 32 objects) | read only |
 | Kamstrup MULTICAL 403/603/803 | Powered wired M-Bus master with serial interface | Telegram records and transmitted units | read only |
-| Regin Corrigo 5, Exigo; Swegon Smart/GOLD; Enervent eAir/eWind; Vallox MyVallox; Fidelix FX-series; Siemens Climatix/Desigo; Produal Proxima; Koja KojaControl; NIBE S-series; Grundfos, Wilo, Belimo and other Ouman models | Hardware/firmware-dependent Modbus or BACnet | **requires exact site-specific point map** | custom profiles always read only |
+| Regin Corrigo 5, Exigo; Swegon Smart/GOLD; Enervent eAir/eWind; Vallox MyVallox; Fidelix FX-series; Siemens Climatix/Desigo; Produal Proxima; Grundfos, Wilo, Belimo and other Ouman models | Hardware/firmware-dependent Modbus or BACnet | **requires exact site-specific point map** | custom profiles always read only |
 
 The model list is not a claim that all these controllers offer Modbus
 without accessories. Confirm physical interface availability, interface
 options/licensing and wiring against the exact unit.
 
-For **Danfoss MCX** and the separate, non-Modbus **DEVIreg 330** setback input,
-see [Danfoss MCX / DEVIreg guidance](DANFOSS_MCX_DEVIREG330.md).
-
-For the *different* conventional Jäspi Tehowatti electric boiler, see
-[documented dry-contact temperature setback example](JASPI_TEHOWATTI.md).
-Its heating input is not a Modbus register interface. Tehowatti AIR
-requires an installed MODBUS 40 module (not just an Ethernet connection).
+For **Danfoss MCX**, see [Danfoss MCX guidance](DANFOSS_MCX.md).
+Tehowatti AIR requires an installed MODBUS 40 module (not just an Ethernet
+connection); see [Jäspi Tehowatti AIR](JASPI_TEHOWATTI.md).
 
 ### Vendor documentation
 
@@ -102,11 +98,11 @@ activated by model name alone.
   humidity, zone output, target and battery, all monitoring-only.
 - Tosibox: status register offsets 14–23 from 40001, with disabled
   status writes. Firmware >= 5.5.0 and enabled local Modbus required.
-- Siemens Desigo, Honeywell EAGLEHAWK, Wavin Sentio, Ouman WL-BASE,
-  Danfoss Icon2 and others are documented research targets, **not**
-  plug-and-play without the model-specific interface and point map.
+- Siemens Desigo, Honeywell EAGLEHAWK, Wavin Sentio, Ouman WL-BASE and
+  others need the model-specific interface and your own point map; they
+  are **not** plug-and-play.
 
-See [Finnish market source catalog](FINLAND_BUILDING_AUTOMATION_CATALOG.md),
+See the [device support list](DEVICE_SUPPORT.md),
 [CO2 supplemental fan blueprint](../blueprints/automation/openlvi/co2_supplemental_fan_0_10v.yaml)
 and [thermal and refrigerant COP guide](THERMAL_AND_REFRIGERANT_COP.md).
 
@@ -154,17 +150,21 @@ The site and vendor address-to-PDU conversion must still be verified.
 - See the [BACnet/M-Bus/SCADA extension guide](OPENLVI_EXTENSIONS.md)
   for adapter requirements and the 2.5D monitoring dashboard.
 
-## Optional English AI guidance
+## Ouman Ouflex and Discovery Mode
 
-This beta includes a read-only English setup guide on the device page, a review button, the `openlvi.ask_assistant` Home Assistant action, and optional local Ollama/Qwen2.5 0.5B. It uses named, verified readings. The AI does **not** apply any controller setting. See [OpenLVI AI Guide](OPENLVI_AI_GUIDE.md).
+For model **Ouflex** over **Modbus TCP** without a JSON map, OpenLVI reads the
+application's own point map (Ounet XML) from the controller's read-only FTP and
+creates read-only entities for the documented points. Reads have been verified
+on one physical Ouflex (device 2.3.3, application 1.1.2): all 240 mapped points
+answered FC03. Writes stay off; individual setpoints can be enabled only on an
+isolated test controller under **Configure → Ouflex: enable reviewed setpoint
+writing**.
 
-
-## Ouman Ouflex: Discovery Mode (0.4.4-beta.1)
-
-You can now add Ouflex without a firmware identifier or JSON register map.
-Discovery Mode creates a device with a **Modbus connection** diagnostic entity;
-it does not assume that TCP connectivity identifies the controller or confirms
-any measurement. No register or control entities are inferred.
+Other Modbus TCP controllers can be added in Discovery Mode without a firmware
+identifier or JSON register map. Discovery Mode creates a device with a
+**Modbus connection** diagnostic entity; it does not assume that TCP
+connectivity identifies the controller or confirms any measurement. No register
+or control entities are inferred.
 
 ### Update Home Assistant and add the controller
 
@@ -172,10 +172,10 @@ any measurement. No register or control entities are inferred.
 2. Replace that entire folder with `custom_components/openlvi/` from the
    feature branch/PR (or `main` after merge). Keep the folder name `openlvi`.
    This feature is in OpenLVI Bridge, not the separate `ouman_ouflex` domain.
-3. Restart Home Assistant. The integration manifest version is `0.4.4-beta.1`.
+3. Restart Home Assistant. The integration manifest version is `0.5.0-beta.1`.
 4. Go to **Settings → Devices & services → Add integration → OpenLVI Bridge
    (experimental)**. Choose **Ouman → Ouflex → Modbus TCP**.
-5. Enter host `192.168.10.105`, port `502`, and an initial Unit ID such as `1`.
+5. Enter the controller's IP address, port `502`, and an initial Unit ID such as `1`.
    Leave firmware, application key and register map empty. Enable
    **Discovery Mode** (the Ouflex TCP default).
 6. Review the TCP and Modbus identification report, then submit to save.
@@ -249,5 +249,5 @@ exceptions, FC03/04 raw reads, explicit Unit IDs, address bounds, discovery
 without a profile, and rejection of all write function codes. Full HA tests in
 `tests/openlvi_ha/` exercise config flows, offline setup, device/entity creation,
 map import with reload, options research and action response data. CI uses
-`pytest-homeassistant==2026.11.0` and Python 3.14. Hardware support and actual
-Ouflex register meanings still require device tests.
+`pytest-homeassistant==2026.11.0` and Python 3.14. Ouflex reads are verified on
+one controller; writes and other Ouflex variants still require device tests.

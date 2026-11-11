@@ -31,7 +31,7 @@ With UG65's **embedded LoRaWAN network server**:
    availability/birth messages, or rely on Home Assistant's native
    MQTT entities to avoid creating duplicate OpenLVI devices.
 
-The user's existing three leak sensors must keep their current DevEUIs,
+Existing LoRaWAN sensors must keep their current DevEUIs,
 device identifiers and associations. Do not reset/replace their
 LoRaWAN AppKeys or overwrite join session state as part of integration.
 

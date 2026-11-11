@@ -8,30 +8,13 @@ are implemented by this research.
 
 ## Direct manufacturer register findings
 
-### 1. NIBE S1155 / S1255 / S1156 / S1256
+### 1. NIBE S-series: use Home Assistant's NIBE integration
 
-Source: NIBE official S-Series Modbus technical information:
-https://www.nibe.eu/download/18.42a6470a1963dded290bb1/1746538843623/Technical%20information%20Modbus%20S-Series.pdf
-
-- On compatible systems, enable Modbus TCP in menu 7.5.9; local port 502;
-  manufacturer's guide states software 2.2.1 or later, max 100 registers/s
-  and 20 registers/request. Restrict allowed client IPs.
-- Official FC04 (input) **register IDs**: 1 outdoor BT1, 5 supply BT2,
-  7 return BT3, 8 DHW top BT7, 9 DHW charging BT6,
-  10/11 brine in/out BT10/BT11, 12 supply line BT12, 13 discharge BT14,
-  14 liquid BT15, 16 suction BT17, 26 room BT50, 39 external supply BT25.
-  Temperatures: signed 16-bit, divide by 10.
-- Additional FC04 IDs: 1046 compressor frequency, unsigned 16-bit
-  /10 Hz; 1102 heating circulation pump speed %, 1104 source/brine pump
-  speed %; 2196 reversing-valve indication.
-- Manufacturer also lists FC03 writable registers. **Do not enable writes
-  automatically**: mode and manual pump registers can affect real equipment.
-- **Missing:** a dedicated NIBE model/firmware-specific driver and safe
-  addressing test. Current OpenLVI generic driver subtracts one from
-  configured 1-based addresses; verify the manufacturer ID-to-PDU offset
-  on actual equipment before using this data in a live configuration.
-- The S-series can export installed-register CSV from menu 7.5.9; use
-  that model-specific export, not a universal guess.
+NIBE S1155 / S1255 / S1156 / S1256 offer Modbus TCP (menu 7.5.9), see the
+[NIBE S-Series Modbus technical information](https://www.nibe.eu/download/18.42a6470a1963dded290bb1/1746538843623/Technical%20information%20Modbus%20S-Series.pdf).
+Home Assistant's built-in
+[NIBE Heat Pump integration](https://www.home-assistant.io/integrations/nibe_heatpump/)
+already supports them locally, so OpenLVI no longer lists the S-series.
 
 ### 2. Vallox MyVallox (MyVallox Control document D5269)
 
@@ -171,20 +154,18 @@ Ouman A203/S203/C203/H23 firmware maps, minimal Danfoss ECL,
 Swegon CASA Genius, Corrigo E 3.2, selected-device BACnet/IP and
 active-master wired M-Bus.
 
-Research-only: complete NIBE S-series telemetry, MyVallox example,
+Research-only: MyVallox example,
 expanded CASA Genius alarms, complete ECL application maps,
 Corrigo 5, Grundfos CIM, Wilo data points, EMS-ESP, HeishaMon.
 
 ## Next implementation sequence
 
 1. Bench verify MyVallox 4353/4358 and centikelvin conversion; no writes.
-2. Add hardware-confirmed NIBE S-series model subprofiles and CSV export
-   support; confirm register base and endianness before a default map.
-3. Add Swegon alarm and service measurements with SW4.x and exact SEM/SEC
+2. Add Swegon alarm and service measurements with SW4.x and exact SEM/SEC
    decoding/bitfield tests.
-4. Parse manufacturer reports (CSV/XML) into read-only profiles with
+3. Parse manufacturer reports (CSV/XML) into read-only profiles with
    verified source/firmware metadata.
-5. After physical acceptance tests, consider individually reviewed,
+4. After physical acceptance tests, consider individually reviewed,
    operator-approved commands; never silently open all RW registers.
 
 The project is **not a certified BMS, safety controller or universal

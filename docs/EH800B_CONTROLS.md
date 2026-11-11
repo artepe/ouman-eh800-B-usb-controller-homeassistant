@@ -16,7 +16,7 @@ against the same serial port: use **one polling owner**.
 Restart Home Assistant. Open **Settings → Devices & services → OpenLVI
 Bridge → Configure**, enable **Allow reviewed writes**, and save.
 The selected EH-800B gets 28 measurement entities in read-only mode.
-Only after the user explicitly enables writing do the **11 Number controls**
+Only after writing is explicitly enabled do the **11 Number controls**
 appear; no separate `number:` YAML setup is needed. Existing entries can
 enable and disable writes through Configure without being deleted.
 

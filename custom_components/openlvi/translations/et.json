@@ -10,7 +10,7 @@
       },
       "model": {
         "title": "Vali kontrolleri mudel",
-        "description": "Vali täpne mudel ja püsivara. EH-800B USB kontrollitud L1 seaded kuvatakse automaatselt; teistel on vaja kirjutamisluba.",
+        "description": "Vali täpne mudel ja püsivara. ✓ = sisseehitatud lugemiskaart või draiver dokumenteeritud püsivarale. Teised mudelid vajavad oma kontrollitud registrikaarti või BACnet/IP objektide tuvastamist. EH-800B USB kontrollitud L1 seaded kuvatakse automaatselt; teistel on vaja kirjutamisluba.",
         "data": {
           "model": "Mudel",
           "firmware": "Püsivara",
@@ -60,22 +60,13 @@
   },
   "options": {
     "step": {
-      "advisor": {
-        "title": "Kohalik ingliskeelne AI-juhend",
-        "description": "Valikuline Ollama eravõrgus. Ingliskeelne põhijuhend töötab ka ilma Ollamata. AI ei muuda kontrolleri seadeid.",
-        "data": {
-          "ai_url": "Kohalik Ollama aadress (nt http://192.168.10.5:11434)",
-          "ai_model": "Väike kohalik mudel",
-          "ai_auto_review": "Kontrolli mõõtmisi käivitamisel ja umbes iga kuue tunni järel",
-          "allow_writes": "Luba kontrollitud seadeväärtuste kirjutamine (vaikimisi väljas; tundmatud punktid kirjutuskaitstud)"
-        }
-      },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "OpenLVI — seaded ja uurimine",
         "menu_options": {
-          "register_map": "Register map and Unit ID",
-          "research": "Modbus register research tool",
-          "advisor": "Local AI advisor"
+          "register_map": "Registrikaart ja Unit ID",
+          "research": "Modbus-registrite uurimise tööriist",
+          "ouflex_write": "Ouflex: luba kontrollitud seadeväärtuste kirjutamine",
+          "writes": "Kirjutusõigus"
         }
       },
       "register_map": {
@@ -103,13 +94,32 @@
       "research_result": {
         "title": "Research results",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
+        "title": "Kirjutusõigus",
+        "description": "Seadeväärtuste kirjutamine on vaikimisi väljas. Luba see alles pärast väärtuste kontrollimist kontrolleris.",
+        "data": {
+          "allow_writes": "Luba kontrollitud seadeväärtuste kirjutamine (vaikimisi väljas; tundmatud punktid kirjutuskaitstud)"
+        }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — kirjutatavad seadeväärtused",
+        "description": "Vali kuni 64 dokumenteeritud numbrilist holding-punkti, mis kuvatakse Home Assistantis numbrijuhikutena. Kasuta ainult füüsiliselt eraldatud testkontrolleris pärast iga valitud punkti Modbus-kirjutamise, skaleerimise ja piiride eraldi kontrollimist. Väärtused loetakse tagasi; ebaõnnestunud kirjutamise korral proovitakse eelmine väärtus taastada. Lubamise väljalülitamine keelab kõik Ouflexi kirjutused.",
+        "data": {
+          "ouflex_write_enabled": "Luba valitud Ouflexi seadeväärtused",
+          "ouflex_write_keys": "Vali seadeväärtused (mitu valikut)",
+          "ouflex_write_isolated": "Kinnitan, et see Ouflex on juhitavatest seadmetest füüsiliselt lahti ühendatud",
+          "ouflex_write_reviewed": "Kontrollisin ise kõiki valitud punkte ja nende kirjutuspiire"
+        }
       }
     },
     "error": {
-      "invalid_ai_connection": "Lubatud on ainult privaatne http://IPv4:11434",
       "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Ouflexi XML-i ei õnnestunud kohalikust FTP-st lugeda"
     }
   },
   "entity": {
@@ -207,9 +217,6 @@
       "diagnostics": {
         "name": "OpenLVI diagnostika"
       },
-      "english_ai_guide": {
-        "name": "OpenLVI ingliskeelne AI-juhend"
-      },
       "derived_water_heating_power_kw": {
         "name": "Veepoole küttevõimsus"
       },
@@ -265,11 +272,6 @@
       },
       "eh800b_l1_fine_adjustment": {
         "name": "L1 peenhäälestus"
-      }
-    },
-    "button": {
-      "review_settings_en": {
-        "name": "Vaata seadistused inglise keeles üle"
       }
     }
   }
