@@ -16,7 +16,7 @@ from .engineering import derive_cop_metrics
 from .ai_guide import (OpenLVIGuide, CONF_AI_AUTO, CONF_AI_URL, REVIEW_INTERVAL_SECONDS)
 
 _LOGGER = logging.getLogger(__name__)
-PLATFORMS = ["sensor", "number", "button"]
+PLATFORMS = ["sensor", "binary_sensor", "number", "button"]
 
 class OumanCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, driver, entry):
