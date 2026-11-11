@@ -116,7 +116,8 @@ async def test_discovery_creates_device_and_only_connection_entity(hass):
         state = hass.states.get(entities[0].entity_id)
         assert state.state == 'tcp_connected'
         assert state.attributes['register_entities'] == 0
-        assert dr.async_get(hass).async_get_device(identifiers={('openlvi', entry.entry_id)})
+        assert any(('openlvi', entry.entry_id) in device.identifiers for device in
+                   dr.async_entries_for_config_entry(dr.async_get(hass), entry.entry_id))
         with patch('custom_components.openlvi.modbus_research.tcp_status',
                    AsyncMock(return_value={'tcp_connected': False})):
             await entry.runtime_data.async_refresh()
