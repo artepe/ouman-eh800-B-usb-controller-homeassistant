@@ -49,7 +49,7 @@ def device():
         registers.update({address+i:v for i,v in enumerate(words)})
         return b''
     with patch.object(Client,'read',read),patch.object(Client,'write',write):
-        yield dict(data=dict(host='127.0.0.1',port=1502,unit_id=1,map_json=json.dumps(doc)),
+        yield dict(data=dict(host='127.0.0.1',port=1502,unit_id=1,auto_ftp_map=False,map_json=json.dumps(doc)),
                    policy=policy,calls=calls,registers=registers)
 
 
