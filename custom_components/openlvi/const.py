@@ -58,3 +58,7 @@ VENDOR_MODELS["Wilo"] = ("Stratos MAXO", "Stratos GIGA")
 VENDOR_MODELS["Belimo"] = ("Modbus actuator", "Modbus VAV", "BACnet actuator")
 VENDOR_MODELS["Schneider Electric"] = ("SpaceLogic MP-C",)
 VENDOR_MODELS["Siemens"] += ("Desigo PXC4 E16", "Desigo PXC5 E24", "Desigo PXC7 E400")
+
+
+CONF_DISCOVERY = "discovery_mode"
+CONF_PROFILE_CONFIRMED = "profile_confirmed"

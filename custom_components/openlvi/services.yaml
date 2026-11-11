@@ -16,3 +16,63 @@ ask_assistant:
       selector:
         text:
       example: "Only needed when more than one OpenLVI device is configured"
+
+research_registers:
+  name: Research Modbus registers (read-only)
+  description: >-
+    Try explicit Unit IDs using device identification (43/14) or read a documented
+    FC03/04 address. Returns TCP status, raw registers, protocol exceptions and
+    request/response hex. Never creates entities or writes controller settings.
+  fields:
+    config_entry_id:
+      required: true
+      selector:
+        config_entry:
+          integration: openlvi
+    unit_ids:
+      required: true
+      default: "1"
+      example: "1,2,10"
+      selector:
+        text:
+    function:
+      required: true
+      default: 43
+      selector:
+        select:
+          options:
+            - label: "43/14 Device identification"
+              value: "43"
+            - label: "03 Holding registers"
+              value: "3"
+            - label: "04 Input registers"
+              value: "4"
+    address:
+      description: Required for FC03/04. Explicit document address or zero-based PDU offset.
+      selector:
+        number:
+          min: 0
+          max: 65536
+          mode: box
+    address_base:
+      required: true
+      default: 0
+      description: "0 = zero-based PDU offset; 1 = one-based document address."
+      selector:
+        number:
+          min: 0
+          max: 1
+          mode: box
+    count:
+      required: true
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 32
+          mode: box
+    documented:
+      default: false
+      description: Confirm that the FC03/04 address comes from an identified source. Not required for identification.
+      selector:
+        boolean:
