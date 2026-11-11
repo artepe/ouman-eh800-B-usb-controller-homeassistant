@@ -139,3 +139,7 @@ and reproduction steps. Unsupported functions should remain read-only.
 [Changelog](CHANGELOG.md) · [MIT license](LICENSE)
 
 <sub>Independent community project. Not affiliated with or endorsed by device manufacturers.</sub>
+
+### Paikallinen Ouflex Tool
+
+Itsenäinen CLI ja selain-UI: [käynnistys, XML-tuonti ja varmennetut kirjoitukset](tools/ouflex_tool/README.md). Ei HA-tokenia tai valmistajan sovellusta. [Tutkimustulos ja rajoitukset](docs/ouman/ouflex/research/ISSUE34.md).

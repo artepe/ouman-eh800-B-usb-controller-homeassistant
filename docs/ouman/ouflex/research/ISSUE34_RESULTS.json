@@ -1,0 +1,39 @@
+{
+  "source": "Previously archived XML, not a fresh FTP read",
+  "points": 240,
+  "kinds": {
+    "u16": 99,
+    "s32": 139,
+    "s16": 2
+  },
+  "identity": {
+    "model": "Ouflex",
+    "firmware": "2.3.3",
+    "application": "1.1.2"
+  },
+  "rejected": [],
+  "structured_ranges": 6,
+  "lcd_rename_supported": false,
+  "network_tests": [
+    {
+      "port": 21,
+      "error": "[Errno 1] Operation not permitted"
+    },
+    {
+      "port": 502,
+      "error": "[Errno 1] Operation not permitted"
+    },
+    {
+      "port": 503,
+      "error": "[Errno 1] Operation not permitted"
+    },
+    {
+      "port": 504,
+      "error": "[Errno 1] Operation not permitted"
+    },
+    {
+      "port": 505,
+      "error": "[Errno 1] Operation not permitted"
+    }
+  ]
+}
