@@ -7,6 +7,7 @@ from homeassistant.helpers import selector
 from . import DOMAIN
 from .modbus import Client
 from .pointmap import load_map, map_digest
+from .ftp_map import fetch_application_map
 
 
 class OuflexFlow(config_entries.ConfigFlow, domain=DOMAIN):
@@ -20,24 +21,36 @@ class OuflexFlow(config_entries.ConfigFlow, domain=DOMAIN):
         errors = {}
         if user_input is not None:
             try:
-                doc, points = load_map(user_input['map_json'])
+                if user_input.get('auto_ftp_map', True):
+                    doc = await self.hass.async_add_executor_job(
+                        fetch_application_map, user_input['host'])
+                    data = {**user_input, 'map_json': json.dumps(doc, ensure_ascii=False)}
+                else:
+                    doc, _ = load_map(user_input.get('map_json', ''))
+                    data = user_input
+                _, points = load_map(json.dumps(doc))
                 if len(points) > 256:
                     raise ValueError('HA maps limited to 256 points per entry')
-                client = Client(user_input['host'], user_input['port'], user_input['unit_id'])
-                p = points[0]
-                await self.hass.async_add_executor_job(client.read, p.offset, p.count, p.function)
-                await self.async_set_unique_id('%s:%s:%s' % (user_input['host'], user_input['port'], user_input['unit_id']))
+                client = Client(data['host'], data['port'], data['unit_id'])
+                first = points[0]
+                await self.hass.async_add_executor_job(
+                    client.read, first.offset, first.count, first.function)
+                await self.async_set_unique_id(
+                    '%s:%s:%s' % (data['host'], data['port'], data['unit_id']))
                 self._abort_if_unique_id_configured()
-                return self.async_create_entry(title='Ouman ' + doc['identity']['model'], data=user_input)
+                return self.async_create_entry(
+                    title='Open HVAC · ' + doc['identity']['model'], data=data)
             except (ValueError, KeyError, TypeError, json.JSONDecodeError):
                 errors['base'] = 'invalid_map'
             except Exception:
                 errors['base'] = 'cannot_connect'
         return self.async_show_form(step_id='user', errors=errors, data_schema=vol.Schema({
-            vol.Required('host'): str,
+            vol.Required('host', default='192.168.10.105'): str,
             vol.Required('port', default=502): vol.All(vol.Coerce(int), vol.Range(min=1, max=65535)),
             vol.Required('unit_id', default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=255)),
-            vol.Required('map_json'): str,
+            vol.Required('auto_ftp_map', default=True): bool,
+            vol.Optional('map_json', default=''): selector.TextSelector(
+                selector.TextSelectorConfig(multiline=True)),
         }))
 
 
