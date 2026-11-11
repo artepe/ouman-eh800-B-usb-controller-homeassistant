@@ -223,8 +223,63 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input=None):
         if self.config_entry.data.get(CONF_TRANSPORT) == "modbus_tcp":
-            return self.async_show_menu(step_id="init", menu_options=["register_map", "research", "advisor"])
+            menus = ["register_map", "research", "advisor"]
+            if self.config_entry.data.get(CONF_MODEL) == "Ouflex":
+                menus.insert(0, "ouflex_write")
+            return self.async_show_menu(step_id="init", menu_options=menus)
         return await self.async_step_advisor(user_input)
+
+    async def async_step_ouflex_write(self, user_input=None):
+        """One opt-in, physically isolated Ouflex setpoint test at a time."""
+        from custom_components.ouman_ouflex.ftp_map import fetch_application_map
+        from custom_components.ouman_ouflex.pointmap import load_map, map_digest
+        from .ouflex_write import candidates
+
+        errors = {}
+        try:
+            doc = await self.hass.async_add_executor_job(
+                fetch_application_map, self.config_entry.data[CONF_HOST])
+            _, points = load_map(json.dumps(doc, ensure_ascii=False))
+            eligible = candidates(points)
+            if not eligible:
+                raise ValueError("No bounded numeric candidates")
+            digest = map_digest(doc)
+        except Exception:
+            return self.async_abort(reason="cannot_connect")
+        valid_keys = {p.key for p in eligible}
+        current = self.config_entry.options
+        if user_input is not None:
+            enabled = user_input.get("ouflex_write_enabled", False) is True
+            selected = user_input.get("ouflex_write_key", "")
+            isolated = user_input.get("ouflex_write_isolated", False) is True
+            reviewed = user_input.get("ouflex_write_reviewed", False) is True
+            if enabled and (selected not in valid_keys or not isolated or not reviewed):
+                errors["base"] = "invalid_profile"
+            else:
+                options = {**current,
+                           "ouflex_write_enabled": enabled,
+                           "ouflex_write_key": selected if enabled else "",
+                           "ouflex_write_digest": digest if enabled else "",
+                           "ouflex_write_isolated": isolated if enabled else False,
+                           "ouflex_write_reviewed": reviewed if enabled else False,
+                           CONF_ALLOW_WRITES: False}
+                return self.async_create_entry(title="", data=options)
+        default_key = current.get("ouflex_write_key")
+        if default_key not in valid_keys:
+            default_key = eligible[0].key
+        return self.async_show_form(step_id="ouflex_write", errors=errors,
+            data_schema=vol.Schema({
+                vol.Required("ouflex_write_enabled",
+                             default=current.get("ouflex_write_enabled", False)): bool,
+                vol.Required("ouflex_write_key", default=default_key):
+                    selector.SelectSelector(selector.SelectSelectorConfig(options=[
+                        {"value": p.key,
+                         "label": f"{p.name} | address {p.address} | {p.kind} | {p.minimum}..{p.maximum}"}
+                        for p in eligible
+                    ])),
+                vol.Required("ouflex_write_isolated", default=False): bool,
+                vol.Required("ouflex_write_reviewed", default=False): bool,
+            }))
 
     async def async_step_register_map(self, user_input=None):
         current = {**self.config_entry.data, **self.config_entry.options}
