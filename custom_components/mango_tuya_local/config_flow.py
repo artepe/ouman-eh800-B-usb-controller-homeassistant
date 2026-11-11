@@ -13,8 +13,8 @@ from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, Tex
 
 from .client import MangoClient
 from .const import (
-    CONF_DEVICE_ID,
     CONF_ALLOW_WRITES,
+    CONF_DEVICE_ID,
     CONF_LOCAL_KEY,
     CONF_POLL_INTERVAL,
     DEFAULT_POLL_INTERVAL,
