@@ -45,7 +45,8 @@
       "init": {
         "title": "Lukeminen",
         "data": {
-          "poll_interval": "Lukuvalli sekunteina (15-300)"
+          "poll_interval": "Lukuvalli sekunteina (15-300)",
+          "allow_writes": "Salli asetusarvojen kirjoitukset (oletuksena pois; muutokset vain harkiten)"
         }
       }
     }

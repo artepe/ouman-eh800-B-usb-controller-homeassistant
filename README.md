@@ -6,7 +6,7 @@ LAN-local Tuya 3.5 heat pump integration; 770 model-specific parameter routes.
 
 **Validation:** beta  
 **Module:** mango-tuya-local  
-**Source commit:** 723d2e635ad6f405ad796384619af98df8b71343
+**Source commit:** 71b6ac3d654735f476dbd939f047b03b2d434b98
 
 ## Install
 

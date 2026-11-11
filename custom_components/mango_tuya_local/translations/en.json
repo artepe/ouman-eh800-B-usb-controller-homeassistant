@@ -45,7 +45,8 @@
       "init": {
         "title": "Polling",
         "data": {
-          "poll_interval": "Polling interval in seconds (15-300)"
+          "poll_interval": "Polling interval in seconds (15-300)",
+          "allow_writes": "Enable parameter writes (off by default; use only verified values)"
         }
       }
     }

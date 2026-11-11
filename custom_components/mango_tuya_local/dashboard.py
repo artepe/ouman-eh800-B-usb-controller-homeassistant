@@ -77,7 +77,7 @@ def dashboard_data(hass, permissions):
                         "name": parameter.name,
                         "entity_id": entity_id,
                         "domain": platform,
-                        "can_control": permissions.check_entity(entity_id, POLICY_CONTROL),
+                        "can_control": coordinator.writes_enabled and permissions.check_entity(entity_id, POLICY_CONTROL),
                         "scale_verified": parameter.scale_verified,
                         **catalog["parameters"][parameter.key],
                     }
