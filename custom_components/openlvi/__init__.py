@@ -61,7 +61,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
     # Retain per-device Ouflex write review settings in the existing bridge.
     for key in ("ouflex_write_enabled", "ouflex_write_isolated",
                 "ouflex_write_reviewed", "ouflex_write_digest",
-                "ouflex_write_key"):
+                "ouflex_write_key", "ouflex_write_keys"):
         if key in entry.options:
             effective_config[key] = entry.options[key]
     driver = make_transport(hass, effective_config)
