@@ -46,6 +46,7 @@ their exact, site-specific, read-only register map.
 | Ouman EH-800B | local USB Mini-B | up to 28 measurements + 11 L1 setup controls | explicitly entered and bounded setpoints only; PID and direct valve position blocked |
 | Ouman A203/S203/C203/H23 | Modbus RTU/TCP | temperature subsets, version-specific room targets | limited room targets, optional |
 | Danfoss ECL Comfort 210/296/310/310B | Modbus RTU (210), TCP or RTU (296/310) | sensor S2 PNU 10202; circuit 1 comfort target 11180 only when application A266.1 is entered | read only until model and application tested |
+| Danfoss MCX (site-programmed) | Modbus RTU on a confirmed RS485-capable variant, or verified RTU-to-TCP gateway | **Requires exported application-specific register JSON; no built-in addresses** | read only; write control not offered |
 | Regin Corrigo E Ventilation 3.2 | Modbus RTU or gateway | outdoor/supply/extract temperatures, fan flow, run state | read only |
 | Jäspi Tehowatti AIR + MODBUS 40 | Modbus RTU or verified RTU-to-LAN gateway | No built-in point map; exact site/firmware register JSON required | custom profile read only |
 | Swegon CASA Genius SW4.x with SEM/SEC | Modbus RTU or gateway | fan RPM and %, temperature setpoint, mode, CO2 thresholds, heat recovery | selected operating modes 1/2/3 only, optional |
@@ -56,6 +57,9 @@ their exact, site-specific, read-only register map.
 The model list is not a claim that all these controllers offer Modbus
 without accessories. Confirm physical interface availability, interface
 options/licensing and wiring against the exact unit.
+
+For **Danfoss MCX** and the separate, non-Modbus **DEVIreg 330** setback input,
+see [Danfoss MCX / DEVIreg guidance](DANFOSS_MCX_DEVIREG330.md).
 
 For the *different* conventional Jäspi Tehowatti electric boiler, see
 [documented dry-contact temperature setback example](JASPI_TEHOWATTI.md).
