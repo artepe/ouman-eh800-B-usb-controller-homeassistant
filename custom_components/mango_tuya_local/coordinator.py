@@ -15,7 +15,7 @@ from homeassistant.exceptions import HomeAssistantError, ServiceValidationError
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .client import MangoClient, MangoWriteError
-from .const import CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL, DOMAIN
+from .const import CONF_ALLOW_WRITES, CONF_POLL_INTERVAL, DEFAULT_POLL_INTERVAL, DOMAIN
 from .executor import async_call
 from .protocol import Field, MangoError, MangoValueError, Parameter, Profile, Snapshot
 
@@ -129,7 +129,17 @@ class MangoCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             return False
         return True
 
+    @property
+    def writes_enabled(self) -> bool:
+        """User-activated setting; enabled only for this configured heat pump."""
+        return self.entry.options.get(CONF_ALLOW_WRITES, False) is True
+
     async def async_set_raw(self, parameter: Parameter, value: int) -> None:
+        if not self.writes_enabled:
+            raise HomeAssistantError(
+                "Parameter writes are disabled. Enable reviewed writes in "
+                "Settings > Devices & services > Mango Tuya Local > Configure."
+            )
         if self._closing:
             raise HomeAssistantError("Local device is closing")
         abort = threading.Event()

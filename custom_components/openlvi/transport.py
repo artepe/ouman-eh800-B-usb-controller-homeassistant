@@ -209,6 +209,9 @@ class UsbDriver:
     async def async_write(self, point: Register, value: float):
         from .usb_setpoints import USB_BY_KEY, raw_from_value
 
+        if not self.data.get(CONF_ALLOW_WRITES, False):
+            raise ValueError("EH-800B writes must be explicitly enabled in integration options")
+
         spec = USB_BY_KEY.get(point.key)
         if spec is None or not point.writable or point.address != spec.property_id:
             raise ValueError("Unknown or prohibited EH-800B property")

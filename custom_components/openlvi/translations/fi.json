@@ -59,7 +59,8 @@
         "data": {
           "ai_url": "Paikallinen Ollama-osoite (esim. http://192.168.10.5:11434)",
           "ai_model": "Pieni paikallinen malli",
-          "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein"
+          "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein",
+          "allow_writes": "Salli tarkistetut asetusarvokirjoitukset (oletuksena pois, tuntemattomat pisteet vain luettavia)"
         }
       }
     },

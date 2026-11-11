@@ -53,6 +53,7 @@ class MangoParameterEntity(CoordinatorEntity[MangoCoordinator]):
             "flags_raw": None if field is None else field.flags,
             "tag_raw": None if field is None else field.tag,
             "scale_verified": self.parameter.scale_verified,
+            "write_permission": "enabled" if self.coordinator.writes_enabled else "read_only",
             "local_write_evidence": "verified_this_connection"
             if self.parameter.key in self.coordinator.client.verified_writes
             else self.parameter.local_write_evidence,
