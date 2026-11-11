@@ -71,7 +71,7 @@
         }
       },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "Open HVAC — settings and research",
         "menu_options": {
           "register_map": "Register map and Unit ID",
           "research": "Modbus register research tool",
@@ -205,10 +205,10 @@
         "name": "L1 estimated thermal power"
       },
       "diagnostics": {
-        "name": "OpenLVI diagnostics"
+        "name": "Open HVAC diagnostics"
       },
       "english_ai_guide": {
-        "name": "OpenLVI English AI guide"
+        "name": "Open HVAC English AI guide"
       },
       "derived_water_heating_power_kw": {
         "name": "Water-side heating output"
