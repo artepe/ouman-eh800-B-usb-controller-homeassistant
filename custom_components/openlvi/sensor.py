@@ -1,5 +1,6 @@
 """Sensor entities for model-specific Ouman points."""
 from homeassistant.components.sensor import SensorEntity
+from homeassistant.const import EntityCategory
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_ALLOW_WRITES
 
@@ -152,7 +153,7 @@ class ModbusConnectionSensor(CoordinatorEntity, SensorEntity):
     _attr_has_entity_name = True
     _attr_translation_key = "modbus_connection"
     _attr_icon = "mdi:lan-connect"
-    _attr_entity_category = "diagnostic"
+    _attr_entity_category = EntityCategory.DIAGNOSTIC
 
     def __init__(self, coordinator):
         super().__init__(coordinator)
