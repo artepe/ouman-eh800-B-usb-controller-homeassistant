@@ -6,7 +6,7 @@ ESP32-S3 dashboard prototype and setup documentation.
 
 **Validation:** experimental  
 **Module:** esp32-s3-ouman-demo  
-**Source commit:** 723d2e635ad6f405ad796384619af98df8b71343
+**Source commit:** 71b6ac3d654735f476dbd939f047b03b2d434b98
 
 ## Install
 
