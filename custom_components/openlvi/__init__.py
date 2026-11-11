@@ -16,7 +16,7 @@ from .engineering import derive_cop_metrics
 from .ai_guide import (OpenLVIGuide, CONF_AI_AUTO, CONF_AI_URL, REVIEW_INTERVAL_SECONDS)
 
 _LOGGER = logging.getLogger(__name__)
-PLATFORMS = ["sensor", "number", "button"]
+PLATFORMS = ["sensor", "binary_sensor", "number", "button"]
 
 class OumanCoordinator(DataUpdateCoordinator):
     def __init__(self, hass, driver, entry):
@@ -58,6 +58,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             effective_config[key] = entry.options[key]
     effective_config[CONF_ALLOW_WRITES] = bool(entry.options.get(
         CONF_ALLOW_WRITES, entry.data.get(CONF_ALLOW_WRITES, False)))
+    # Retain per-device Ouflex write review settings in the existing bridge.
+    for key in ("ouflex_write_enabled", "ouflex_write_isolated",
+                "ouflex_write_reviewed", "ouflex_write_digest",
+                "ouflex_write_key", "ouflex_write_keys"):
+        if key in entry.options:
+            effective_config[key] = entry.options[key]
     driver = make_transport(hass, effective_config)
     try:
         await driver.async_connect()

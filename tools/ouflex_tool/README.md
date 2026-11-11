@@ -5,10 +5,13 @@ Aja repon juuresta Macissa tai Linuxissa / HAOS Terminalin Python-ympäristöss�
 
 ```sh
 python3 -m tools.ouflex_tool --host 192.168.10.105 fetch-map \
-  --out ouflex-results/tool/ounet.xml
+  --out ouflex-results/tool/map.json
 python3 -m tools.ouflex_tool --host 192.168.10.105 \
-  --map ouflex-results/tool/ounet.xml serve
+  --map ouflex-results/tool/map.json serve
 ```
+
+FTP-komento käyttää integraation yhteistä `ftp_map`-lukijaa: firmware haetaan
+laitteelta ja XML normalisoidaan paikalliseen JSONiin.
 
 Avaa **http://127.0.0.1:8765**. HTTP-palvelin kuuntelee vain loopbackia.
 Etäkoneelta (esim. HAOS, jos SSH ja Python ovat saatavilla) tee SSH-tunneli:
@@ -43,7 +46,7 @@ saada politiikan. Firmware 2.3.3 ja sovellus 1.1.2 vaaditaan. Mittaukset,
 käsiajot ja muut osoitteet estetään myös politiikkatiedostoa muokkaamalla.
 
 ```sh
-python3 -m tools.ouflex_tool --map ouflex-results/tool/ounet.xml \
+python3 -m tools.ouflex_tool --map ouflex-results/tool/map.json \
   policy-template > ouflex-results/tool/policy.json
 ```
 
@@ -53,10 +56,10 @@ kun käyttäjän aiempi testi koskee juuri tätä laitetta ja pistettä. Kartan 
 endpointin muutos mitätöi politiikan. Mallipolitiikka ei ole automaattinen lupa.
 
 ```sh
-python3 -m tools.ouflex_tool --map ouflex-results/tool/ounet.xml \
+python3 -m tools.ouflex_tool --map ouflex-results/tool/map.json \
   --policy ouflex-results/tool/policy.json serve
 # Avain näkyy list-komennossa. Testi palauttaa alkuarvon automaattisesti:
-python3 -m tools.ouflex_tool --map ouflex-results/tool/ounet.xml \
+python3 -m tools.ouflex_tool --map ouflex-results/tool/map.json \
   --policy ouflex-results/tool/policy.json \
   write-test PISTEEN_AVAIN 21.1 --confirm-disconnected
 ```

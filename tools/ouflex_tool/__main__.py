@@ -38,25 +38,13 @@ def main():
         if args.map:
             app.import_map(Path(args.map).read_text(encoding='utf-8-sig'), args.firmware)
         if args.command == 'fetch-map':
-            import ftplib
+            from custom_components.ouman_ouflex.ftp_map import fetch_application_map
             target = Path(args.out)
             target.parent.mkdir(parents=True, exist_ok=True)
-            with ftplib.FTP() as ftp:
-                ftp.connect(args.host, 21, timeout=3)
-                ftp.login('anonymous', '')
-                chunks = []
-                total = 0
-                def collect(data):
-                    nonlocal total
-                    total += len(data)
-                    if total > 2_000_000:
-                        raise ValueError('XML exceeds 2 MB')
-                    chunks.append(data)
-                ftp.retrbinary('RETR /files/ounetDescrFile_fi-FI.xml', collect)
-            text = b''.join(chunks).decode('utf-8-sig')
-            app.import_map(text, args.firmware)
+            doc = fetch_application_map(args.host)
+            app.import_map(json.dumps(doc))
             with target.open('x', encoding='utf-8') as stream:
-                stream.write(text)
+                json.dump(doc, stream, ensure_ascii=False, indent=2)
             print(json.dumps(dict(points=len(app.points), file=str(target))))
             return 0
         if args.command == 'policy-template':

@@ -71,11 +71,12 @@
         }
       },
       "init": {
-        "title": "OpenLVI — settings and research",
+        "title": "Open HVAC — settings and research",
         "menu_options": {
           "register_map": "Register map and Unit ID",
           "research": "Modbus register research tool",
-          "advisor": "Local AI advisor"
+          "advisor": "Local AI advisor",
+          "ouflex_write": "Ouflex: enable reviewed setpoint writing"
         }
       },
       "register_map": {
@@ -103,13 +104,26 @@
       "research_result": {
         "title": "Research results",
         "description": "```json\n{diagnostics}\n```"
+      },
+      "ouflex_write": {
+        "title": "Ouflex — writable setpoint controls",
+        "description": "Select up to 64 documented numeric holding points and expose them as Home Assistant number controls. Only use on a physically isolated test controller, after independently verifying each selected point's Modbus write behavior, scaling and limits. Values are read back; a failed write triggers a best-effort restore. Clearing Enable disables all Ouflex writes.",
+        "data": {
+          "ouflex_write_enabled": "Enable selected Ouflex setpoint controls",
+          "ouflex_write_keys": "Choose setpoints (multiple selections)",
+          "ouflex_write_isolated": "I confirm this Ouflex is physically disconnected from controlled equipment",
+          "ouflex_write_reviewed": "I independently checked all selected points and their write limits"
+        }
       }
     },
     "error": {
       "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported",
-      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "invalid_profile": "Select 1–64 verified setpoints and confirm physical isolation and write verification",
       "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
       "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Could not read Ouflex XML from local FTP"
     }
   },
   "entity": {
@@ -205,10 +219,10 @@
         "name": "L1 estimated thermal power"
       },
       "diagnostics": {
-        "name": "OpenLVI diagnostics"
+        "name": "Open HVAC diagnostics"
       },
       "english_ai_guide": {
-        "name": "OpenLVI English AI guide"
+        "name": "Open HVAC English AI guide"
       },
       "derived_water_heating_power_kw": {
         "name": "Water-side heating output"

@@ -4,8 +4,8 @@
 
 `tools/ouflex_tool` toteuttaa itsenäisen stdlib-CLI:n ja paikallisen selain-UI:n.
 Yhteiset `modbus`, `ounet`, `pointmap` ja `session` säilyvät HA-integraatioiden
-käytössä muuttamattomina. `ftp_map.py`-tiedostoa ei tässä lähtöhaarassa ole;
-Ounet-tuonti on `ounet.py`:ssä. Käyttöohje: [README](../../../../tools/ouflex_tool/README.md).
+käytössä muuttamattomina. Tutkimushaaran myöhemmät muutokset yhdistettiin mukaan. FTP-haku käyttää
+yhteistä `ftp_map.py`-lukijaa ja Ounet-tuonti `ounet.py`:tä. Käyttöohje: [README](../../../../tools/ouflex_tool/README.md).
 
 Tämän ajon suorat Python TCP-yhteydet Macilta 192.168.10.105:n portteihin
 21, 502, 503, 504 ja 505 palauttivat `EPERM: Operation not permitted` ennen

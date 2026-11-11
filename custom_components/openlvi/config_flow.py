@@ -223,8 +223,89 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
 
     async def async_step_init(self, user_input=None):
         if self.config_entry.data.get(CONF_TRANSPORT) == "modbus_tcp":
-            return self.async_show_menu(step_id="init", menu_options=["register_map", "research", "advisor"])
+            menus = ["register_map", "research", "advisor"]
+            if self.config_entry.data.get(CONF_MODEL) == "Ouflex":
+                menus.insert(0, "ouflex_write")
+            return self.async_show_menu(step_id="init", menu_options=menus)
         return await self.async_step_advisor(user_input)
+
+    async def async_step_ouflex_write(self, user_input=None):
+        """Choose multiple reviewed setpoints for an isolated Ouflex test rig."""
+        from custom_components.ouman_ouflex.ftp_map import fetch_application_map
+        from custom_components.ouman_ouflex.pointmap import load_map, map_digest
+        from .ouflex_write import candidates, selected_keys
+
+        try:
+            doc = await self.hass.async_add_executor_job(
+                fetch_application_map, self.config_entry.data[CONF_HOST])
+            _, points = load_map(json.dumps(doc, ensure_ascii=False))
+            eligible = sorted(candidates(points), key=lambda p: p.name.casefold())
+            if not eligible:
+                raise ValueError("No bounded numeric setpoint candidates")
+            digest = map_digest(doc)
+        except Exception:
+            return self.async_abort(reason="cannot_connect")
+
+        valid_keys = {p.key for p in eligible}
+        current = self.config_entry.options
+        errors = {}
+        if user_input is not None:
+            enabled = user_input.get("ouflex_write_enabled") is True
+            selected = user_input.get("ouflex_write_keys", [])
+            isolated = user_input.get("ouflex_write_isolated") is True
+            reviewed = user_input.get("ouflex_write_reviewed") is True
+            if (enabled and
+                    (not isinstance(selected, list)
+                     or not selected
+                     or len(selected) > 64
+                     or len(set(selected)) != len(selected)
+                     or any(key not in valid_keys for key in selected)
+                     or not isolated or not reviewed)):
+                errors["base"] = "invalid_profile"
+            else:
+                updated = {
+                    **current,
+                    "ouflex_write_enabled": enabled,
+                    "ouflex_write_keys": selected if enabled else [],
+                    # Clear legacy single-key choice to avoid ambiguous state.
+                    "ouflex_write_key": "",
+                    "ouflex_write_digest": digest if enabled else "",
+                    "ouflex_write_isolated": isolated if enabled else False,
+                    "ouflex_write_reviewed": reviewed if enabled else False,
+                    CONF_ALLOW_WRITES: False,
+                }
+                return self.async_create_entry(title="", data=updated)
+
+        defaults = [key for key in selected_keys(current) if key in valid_keys]
+        return self.async_show_form(
+            step_id="ouflex_write",
+            errors=errors,
+            data_schema=vol.Schema({
+                vol.Required(
+                    "ouflex_write_enabled",
+                    default=current.get("ouflex_write_enabled", False),
+                ): bool,
+                vol.Optional("ouflex_write_keys", default=defaults):
+                    selector.SelectSelector(
+                        selector.SelectSelectorConfig(
+                            multiple=True,
+                            options=[
+                                {
+                                    "value": p.key,
+                                    "label": (
+                                        f"{p.name} | Modbus {p.address} | "
+                                        f"{p.minimum}–{p.maximum} {p.unit or ''}"
+                                    ),
+                                }
+                                for p in eligible
+                            ],
+                            mode=selector.SelectSelectorMode.DROPDOWN,
+                        )
+                    ),
+                vol.Required("ouflex_write_isolated", default=False): bool,
+                vol.Required("ouflex_write_reviewed", default=False): bool,
+            }),
+        )
 
     async def async_step_register_map(self, user_input=None):
         current = {**self.config_entry.data, **self.config_entry.options}

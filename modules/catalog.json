@@ -1,10 +1,10 @@
 {
   "schema_version": 1,
-  "project": "Open HVAC / OpenLVI Bridge",
+  "project": "Open HVAC",
   "modules": [
     {
       "slug": "openlvi-bridge",
-      "name": "OpenLVI Bridge Core",
+      "name": "Open HVAC Bridge Core",
       "kind": "integration",
       "status": "experimental",
       "summary": "Multi-vendor local Modbus, USB, BACnet and M-Bus bridge. Ouman USB protocol reader bundled.",
@@ -123,16 +123,16 @@
     },
     {
       "slug": "ouman-ouflex",
-      "name": "Ouman Ouflex laboratory",
+      "name": "Open HVAC Ouflex",
       "kind": "integration",
-      "status": "experimental / hardware-unverified",
-      "summary": "Application-map-based isolated Ouflex integration; protected per-register writes and Modbus laboratory CLI.",
+      "status": "experimental / hardware-read verified",
+      "summary": "Ouman Ouflex app-specific Modbus integration: read-only automatic FTP Ounet XML point map import and register browser; protected writes only after verification.",
       "paths": [
         "custom_components/ouman_ouflex"
       ],
       "documentation": "docs/ouman/ouflex/research/README.md",
       "target": "/config",
-      "caution": "No application map or physical verification is bundled. Imported maps are read-only until individually verified in a separate policy."
+      "caution": "FTP autoload requires anonymous read access on private LAN and per-device Ounet XML. Writes disabled until separately physically verified."
     }
   ]
 }

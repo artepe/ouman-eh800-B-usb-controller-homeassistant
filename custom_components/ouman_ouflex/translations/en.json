@@ -1,15 +1,16 @@
 {
-  "title": "Ouman Ouflex (experimental)",
+  "title": "Open HVAC – Ouman Ouflex (experimental)",
   "config": {
     "step": {
       "user": {
-        "title": "Ouflex application map",
-        "description": "Import a normalized map from ouflex_lab import-map. No default application registers are assumed. Setup performs reads only.",
+        "title": "Connect Ouflex and import application points",
+        "description": "Automatically read the device-specific Ounet XML via private LAN FTP; do not enter a JSON map unless disabling automatic import. All imported points start read-only.",
         "data": {
           "host": "IP address",
           "port": "TCP port",
           "unit_id": "Unit ID",
-          "map_json": "Normalized map JSON"
+          "map_json": "Existing normalized map JSON (manual mode only)",
+          "auto_ftp_map": "Automatically import all Ouflex points from FTP"
         }
       }
     },
@@ -36,7 +37,8 @@
         "menu_options": {
           "register_browser": "Select mapped registers",
           "register_map": "Import application description",
-          "write_access": "Verified write access"
+          "write_access": "Verified write access",
+          "refresh_from_ftp": "Refresh all points from Ouflex FTP"
         }
       },
       "register_browser": {
@@ -53,11 +55,20 @@
           "map_json": "JSON map or Ounet XML",
           "firmware": "Firmware from deviceversion.txt"
         }
+      },
+      "refresh_from_ftp": {
+        "title": "Refresh Ouflex application map from FTP",
+        "description": "Fetch the Ouflex point map directly from its private LAN FTP server. Replaces the current map and selection, and disables all write permissions. No Modbus writes or FTP uploads.",
+        "data": {
+          "confirm": "Confirm read-only import of all documented points"
+        }
       }
     },
     "error": {
       "invalid_policy": "Write policy must match the application identity and map digest",
-      "invalid_map": "Invalid map or point selection"
+      "invalid_map": "Invalid map or point selection",
+      "not_confirmed": "Confirm the import first",
+      "ftp_import_failed": "Could not read or parse the Ouflex FTP application map"
     }
   }
 }
