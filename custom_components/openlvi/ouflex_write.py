@@ -26,7 +26,7 @@ def candidates(native_points):
                 or point.manual_reg is not None
                 or not point.source or not point.name
                 or point.metadata.get("operation", "value") != "value"
-                or point.metadata.get("pointtype") in ("5", "14", "15", "16", "17")
+                or point.metadata.get("pointtype") in ("5", "8", "9", "11", "14", "15", "16", "17")
                 or point.decimals > 5):
             continue
         result.append(point)
