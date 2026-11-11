@@ -1,0 +1,103 @@
+blueprint:
+  name: "Open HVAC | DEVIreg 330 price-based setback (one circuit)"
+  description: >
+    Requests the existing DEVIreg 330 (+5...+45 C) 5 C setback using
+    an already commissioned Home Assistant switch entity. The switch
+    ON state MUST mean 'setback requested', not 'heater energized'.
+    Use one blueprint automation per independently wired circuit.
+    Invalid or stale price data restores normal thermostat mode.
+    This blueprint cannot replace physical thermostat, overheat or
+    frost protection; HA / Wi-Fi loss requires a hardware fail-safe.
+    The thermostat timer input may be mains-referenced: qualified
+    electrical installation and exact wiring verification required.
+  domain: automation
+  input:
+    price_sensor:
+      name: Electricity spot price sensor
+      description: Numeric price in c/kWh (including any selected fees).
+      selector:
+        entity:
+          domain: sensor
+    setback_switch:
+      name: Commissioned setback-request switch
+      description: ON = DEVIreg 5 C economy setback; OFF = normal thermostat setting.
+      selector:
+        entity:
+          domain: switch
+    expensive_price:
+      name: Enter setback at or above this price (c/kWh)
+      default: 15
+      selector:
+        number:
+          min: -50
+          max: 200
+          step: 0.5
+          mode: box
+    cheap_price:
+      name: Return to normal at or below this price (c/kWh)
+      description: Must be lower than the expensive threshold.
+      default: 8
+      selector:
+        number:
+          min: -50
+          max: 200
+          step: 0.5
+          mode: box
+    max_price_age_minutes:
+      name: Price data stale after (minutes)
+      description: Restore normal operation when the sensor has not updated.
+      default: 90
+      selector:
+        number:
+          min: 15
+          max: 360
+          step: 5
+          unit_of_measurement: min
+          mode: box
+
+mode: restart
+max_exceeded: silent
+variables:
+  price_entity: !input price_sensor
+  high_price: !input expensive_price
+  low_price: !input cheap_price
+  max_age_minutes: !input max_price_age_minutes
+trigger:
+  - platform: state
+    entity_id: !input price_sensor
+  - platform: homeassistant
+    event: start
+  - platform: time_pattern
+    minutes: "/5"
+condition: []
+action:
+  - choose:
+      # Missing/non-numeric/stale prices, or invalid threshold order:
+      # revert to the existing thermostat's normal operating mode.
+      - conditions:
+          - condition: template
+            value_template: >-
+              {% set price = states(price_entity) %}
+              {{ high_price <= low_price or not is_number(price)
+                 or (as_timestamp(now()) -
+                     as_timestamp(states[price_entity].last_updated, 0)) >
+                     (max_age_minutes | float * 60) }}
+        sequence:
+          - service: switch.turn_off
+            target:
+              entity_id: !input setback_switch
+      - conditions:
+          - condition: template
+            value_template: "{{ states(price_entity) | float >= high_price | float }}"
+        sequence:
+          - service: switch.turn_on
+            target:
+              entity_id: !input setback_switch
+      - conditions:
+          - condition: template
+            value_template: "{{ states(price_entity) | float <= low_price | float }}"
+        sequence:
+          - service: switch.turn_off
+            target:
+              entity_id: !input setback_switch
+    default: []
