@@ -23,11 +23,6 @@ def hass_config_dir(hass_tmp_config_dir):
     return hass_tmp_config_dir
 
 
-@pytest.fixture(autouse=True)
-def no_dependency_install(skip_pip):
-    """Only transport I/O is mocked; HA flows, entities and options are real."""
-
-
 async def connection_step(hass):
     result = await hass.config_entries.flow.async_init('openlvi', context={'source': 'user'})
     result = await hass.config_entries.flow.async_configure(result['flow_id'], {'vendor': 'Ouman'})
