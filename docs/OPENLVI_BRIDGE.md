@@ -28,8 +28,10 @@ The controller's actual language setting is not changed. See
 [Language support](LOCALIZATION.md).
 
 The setup probe is *read-only*. On **EH-800B USB**, 11 guarded L1
-Number controls now appear automatically (also on previously configured
-OpenLVI entries). **No SET PROPERTY is sent on startup or polling.**
+Number controls appear only after enabling **Allow reviewed writes** in
+the integration's **Configure** options. Other compatible controllers
+use the same opt-in setting. Previously configured entries can change
+permission without re-adding devices. **No SET PROPERTY is sent on startup or polling.**
 Their actual initial values are unknown until a user manually submits
 a new target because a side-effect-free USB GET PROPERTY is not verified.
 PID, direct valve position and undocumented properties are not exposed.
