@@ -122,6 +122,13 @@ async def run_driver_sequence():
     assert all(key not in points for key in ["l1_p_band", "l1_i_time",
                                             "l1_d_time", "l1_manual_valve_position"])
 
+    try:
+        await driver.async_write(points["l1_curve_minus_20c"], 55)
+        raise AssertionError("Disabled write permission was bypassed")
+    except ValueError:
+        pass
+    assert not hub.commands
+    driver.data["allow_writes"] = True
     await driver.async_write(points["l1_curve_minus_20c"], 55)
     assert hub.commands == [("SET PROPERTY 67 550", 1)]
     updated = await driver.async_read()
