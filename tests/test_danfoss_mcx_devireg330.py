@@ -42,7 +42,7 @@ class DanfossMCXTests(unittest.TestCase):
     def test_blueprint_is_one_circuit_and_fails_to_normal(self):
         p = ROOT / "blueprints/automation/openlvi/devireg330_price_setback.yaml"
         content = p.read_text(encoding="utf-8")
-        for marker in ("domain: automation", "setback_switch: !input setback_switch",
+        for marker in ("domain: automation", "entity_id: !input setback_switch",
                        "switch.turn_on", "switch.turn_off", "max_age_minutes",
                        "platform: homeassistant", "platform: time_pattern",
                        "not is_number(price)"):
