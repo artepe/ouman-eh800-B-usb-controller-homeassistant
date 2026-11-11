@@ -193,6 +193,7 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
                         CONF_AI_URL: url,
                         CONF_AI_MODEL: model,
                         CONF_AI_AUTO: bool(user_input.get(CONF_AI_AUTO, False)),
+                        CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)),
                     }
                 )
             except ValueError:
@@ -204,6 +205,8 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(CONF_AI_URL, default=current.get(CONF_AI_URL, "")): str,
                 vol.Required(CONF_AI_MODEL, default=current.get(CONF_AI_MODEL, DEFAULT_MODEL)): str,
                 vol.Optional(CONF_AI_AUTO, default=current.get(CONF_AI_AUTO, False)): bool,
+                vol.Optional(CONF_ALLOW_WRITES, default=current.get(
+                    CONF_ALLOW_WRITES, self.config_entry.data.get(CONF_ALLOW_WRITES, False))): bool,
             }),
             errors=errors,
         )
