@@ -38,7 +38,7 @@ class OuflexNativeDriver(ModbusDriver):
         self.points = []
         self.binary_points = {}
         self.ouflex_doc = None
-        self._authorized = None
+        self._authorized = {}
 
     async def async_connect(self):
         # This separate module is shipped alongside openlvi in the OpenHVAC
@@ -53,9 +53,9 @@ class OuflexNativeDriver(ModbusDriver):
             raise ValueError("No documented Ouflex points in XML")
         self.ouflex_doc = doc
         self._authorized = authorize(native_points, map_digest(doc), self.data)
-        self.data[CONF_ALLOW_WRITES] = self._authorized is not None
+        self.data[CONF_ALLOW_WRITES] = bool(self._authorized)
         self.points = [
-            (self._authorized if self._authorized and self._authorized.key == p.key
+            (self._authorized[p.key] if p.key in self._authorized
              else Register(key=p.key, name=p.name, address=p.address, kind=p.kind,
                            decimals=p.decimals, unit=p.unit, writable=False, area=p.area))
             for p in native_points
@@ -67,6 +67,7 @@ class OuflexNativeDriver(ModbusDriver):
         self.last_diagnostics = {
             "mapped_points": len(self.points),
             "binary_points": len(self.binary_points),
+            "writable_setpoints": len(self._authorized),
             "source": "read-only local Ounet XML FTP",
             "firmware": doc["identity"]["firmware"],
         }
@@ -126,7 +127,7 @@ class OuflexNativeDriver(ModbusDriver):
         On an error after a possible write, attempt to restore the original
         documented numeric value. Keep the result observable to the user.
         """
-        if not self._authorized or point.key != self._authorized.key:
+        if point.key not in self._authorized:
             raise ValueError("Ouflex point is not enabled for reviewed writes")
         if not self.data.get("ouflex_write_isolated", False):
             raise ValueError("Bench write requires physically isolated controller")
