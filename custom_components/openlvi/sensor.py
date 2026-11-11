@@ -15,7 +15,8 @@ async def async_setup_entry(hass, entry, async_add_entities):
     entities = [
         OumanSensor(coordinator, point)
         for point in coordinator.driver.points
-        if not (editable and point.writable)
+        if (not (editable and point.writable)
+            and point.key not in getattr(coordinator.driver, "binary_points", {}))
     ]
     for key, name, unit in (
         ("l1_delta_t", "L1 temperature difference", "K"),
