@@ -4,6 +4,8 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .const import DOMAIN, CONF_MODEL, CONF_VENDOR
 
 async def async_setup_entry(hass, entry, async_add_entities):
+    if getattr(entry.runtime_data.driver, "discovery", False):
+        return
     async_add_entities([OpenLVIReviewButton(entry.runtime_data)])
 
 class OpenLVIReviewButton(CoordinatorEntity, ButtonEntity):
@@ -24,3 +26,4 @@ class OpenLVIReviewButton(CoordinatorEntity, ButtonEntity):
                 "name": f"{entry.data[CONF_VENDOR]} {entry.data[CONF_MODEL]}",
                 "manufacturer": entry.data[CONF_VENDOR],
                 "model": entry.data[CONF_MODEL]}
+

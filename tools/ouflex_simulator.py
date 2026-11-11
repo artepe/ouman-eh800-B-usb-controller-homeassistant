@@ -20,6 +20,8 @@ class Model:
     def __init__(self):
         self.holding = {0: 7, 1: 0xffff, 2: 0xff85, 3: 0, 4: 39}
         self.inputs = {0: 23}
+        self.coils = {i: False for i in range(16)}
+        self.discrete = {0: True}
         self.lock = threading.Lock()
         self.requests = []
         self.delay = 0
@@ -32,6 +34,33 @@ class Model:
         with self.lock:
             self.requests.append(pdu)
             fc = pdu[0]
+            if fc in (1, 2) and len(pdu) == 5:
+                start, count = struct.unpack('>HH', pdu[1:])
+                data = self.coils if fc == 1 else self.discrete
+                if not 1 <= count <= 2000:
+                    return bytes([fc | 128, 3])
+                if any(i not in data for i in range(start, start+count)):
+                    return bytes([fc | 128, 2])
+                packed = bytearray((count+7)//8)
+                for i in range(count):
+                    packed[i//8] |= int(data[start+i]) << (i % 8)
+                return bytes([fc, len(packed)]) + packed
+            if fc == 5 and len(pdu) == 5:
+                start, value = struct.unpack('>HH', pdu[1:])
+                if value not in (0, 0xff00):
+                    return bytes([133, 3])
+                if start not in self.coils:
+                    return bytes([133, 2])
+                self.coils[start] = bool(value)
+                return pdu
+            if fc == 15 and len(pdu) >= 6:
+                start, count, n = struct.unpack('>HHB', pdu[1:6])
+                if not 1 <= count <= 1968 or n != (count+7)//8 or len(pdu) != 6+n:
+                    return bytes([143, 3])
+                if any(i not in self.coils for i in range(start, start+count)):
+                    return bytes([143, 2])
+                self.coils.update({start+i: bool(pdu[6+i//8] & (1 << (i % 8))) for i in range(count)})
+                return pdu[:5]
             if fc in (3, 4) and len(pdu) == 5:
                 start, count = struct.unpack('>HH', pdu[1:])
                 data = self.holding if fc == 3 else self.inputs

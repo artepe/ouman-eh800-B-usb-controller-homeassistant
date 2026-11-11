@@ -1,0 +1,33 @@
+name: OpenLVI Discovery Mode
+on:
+  pull_request:
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests/test_openlvi_discovery.py'
+      - 'tests/openlvi_ha/**'
+      - '.github/workflows/openlvi-discovery.yml'
+  push:
+    branches: [main, 'feature/openlvi-ouflex-discovery']
+    paths:
+      - 'custom_components/openlvi/**'
+      - 'tests/test_openlvi_discovery.py'
+      - 'tests/openlvi_ha/**'
+      - '.github/workflows/openlvi-discovery.yml'
+jobs:
+  protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p 'test_openlvi_discovery.py' -v
+  home-assistant:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python -m pip install pytest-homeassistant==2026.11.0 pymodbus==3.13.1
+      - run: python -m pytest -c tests/openlvi_ha/pytest.ini tests/openlvi_ha -v

@@ -26,7 +26,12 @@ class OuflexCoordinator(DataUpdateCoordinator):
         super().__init__(hass, _LOGGER, name='Ouman Ouflex',
                          update_interval=timedelta(seconds=30))
         self.config_entry = entry
-        self.doc, self.points = load_map(entry.data['map_json'])
+        self.doc, self.points = load_map(entry.options.get('map_json', entry.data['map_json']))
+        selected = entry.options.get('selected_points')
+        if selected is not None:
+            self.points = [p for p in self.points if p.key in selected]
+            if not self.points:
+                raise ValueError('Select at least one mapped point')
         self.lock = asyncio.Lock()
         self.point_errors = {}
         self.last_write = None

@@ -1,5 +1,10 @@
 # MacBook/Linux: tulosten keruu
 
+Uusin laitteella toimivaksi todettu FTP-/XML-/nc-lukupolku on
+[ADVANCED.md](ADVANCED.md#home-assistant-ja-toistaminen). Tämän yksilön
+FTP-hakemisto on `/files`, ei `/Files`; FC03 toimii Unit ID:llä 1.
+`fetch-map` käyttää nyt oletuksena `/files`-hakemistoa.
+
 Aja samaan verkkoon tai valmiiseen VPN-/Access-reittiin pääsevästä koneesta. USB:tä ei tarvita.
 Alla oletetaan repositorion juuri nykyhakemistoksi. Python-työkalu ei vaadi pip-asennuksia.
 

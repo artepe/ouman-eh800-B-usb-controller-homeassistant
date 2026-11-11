@@ -27,13 +27,16 @@ def address_offset(address, base, count=1):
 
 
 class Client:
-    def __init__(self, host, port=502, unit=1, timeout=2, audit=None):
+    def __init__(self, host, port=502, unit=1, timeout=2, audit=None, transport="socket"):
         if not isinstance(host, str) or not host or not 1 <= int(port) <= 65535:
             raise ValueError("Invalid host/port")
         if not 1 <= int(unit) <= 255 or not 0 < float(timeout) <= 30:
             raise ValueError("Unit must be 1..255; timeout must be 0..30 seconds")
         self.host, self.port, self.unit = host, int(port), int(unit)
         self.timeout, self.audit, self.transaction = float(timeout), audit, 0
+        if transport not in ('socket', 'nc'):
+            raise ValueError('Transport must be socket or nc')
+        self.transport = transport
         self.events = []
 
     @staticmethod
@@ -60,13 +63,19 @@ class Client:
                      port=self.port, unit_id=self.unit, function_code=function,
                      address=address, address_base=0, count=count, raw=None,
                      interpreted=value, datatype=datatype, point_name=name,
-                     tcp_connected=False, modbus_response=False, success=False,
+                     transport=self.transport, tcp_connected=False, modbus_response=False, success=False,
                      exception_code=None)
         pdu = bytes([function]) + payload
         event['request_hex'] = (struct.pack('>HHHB', tid, 0, len(pdu) + 1, self.unit) + pdu).hex()
         try:
-            with socket.create_connection((self.host, self.port), self.timeout) as sock:
-                event['tcp_connected'] = True
+            if self.transport == 'nc':
+                from .nc_transport import NetcatSocket
+                connection = NetcatSocket(self.host, self.port, self.timeout)
+            else:
+                connection = socket.create_connection((self.host, self.port), self.timeout)
+            with connection as sock:
+                event['transport'] = self.transport
+                event['tcp_connected'] = self.transport == 'socket'
                 # A single deadline bounds fragmented responses as well as connect.
                 deadline = started + self.timeout
                 sock.settimeout(max(0.001, deadline - time.monotonic()))
@@ -77,6 +86,7 @@ class Client:
                     raise ModbusError('Invalid MBAP transaction/protocol/unit/length')
                 sock.settimeout(max(0.001, deadline - time.monotonic()))
                 reply = self._exact(sock, length - 1, deadline)
+                event['tcp_connected'] = True
                 event['response_hex'] = (header + reply).hex()
                 if reply[0] == function | 0x80:
                     if len(reply) != 2:
@@ -85,19 +95,28 @@ class Client:
                     raise ModbusError('Modbus exception %d' % reply[1], reply[1])
                 if reply[0] != function:
                     raise ModbusError('Unexpected response function')
-                if function in (3, 4):
+                if function in (1, 2):
+                    n = (count + 7) // 8
+                    if len(reply) != 2 + n or reply[1] != n:
+                        raise ModbusError('Invalid bit byte count')
+                    if count % 8 and reply[-1] >> (count % 8):
+                        raise ModbusError('Nonzero bit padding')
+                    result = [bool(reply[2+i//8] & (1 << (i % 8))) for i in range(count)]
+                    event['raw'] = result
+                elif function in (3, 4):
                     if len(reply) != 2 + count * 2 or reply[1] != count * 2:
                         raise ModbusError('Invalid register byte count')
                     result = list(struct.unpack('>' + 'H' * count, reply[2:]))
                     event['raw'] = result
-                elif function in (6, 16):
-                    expected = payload if function == 6 else payload[:4]
+                elif function in (5, 6, 15, 16):
+                    expected = payload if function in (5, 6) else payload[:4]
                     if reply[1:] != expected:
                         raise ModbusError('Write echo mismatch')
                     result = reply[1:]
                     event['echo_hex'] = expected.hex()
-                    data = payload[2:] if function == 6 else payload[5:]
-                    event['raw'] = list(struct.unpack('>' + 'H' * (len(data)//2), data))
+                    data = payload[2:] if function in (5, 6) else payload[5:]
+                    event['raw'] = (list(data) if function in (5, 15) else
+                                    list(struct.unpack('>' + 'H' * (len(data)//2), data)))
                 elif function == 43:
                     if len(reply) < 7 or reply[1:3] != b'\x0e\x01':
                         raise ModbusError('Malformed device identification')
@@ -138,6 +157,28 @@ class Client:
             raise ValueError('FC03/FC04, 1..125 registers required')
         return self.request(function, struct.pack('>HH', address, count),
                             address=address, count=count, **metadata)
+
+    def read_bits(self, address, count=1, function=1):
+        address_offset(address, 0, count)
+        if function not in (1, 2) or count > 2000:
+            raise ValueError('FC01/FC02, 1..2000 bits required')
+        return self.request(function, struct.pack('>HH', address, count), address=address, count=count)
+
+    def write_bits(self, address, bits, function=15):
+        # Low-level laboratory API; no HA exposure or implicit permissions.
+        address_offset(address, 0, len(bits))
+        if any(type(b) is not bool for b in bits):
+            raise ValueError('Explicit bool values required')
+        if function == 5 and len(bits) == 1:
+            payload = struct.pack('>HH', address, 0xff00 if bits[0] else 0)
+        elif function == 15 and len(bits) <= 1968:
+            packed = bytearray((len(bits)+7)//8)
+            for i, bit in enumerate(bits):
+                packed[i//8] |= int(bit) << (i % 8)
+            payload = struct.pack('>HHB', address, len(bits), len(packed)) + packed
+        else:
+            raise ValueError('FC05 requires one bit; FC15 requires 1..1968')
+        return self.request(function, payload, address=address, count=len(bits))
 
     def identify(self):
         return self.request(43, b'\x0e\x01\x00')

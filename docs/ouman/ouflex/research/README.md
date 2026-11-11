@@ -1,7 +1,12 @@
 # Ouman Ouflex: tutkimus ja kokeellinen OpenHVAC-moduuli
 
-Tilanne 2026-11-11: **laitekohtainen kartta ja laitetestit puuttuvat**.
-Tämä ei ole valmis tai laitteella hyväksytty tuotantointegraatio.
+Uusin laiteajo: [ADVANCED.md](ADVANCED.md). FTP-kuvaukset ja versiot sekä
+240/240 pisteen ja 720 kalenterirekisterin FC03-luvut on nyt varmennettu.
+Kirjoituksia ja fyysisen LCD:n muutoksia ei ole vahvistettu.
+
+**Alla on aiemman PR #30 -vaiheen historiallinen lähtötilanne**, jonka
+verkkorajoitukset ja puuttuva pistekartta eivät kuvaa uusinta ajoa.
+Uusimmat todisteet ja rajaukset ovat yllä linkitetyssä tutkimusraportissa.
 
 ## Mitä on toteutettu
 

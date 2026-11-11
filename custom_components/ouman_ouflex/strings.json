@@ -5,20 +5,59 @@
       "user": {
         "title": "Ouflex application map",
         "description": "Import a normalized map from ouflex_lab import-map. No default application registers are assumed. Setup performs reads only.",
-        "data": {"host": "IP address", "port": "TCP port", "unit_id": "Unit ID", "map_json": "Normalized map JSON"}
+        "data": {
+          "host": "IP address",
+          "port": "TCP port",
+          "unit_id": "Unit ID",
+          "map_json": "Normalized map JSON"
+        }
       }
     },
-    "error": {"invalid_map": "Invalid or unsupported application map", "cannot_connect": "No valid Modbus response from first mapped point"},
-    "abort": {"already_configured": "This endpoint is already configured"}
+    "error": {
+      "invalid_map": "Invalid or unsupported application map",
+      "cannot_connect": "No valid Modbus response from first mapped point"
+    },
+    "abort": {
+      "already_configured": "This endpoint is already configured"
+    }
   },
   "options": {
     "step": {
-      "init": {
+      "write_access": {
         "title": "Ouflex write access",
         "description": "Controls require an exact map policy and individual physical verification. Imported RW flags alone do not enable writes.",
-        "data": {"allow_writes": "Enable verified register writes", "write_policy": "Reviewed write policy JSON"}
+        "data": {
+          "allow_writes": "Enable verified register writes",
+          "write_policy": "Reviewed write policy JSON"
+        }
+      },
+      "init": {
+        "title": "Ouflex registers",
+        "menu_options": {
+          "register_browser": "Select mapped registers",
+          "register_map": "Import application description",
+          "write_access": "Verified write access"
+        }
+      },
+      "register_browser": {
+        "title": "Register browser",
+        "description": "Select documented points to create entities. Labels include source address, address base and type. Writes require separate verification.",
+        "data": {
+          "selected_points": "Points to add to Home Assistant"
+        }
+      },
+      "register_map": {
+        "title": "Import register map",
+        "description": "Paste normalized JSON or the observed Ounet controllertemplate XML. Import disables writes and resets the selection. Site details are discarded.",
+        "data": {
+          "map_json": "JSON map or Ounet XML",
+          "firmware": "Firmware from deviceversion.txt"
+        }
       }
     },
-    "error": {"invalid_policy": "Write policy must match the application identity and map digest"}
+    "error": {
+      "invalid_policy": "Write policy must match the application identity and map digest",
+      "invalid_map": "Invalid map or point selection"
+    }
   }
 }

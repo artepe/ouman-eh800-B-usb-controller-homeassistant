@@ -20,7 +20,7 @@ class OuflexBinary(OuflexEntity, BinarySensorEntity):
     def extra_state_attributes(self):
         result = super().extra_state_attributes
         if self.point.entity == 'alarm' and self.value is not None:
-            result.update(alarm_state(self.value))
+            result.update(alarm_state(self.value, self.point.metadata.get('alarm_masks')))
         return result
 
 

@@ -26,7 +26,7 @@ SENSOR_KEYS = (
     "derived_refrigerant_cycle_heating_cop_estimate",
     "derived_refrigerant_heating_power_kw",
     "derived_refrigerant_compressor_heating_cop",
-    "diagnostics", "english_ai_guide",
+    "diagnostics", "english_ai_guide", "modbus_connection",
 )
 NUMBER_KEYS = tuple("eh800b_" + x for x in SETPOINT_KEYS)
 BUTTON_KEYS = ("review_settings_en",)
@@ -87,7 +87,7 @@ class LocaleTests(unittest.TestCase):
         self.assertIn('f"eh800b_{point.key}"', sensor)
 
     def test_manifest_version_and_legacy_unchanged(self):
-        self.assertEqual(load_json("manifest.json")["version"], "0.4.3-beta.1")
+        self.assertEqual(load_json("manifest.json")["version"], "0.4.4-beta.1")
         legacy = json.loads((ROOT / "custom_components/ouman_eh800/manifest.json")
                             .read_text(encoding="utf-8"))
         self.assertEqual(legacy["version"], "0.1.2")
@@ -95,3 +95,4 @@ class LocaleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

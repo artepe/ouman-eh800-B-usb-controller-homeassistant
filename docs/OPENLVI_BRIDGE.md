@@ -157,3 +157,97 @@ The site and vendor address-to-PDU conversion must still be verified.
 ## Optional English AI guidance
 
 This beta includes a read-only English setup guide on the device page, a review button, the `openlvi.ask_assistant` Home Assistant action, and optional local Ollama/Qwen2.5 0.5B. It uses named, verified readings. The AI does **not** apply any controller setting. See [OpenLVI AI Guide](OPENLVI_AI_GUIDE.md).
+
+
+## Ouman Ouflex: Discovery Mode (0.4.4-beta.1)
+
+You can now add Ouflex without a firmware identifier or JSON register map.
+Discovery Mode creates a device with a **Modbus connection** diagnostic entity;
+it does not assume that TCP connectivity identifies the controller or confirms
+any measurement. No register or control entities are inferred.
+
+### Update Home Assistant and add the controller
+
+1. Back up `/config/custom_components/openlvi/`.
+2. Replace that entire folder with `custom_components/openlvi/` from the
+   feature branch/PR (or `main` after merge). Keep the folder name `openlvi`.
+   This feature is in OpenLVI Bridge, not the separate `ouman_ouflex` domain.
+3. Restart Home Assistant. The integration manifest version is `0.4.4-beta.1`.
+4. Go to **Settings → Devices & services → Add integration → OpenLVI Bridge
+   (experimental)**. Choose **Ouman → Ouflex → Modbus TCP**.
+5. Enter host `192.168.10.105`, port `502`, and an initial Unit ID such as `1`.
+   Leave firmware, application key and register map empty. Enable
+   **Discovery Mode** (the Ouflex TCP default).
+6. Review the TCP and Modbus identification report, then submit to save.
+   Successful TCP connection is sufficient. An unsupported FC43/14,
+   Modbus exception or timeout after TCP connected does not block adding.
+
+A TCP failure is reported separately from a missing/invalid profile.
+HA itself must have a route to the device; a connection from another PC is not
+proof of HA's connectivity. After setup, the entry can stay loaded offline;
+the connection entity changes to `tcp_disconnected` and resumes on reconnect.
+Discovery polling every 60 seconds checks TCP only and sends no register reads.
+
+### Research registers in the Home Assistant UI
+
+Open the integration's **Configure → Modbus register research tool**.
+Choose FC43/14 identification, or FC03/04 for a documented address. Enter
+1–8 distinct comma-separated Unit IDs (`1,2,10`, range 1–255); no broadcast,
+automatic sweep or write functions are available. For FC03/04 select explicitly:
+
+- The register address and its base: `0` means PDU offset; `1` means the
+  source document's one-based address. A `3xxxx`/`4xxxx` reference number
+  must be converted according to that document, not copied blindly.
+- A count of 1–32 consecutive 16-bit words.
+- Confirmation that the address comes from an identified document.
+
+The result screen distinguishes `tcp_connected`, `modbus_response`, `success`,
+raw `registers`, exception code/name, error, duration, request hex and response
+hex. `Illegal Data Address` is a valid Modbus reply, not a successful point read.
+Identification continuation fields are reported, not automatically traversed.
+Each attempt has a 2.5-second overall timeout, with no retries. Unit attempts
+have a 200 ms gap. Results do not change the configured polling Unit ID and do
+not create entities. The most recent result is also in the discovery diagnostic
+entity's `last_research` attribute (not a durable firmware backup).
+
+The same read-only tool is exposed under **Developer tools → Actions →
+OpenLVI: Research Modbus registers** (`openlvi.research_registers`). Select the
+config entry using the action's selector. It returns response data, including
+Modbus exceptions. A script example for identification (no address needed):
+
+```yaml
+action: openlvi.research_registers
+data:
+  config_entry_id: YOUR_OPENLVI_CONFIG_ENTRY_ID
+  unit_ids: "1,2"
+  function: 43
+response_variable: ouflex_research
+```
+
+Research and normal Modbus polling share an entry-level I/O lock. Only one
+latest result is retained; copy/export results you need for further research.
+
+### Add confirmed measurements later
+
+Under **Configure → Register map and Unit ID**, paste a confirmed OpenLVI
+JSON map, select the polling Unit ID, confirm addresses/types/interpretation,
+and turn Discovery Mode off. The entry reloads and creates the mapped sensor
+entities. Saving settings does not write to the controller. Unconfirmed maps
+are rejected; custom maps remain read-only even with `writable: true`.
+Re-enable Discovery Mode to return to connection-only operation.
+
+The JSON format remains OpenLVI's `{"registers": [...]}` format; it is different
+from the independent laboratory integration's `{"points": [...]}` format.
+Addresses in a saved OpenLVI map are one-based. Only include points whose
+interpretation has been confirmed against the source and device. Raw research
+responses alone do not establish scaling, unit, signedness or meaning.
+
+### Validation
+
+Portable tests cover TCP errors, timeout after connect, identification and its
+exceptions, FC03/04 raw reads, explicit Unit IDs, address bounds, discovery
+without a profile, and rejection of all write function codes. Full HA tests in
+`tests/openlvi_ha/` exercise config flows, offline setup, device/entity creation,
+map import with reload, options research and action response data. CI uses
+`pytest-homeassistant==2026.11.0` and Python 3.14. Hardware support and actual
+Ouflex register meanings still require device tests.

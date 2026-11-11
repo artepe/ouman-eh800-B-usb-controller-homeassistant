@@ -90,7 +90,7 @@ class Session:
         self._put(p, words, function, 'write')
         return dict(key=key, success=True, raw=words, interpreted=decode(words, p))
 
-    def write_test(self, key, value, function=16, disconnected=False, display_note=None):
+    def write_test(self, key, value, function=16, disconnected=False, display_note=None, observer=None):
         if not disconnected:
             raise ValueError('Physical disconnection confirmation required')
         p = self.permitted(key)
@@ -128,6 +128,9 @@ class Session:
             value_attempted = True
             self._put(p, words, function, 'test_write')
             result['test_confirmed'] = True
+            if observer is not None:
+                result['display_comparison'] = observer(dict(result)) or 'not performed'
+                self._journal('display_observation', observation=result['display_comparison'], key=key)
         except Exception as err:
             result['errors'].append(str(err))
         finally:
@@ -146,7 +149,7 @@ class Session:
                 except Exception as err:
                     result['errors'].append('RESTORE MANUAL FAILED: ' + str(err))
             result['restored'] = value_restored and manual_restored
-            result['success'] = result['test_confirmed'] and result['restored']
+            result['success'] = result['test_confirmed'] and result['restored'] and not result['errors']
             result['audit_errors'] = list(self.audit_errors)
             if self.audit_errors:
                 result['success'] = False

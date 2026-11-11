@@ -57,12 +57,12 @@ def ftp_fetch(args):
     # User/password are explicit. No credential guessing, upload or deletion.
     destination = Path(args.destination)
     destination.mkdir(parents=True, exist_ok=True)
-    result = dict(ip=args.host, port=args.port, directory='/Files', files=[], errors=[])
+    result = dict(ip=args.host, port=args.port, directory=args.directory, files=[], errors=[])
     try:
         with ftplib.FTP() as ftp:
             ftp.connect(args.host, args.port, timeout=args.timeout)
             ftp.login(args.username, os.environ.get(args.password_env, ''))
-            ftp.cwd('/Files')
+            ftp.cwd(args.directory)
             names = ftp.nlst()
             for remote in names[:128]:
                 name = remote.rsplit('/', 1)[-1]
@@ -103,13 +103,14 @@ def build_parser():
         p.add_argument('--port', type=int, default=502)
         p.add_argument('--unit', type=int, default=1)
         p.add_argument('--timeout', type=float, default=2)
+        p.add_argument('--transport', choices=('socket', 'nc'), default='socket')
         p.add_argument('--audit', default='ouflex-results/audit.jsonl')
         p.add_argument('--out', required=True)
         if command in ('read', 'read-block', 'scan', 'discover'):
             p.add_argument('--address', type=int, required=True,
                            help='Probe address; no default map is assumed')
             p.add_argument('--address-base', type=int, choices=(0, 1), required=True)
-            p.add_argument('--function', type=int, choices=(3, 4), default=3)
+            p.add_argument('--function', type=int, choices=(1, 2, 3, 4), default=3)
         if command in ('read-block', 'scan'):
             p.add_argument('--count', type=int, required=True)
         if command == 'scan':
@@ -131,6 +132,7 @@ def build_parser():
         if command == 'restore':
             p.add_argument('--snapshot', required=True)
         if command == 'write-test':
+            p.add_argument('--observe-display', action='store_true', help='Pause after read-back for a real LCD observation; restore follows Enter')
             p.add_argument('--display-note', help='Actual local display observation, if available')
     p = sub.add_parser('decode')
     p.add_argument('words', nargs='+', type=lambda s: int(s, 0))
@@ -158,12 +160,17 @@ def build_parser():
     p.add_argument('input')
     p.add_argument('--map')
     p.add_argument('--out', required=True)
+    p = sub.add_parser('import-ounet')
+    p.add_argument('input')
+    p.add_argument('--firmware', required=True)
+    p.add_argument('--out', required=True)
     p = sub.add_parser('map-info')
     p.add_argument('--map', required=True)
     p = sub.add_parser('fetch-map')
     p.add_argument('--host', default='192.168.10.105')
     p.add_argument('--port', type=int, default=21)
     p.add_argument('--timeout', type=float, default=3)
+    p.add_argument('--directory', default='/files')
     p.add_argument('--username', required=True)
     p.add_argument('--password-env', default='OUFLEX_FTP_PASSWORD')
     p.add_argument('--destination', required=True)
@@ -178,6 +185,12 @@ def execute(args):
                   byte_order=args.byte_order, word_order=args.word_order)
         value = decode(args.words, p)
         return alarm_state(value) if args.alarm else dict(raw=args.words, interpreted=value)
+    if command == 'import-ounet':
+        from custom_components.ouman_ouflex.ounet import import_ounet
+        result = import_ounet(Path(args.input).read_text(encoding='utf-8-sig'), firmware=args.firmware)
+        save(args.out, result)
+        return dict(points=len(result['points']), rejected=result['rejected_rows'],
+                    structured_read_ranges=len(result['structured_read_ranges']))
     if command == 'import-map':
         result = import_rows(Path(args.input).read_text(encoding='utf-8-sig'), args.format,
                              identity={k: getattr(args, k) for k in ('model', 'firmware', 'application')},
@@ -233,7 +246,7 @@ def execute(args):
         save(args.out, result)
         return result
     audit = journal(args.audit)
-    client = Client(args.host, args.port, args.unit, args.timeout, audit)
+    client = Client(args.host, args.port, args.unit, args.timeout, audit, transport=args.transport)
     if command == 'backup':
         if Path(args.out).exists():
             raise ValueError('Backup destination already exists; original snapshot will not be overwritten')
@@ -248,8 +261,10 @@ def execute(args):
                                                 timestamp=client.events[-1]['timestamp'])
             except Exception as err:
                 snapshot['points'][p.key] = dict(error=str(err))
+            if client.events and not client.events[-1]['modbus_response']:
+                break
             time.sleep(0.2)
-        snapshot['complete'] = all('raw' in r for r in snapshot['points'].values())
+        snapshot['complete'] = len(snapshot['points']) == len(points) and all('raw' in r for r in snapshot['points'].values())
         save(args.out, snapshot)
         return snapshot
     if command == 'restore':
@@ -277,7 +292,12 @@ def execute(args):
         doc, points = get_map(args)
         session = Session(client, doc, points, json.loads(Path(args.policy).read_text()), enabled=True)
         if command == 'write-test':
-            result = session.write_test(args.key, args.value, args.function, True, args.display_note)
+            observer = None
+            if args.observe_display:
+                if not sys.stdin.isatty():
+                    raise ValueError('--observe-display requires an interactive terminal')
+                observer = lambda result: input('Test value is active. Compare LCD, enter observation (Enter restores): ')
+            result = session.write_test(args.key, args.value, args.function, True, args.display_note, observer)
         else:
             result = session.write(args.key, args.value, args.function)
         save(args.out, result)
@@ -293,6 +313,8 @@ def execute(args):
                 client.events[-1] = event
             except Exception:
                 pass  # Complete failure event already durably logged by transport.
+            if client.events and not client.events[-1]['modbus_response']:
+                break
             time.sleep(0.2)
         result = client.events
     elif command == 'discover':
@@ -302,12 +324,15 @@ def execute(args):
         result = []
         for port in ports:
             for unit in units:
-                probe = Client(args.host, port, unit, args.timeout, audit)
+                probe = Client(args.host, port, unit, args.timeout, audit, transport=args.transport)
                 try:
-                    probe.read(address_offset(args.address, args.address_base), 1, args.function)
+                    (probe.read_bits if args.function in (1, 2) else probe.read)(address_offset(args.address, args.address_base), 1, args.function)
                 except Exception:
                     pass
                 result.extend(probe.events)
+                if probe.events and not probe.events[-1]['modbus_response']:
+                    save(args.out, result)
+                    return result
                 time.sleep(0.2)
     elif command == 'identify':
         try:
@@ -328,9 +353,11 @@ def execute(args):
             size = count
         for pos in range(offset, offset+count, size):
             try:
-                client.read(pos, min(size, offset+count-pos), args.function)
+                (client.read_bits if args.function in (1, 2) else client.read)(pos, min(size, offset+count-pos), args.function)
             except Exception:
                 pass
+            if client.events and not client.events[-1]['modbus_response']:
+                break
             if command == 'scan':
                 time.sleep(args.delay)
         result = client.events

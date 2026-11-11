@@ -111,3 +111,36 @@ async def test_total_read_failure_marks_entry_retry(hass,device):
     entry.add_to_hass(hass)
     assert not await hass.config_entries.async_setup(entry.entry_id)
     assert entry.state is config_entries.ConfigEntryState.SETUP_RETRY
+
+
+async def test_register_browser_selects_points_and_preserves_write_policy(hass, device):
+    entry = await setup(hass, device)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result['type'] is FlowResultType.MENU
+    result = await hass.config_entries.options.async_configure(
+        result['flow_id'], {'next_step_id': 'register_browser'})
+    result = await hass.config_entries.options.async_configure(
+        result['flow_id'], {'selected_points': ['measurement', 'alarm']})
+    assert result['type'] is FlowResultType.CREATE_ENTRY
+    await hass.async_block_till_done()
+    assert {p.key for p in entry.runtime_data.points} == {'measurement', 'alarm'}
+    assert json.loads(entry.options['write_policy']) == device['policy']
+    assert not any(call[0] == 'write' for call in device['calls'])
+
+
+async def test_map_reimport_disables_writes_and_reloads(hass, device):
+    entry = await setup(hass, device, write=True)
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(
+        result['flow_id'], {'next_step_id': 'register_map'})
+    result = await hass.config_entries.options.async_configure(
+        result['flow_id'], {'map_json': '<broken', 'firmware': 'test'})
+    assert result['errors'] == {'base': 'invalid_map'}
+    result = await hass.config_entries.options.async_configure(
+        result['flow_id'], {'map_json': device['data']['map_json'], 'firmware': 'test'})
+    assert result['type'] is FlowResultType.CREATE_ENTRY
+    await hass.async_block_till_done()
+    assert entry.options['allow_writes'] is False
+    assert entry.options['write_policy'] == '{}'
+    assert not any(entry.runtime_data.can_write(p) for p in entry.runtime_data.points)
+    assert not any(call[0] == 'write' for call in device['calls'])

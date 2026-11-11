@@ -72,7 +72,8 @@ class Point:
             raise ValueError('Enum labels must be unique')
         if self.entity == 'select' and not self.enums:
             raise ValueError('Select requires explicit enum values')
-        if self.entity in ('alarm', 'binary_sensor', 'switch') and (self.count != 1 or self.decimals):
+        if ((self.entity == 'alarm' and self.count != 1) or
+            (self.entity in ('alarm', 'binary_sensor', 'switch') and self.decimals)):
             raise ValueError('Binary/alarm entities require unscaled 16-bit data')
 
     @property
@@ -121,8 +122,17 @@ def encode(value, point):
     return words[::-1] if point.word_order == 'little' else words
 
 
-def alarm_state(value):
+def alarm_state(value, masks=None):
     value = int(value)
+    if masks is not None:
+        if set(masks) != {'active', 'unacknowledged', 'priority', 'group'} or any(
+                type(m) is not int or not 0 < m <= 65535 for m in masks.values()):
+            raise ValueError('Invalid documented alarm masks')
+        def field(mask):
+            return (value & mask) >> ((mask & -mask).bit_length()-1)
+        return dict(raw=value, active=bool(value & masks['active']),
+                    unacknowledged=bool(value & masks['unacknowledged']),
+                    priority=field(masks['priority']), group=field(masks['group']))
     return dict(active=bool(value & 1), unacknowledged=bool(value & 2),
                 priority=(value >> 2) & 7, group=(value >> 5) & 7,
                 raw=value, note='Group field is only three bits in YM0105; groups 8..10 need confirmation')
