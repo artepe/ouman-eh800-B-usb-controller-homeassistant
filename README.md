@@ -73,6 +73,8 @@ and [SHA256 package checksums](docs/DOWNLOADS.md). See the
    according to its device-specific guide. Start with **read-only checks**.
 5. Confirm values on the physical equipment before using any control entity.
 
+**Write permission:** Both OpenLVI and Mango Tuya Local default to read-only for device setpoints. Open **Settings → Devices & services → (integration) → Configure**, explicitly enable **Allow reviewed writes** or **Enable parameter writes**, and save. Only the specific driver's existing bounded write operations become available. No permission toggle creates undocumented Modbus registers, grants MCX coil control, or changes physical safety protections. See [write permission guide](docs/WRITE_PERMISSION.md).
+
 Installation guides: [Danfoss MCX / DEVIreg 330](docs/DANFOSS_MCX_DEVIREG330.md) · [Roth Touchline PL](docs/ROTH_TOUCHLINE_PL.md) · [Jäspi Tehowatti](docs/JASPI_TEHOWATTI.md) · [OpenLVI](docs/OPENLVI_BRIDGE.md) ·
 [Mango Tuya](docs/MANGO_TUYA_LOCAL.md) ·
 [Ouman EH-800B](docs/STABLE_RELEASE_v0.1.2.md) ·
