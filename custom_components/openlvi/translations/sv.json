@@ -59,7 +59,8 @@
         "data": {
           "ai_url": "Lokal Ollama-adress (t.ex. http://192.168.10.5:11434)",
           "ai_model": "Liten lokal modell",
-          "ai_auto_review": "Granska mätningar vid start och ungefär var sjätte timme"
+          "ai_auto_review": "Granska mätningar vid start och ungefär var sjätte timme",
+          "allow_writes": "Tillåt granskade börvärdesskrivningar (av som standard, okända punkter skrivskyddade)"
         }
       }
     },

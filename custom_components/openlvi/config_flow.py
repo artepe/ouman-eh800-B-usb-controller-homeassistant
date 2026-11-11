@@ -40,6 +40,9 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             if self._data[CONF_VENDOR] == "Ouman" and model in ("EH-800", "EH-800B"):
                 self._data[CONF_TRANSPORT] = "http" if model == "EH-800" else "usb"
                 return await self.async_step_connection()
+            if model == "MCX (site-programmed)" and self._data[CONF_VENDOR] == "Danfoss":
+                # MCX is application-programmed; never grant writes or assume a map.
+                self._data[CONF_ALLOW_WRITES] = False
             if self._data[CONF_VENDOR] == "Kamstrup":
                 self._data[CONF_TRANSPORT] = "mbus_serial"
                 self._data[CONF_ALLOW_WRITES] = False
@@ -61,7 +64,14 @@ class OpenLVIBridgeConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             return await self.async_step_connection()
         # MODBUS 40 is an optional Modbus RTU accessory, not a built-in
         # Tehowatti Ethernet API. Only offer local RTU or a verified gateway.
-        if self._data.get(CONF_VENDOR) == "Jäspi":
+        if self._data.get(CONF_MODEL) == "MCX (site-programmed)":
+            # Only application-confirmed RS485 Modbus RTU, or a verified gateway.
+            transport_options = {
+                "modbus_rtu": "Modbus RTU (confirmed RS485 port)",
+                "modbus_tcp": "Modbus TCP (verified RS485-to-TCP gateway only)",
+            }
+            default_transport = "modbus_rtu"
+        elif self._data.get(CONF_VENDOR) == "Jäspi":
             transport_options = {
                 "modbus_rtu": "Modbus RTU (MODBUS 40 + RS-485 / USB)",
                 "modbus_tcp": "Modbus TCP (verified RTU-to-LAN gateway only)",
@@ -183,6 +193,7 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
                         CONF_AI_URL: url,
                         CONF_AI_MODEL: model,
                         CONF_AI_AUTO: bool(user_input.get(CONF_AI_AUTO, False)),
+                        CONF_ALLOW_WRITES: bool(user_input.get(CONF_ALLOW_WRITES, False)),
                     }
                 )
             except ValueError:
@@ -194,6 +205,8 @@ class OpenLVIAIOptionsFlow(config_entries.OptionsFlow):
                 vol.Optional(CONF_AI_URL, default=current.get(CONF_AI_URL, "")): str,
                 vol.Required(CONF_AI_MODEL, default=current.get(CONF_AI_MODEL, DEFAULT_MODEL)): str,
                 vol.Optional(CONF_AI_AUTO, default=current.get(CONF_AI_AUTO, False)): bool,
+                vol.Optional(CONF_ALLOW_WRITES, default=current.get(
+                    CONF_ALLOW_WRITES, self.config_entry.data.get(CONF_ALLOW_WRITES, False))): bool,
             }),
             errors=errors,
         )

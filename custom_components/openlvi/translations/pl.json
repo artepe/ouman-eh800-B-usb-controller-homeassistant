@@ -59,7 +59,8 @@
         "data": {
           "ai_url": "Lokalny adres Ollama (np. http://192.168.10.5:11434)",
           "ai_model": "Mały model lokalny",
-          "ai_auto_review": "Sprawdzaj pomiary przy uruchomieniu i około co sześć godzin"
+          "ai_auto_review": "Sprawdzaj pomiary przy uruchomieniu i około co sześć godzin",
+          "allow_writes": "Zezwól na sprawdzone zapisy nastaw (domyślnie wyłączone; nieznane punkty tylko do odczytu)"
         }
       }
     },

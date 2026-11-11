@@ -17,15 +17,14 @@ def is_usb_eh800b(data) -> bool:
 
 
 def writes_enabled(data) -> bool:
-    # For this exact USB model a *manual* user set is permitted on the
-    # allowlist from the outset, including preexisting read-only entries.
-    # All other transports keep their explicit write opt-in requirement.
-    return is_usb_eh800b(data) or data.get(CONF_ALLOW_WRITES, False)
+    # All transports, including EH-800B USB, require explicit write opt-in.
+    # Point-specific allowlists remain enforced by the transport driver.
+    return bool(data.get(CONF_ALLOW_WRITES, False))
 
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = entry.runtime_data
-    if not writes_enabled(entry.data):
+    if not writes_enabled(coordinator.driver.data):
         return
     async_add_entities([
         OpenLVINumber(coordinator, point)
@@ -94,7 +93,7 @@ class OpenLVINumber(CoordinatorEntity, NumberEntity):
         }
 
     async def async_set_native_value(self, value):
-        if not writes_enabled(self.coordinator.config_entry.data):
+        if not writes_enabled(self.coordinator.driver.data):
             raise HomeAssistantError("Remote setpoint control is disabled")
         if not self.point.minimum <= value <= self.point.maximum:
             raise HomeAssistantError("Setpoint outside allowed bounds")

@@ -59,7 +59,8 @@
         "data": {
           "ai_url": "Kohalik Ollama aadress (nt http://192.168.10.5:11434)",
           "ai_model": "Väike kohalik mudel",
-          "ai_auto_review": "Kontrolli mõõtmisi käivitamisel ja umbes iga kuue tunni järel"
+          "ai_auto_review": "Kontrolli mõõtmisi käivitamisel ja umbes iga kuue tunni järel",
+          "allow_writes": "Luba kontrollitud seadeväärtuste kirjutamine (vaikimisi väljas; tundmatud punktid kirjutuskaitstud)"
         }
       }
     },
