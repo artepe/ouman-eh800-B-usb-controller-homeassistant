@@ -26,7 +26,7 @@
       },
       "connection": {
         "title": "Локальное соединение",
-        "description": "Для контроллеров с индивидуальной конфигурацией нужна проверенная карта регистров только для чтения.",
+        "description": "Ouflex can be added in Discovery Mode without firmware or JSON. Checks TCP and requests basic Modbus identification; no successful register read is required. Diagnostics: {diagnostics}",
         "data": {
           "host": "IP-адрес устройства",
           "port": "Последовательный или TCP-порт",
@@ -39,13 +39,20 @@
           "password": "Пароль",
           "bacnet_device_id": "Экземпляр устройства BACnet",
           "bacnet_local_address": "Локальный BACnet IP/CIDR",
-          "bacnet_local_instance": "Локальный экземпляр клиента BACnet"
+          "bacnet_local_instance": "Локальный экземпляр клиента BACnet",
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation"
         }
+      },
+      "discovery_result": {
+        "title": "Discovery Mode — connection diagnostics",
+        "description": "TCP connected. Unsupported Modbus identification, exceptions or timeouts do not prevent adding the entry. No measurement or control entities will be created. Continue to save.\n\n```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_profile": "Недопустимая прошивка, ключ приложения или карта регистров",
-      "cannot_connect": "Не удалось подключиться или прочитать измерения"
+      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "cannot_connect": "Could not connect or read measurements from the selected map.",
+      "cannot_connect_tcp": "TCP connection failed. Check the host, port and the network route from Home Assistant."
     },
     "abort": {
       "already_configured": "Уже настроено"
@@ -54,12 +61,65 @@
   "options": {
     "step": {
       "init": {
+        "title": "OpenLVI — настройки и исследование",
+        "menu_options": {
+          "register_map": "Карта регистров и Unit ID",
+          "research": "Инструмент исследования регистров Modbus",
+          "ouflex_write": "Ouflex: включить проверенную запись уставок",
+          "writes": "Разрешение записи"
+        }
+      },
+      "register_map": {
+        "title": "Register map",
+        "description": "Add a confirmed JSON map and turn off Discovery Mode to create measurement entities. Map addresses are one-based. Saving does not write to the controller.",
+        "data": {
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_json": "Карта регистров Modbus / список объектов BACnet (JSON)",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation",
+          "unit_id": "Адрес устройства Modbus или первичный адрес M-Bus"
+        }
+      },
+      "research": {
+        "title": "Modbus research — read only",
+        "description": "Try 1–8 comma-separated Unit IDs. Identification 43/14 needs no register address. FC03/04 requires an address from an identified source and its address base. Results never automatically become entities.",
+        "data": {
+          "unit_ids": "Unit IDs, e.g. 1,2,10",
+          "function": "Modbus function",
+          "address": "Register address",
+          "address_base": "Address base",
+          "count": "Register count (1–32)",
+          "documented": "The address comes from an identified document"
+        }
+      },
+      "research_result": {
+        "title": "Research results",
+        "description": "```json\n{diagnostics}\n```"
+      },
+      "writes": {
         "title": "Разрешение записи",
         "description": "Запись уставок по умолчанию выключена. Включайте её только после проверки значений на контроллере.",
         "data": {
           "allow_writes": "Разрешить проверенные записи уставок (по умолчанию выключено; неизвестные точки только для чтения)"
         }
+      },
+      "ouflex_write": {
+        "title": "Ouflex — записываемые уставки",
+        "description": "Выберите до 64 документированных числовых holding-точек, которые будут доступны как числовые элементы управления в Home Assistant. Используйте только на физически изолированном тестовом контроллере после независимой проверки записи Modbus, масштабирования и пределов каждой выбранной точки. Значения считываются обратно; при неудачной записи выполняется попытка восстановить прежнее значение. Отключение этой опции запрещает все записи Ouflex.",
+        "data": {
+          "ouflex_write_enabled": "Включить выбранные уставки Ouflex",
+          "ouflex_write_keys": "Выберите уставки (множественный выбор)",
+          "ouflex_write_isolated": "Подтверждаю, что этот Ouflex физически отключён от управляемого оборудования",
+          "ouflex_write_reviewed": "Все выбранные точки и их пределы записи проверены независимо"
+        }
       }
+    },
+    "error": {
+      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
+      "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Не удалось прочитать XML Ouflex с локального FTP"
     }
   },
   "entity": {
@@ -174,6 +234,9 @@
       },
       "derived_refrigerant_compressor_heating_cop": {
         "name": "Электрический COP компрессора при нагреве"
+      },
+      "modbus_connection": {
+        "name": "Modbus connection"
       }
     },
     "number": {

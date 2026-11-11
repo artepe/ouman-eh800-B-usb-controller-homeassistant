@@ -53,10 +53,11 @@ VENDOR_MODELS = {
 }
 
 # Models with a built-in driver or read-only point map for the documented
-# firmware (marked with ✓ in the setup wizard). Every other model needs an
+# firmware (marked with ✓ in the setup wizard). Ouflex reads its application
+# map from the controller over Modbus TCP/FTP. Every other model needs an
 # operator-supplied register map or BACnet/IP object discovery.
 BUILTIN_SUPPORT_MODELS = frozenset((
-    "EH-800", "EH-800B", "A203", "S203", "C203", "H23",
+    "EH-800", "EH-800B", "A203", "S203", "C203", "H23", "Ouflex",
     "ECL Comfort 210", "ECL Comfort 296", "ECL Comfort 310", "ECL Comfort 310B",
     "CASA Genius", "Corrigo E Ventilation",
     "Smatrix Base PRO X-148", "Touchline SL Modbus",
@@ -66,3 +67,6 @@ BUILTIN_SUPPORT_MODELS = frozenset((
 CONF_BACNET_LOCAL_ADDRESS = "bacnet_local_address"
 CONF_BACNET_DEVICE_ID = "bacnet_device_id"
 CONF_BACNET_LOCAL_INSTANCE = "bacnet_local_instance"
+
+CONF_DISCOVERY = "discovery_mode"
+CONF_PROFILE_CONFIRMED = "profile_confirmed"

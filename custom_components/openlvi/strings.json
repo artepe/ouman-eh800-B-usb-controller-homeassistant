@@ -26,7 +26,7 @@
       },
       "connection": {
         "title": "Local connection",
-        "description": "Site-programmed controllers require a verified read-only register/object map. Unknown points are never guessed.",
+        "description": "Ouflex can be added in Discovery Mode without firmware or JSON. Checks TCP and requests basic Modbus identification; no successful register read is required. Diagnostics: {diagnostics}",
         "data": {
           "host": "Remote IP address",
           "port": "Serial path or TCP port",
@@ -39,13 +39,20 @@
           "password": "Password",
           "bacnet_device_id": "Remote BACnet device instance",
           "bacnet_local_address": "Local BACnet IP/CIDR (e.g. 192.168.1.50/24)",
-          "bacnet_local_instance": "Local BACnet client instance"
+          "bacnet_local_instance": "Local BACnet client instance",
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation"
         }
+      },
+      "discovery_result": {
+        "title": "Discovery Mode — connection diagnostics",
+        "description": "TCP connected. Unsupported Modbus identification, exceptions or timeouts do not prevent adding the entry. No measurement or control entities will be created. Continue to save.\n\n```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_profile": "Firmware, application key or register map is missing or invalid",
-      "cannot_connect": "Could not connect or read measurements"
+      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "cannot_connect": "Could not connect or read measurements from the selected map.",
+      "cannot_connect_tcp": "TCP connection failed. Check the host, port and the network route from Home Assistant."
     },
     "abort": {
       "already_configured": "Already configured"
@@ -54,12 +61,65 @@
   "options": {
     "step": {
       "init": {
+        "title": "Open HVAC — settings and research",
+        "menu_options": {
+          "register_map": "Register map and Unit ID",
+          "research": "Modbus register research tool",
+          "ouflex_write": "Ouflex: enable reviewed setpoint writing",
+          "writes": "Write permission"
+        }
+      },
+      "register_map": {
+        "title": "Register map",
+        "description": "Add a confirmed JSON map and turn off Discovery Mode to create measurement entities. Map addresses are one-based. Saving does not write to the controller.",
+        "data": {
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_json": "Modbus register map / BACnet object list (JSON)",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation",
+          "unit_id": "Modbus unit or M-Bus primary address"
+        }
+      },
+      "research": {
+        "title": "Modbus research — read only",
+        "description": "Try 1–8 comma-separated Unit IDs. Identification 43/14 needs no register address. FC03/04 requires an address from an identified source and its address base. Results never automatically become entities.",
+        "data": {
+          "unit_ids": "Unit IDs, e.g. 1,2,10",
+          "function": "Modbus function",
+          "address": "Register address",
+          "address_base": "Address base",
+          "count": "Register count (1–32)",
+          "documented": "The address comes from an identified document"
+        }
+      },
+      "research_result": {
+        "title": "Research results",
+        "description": "```json\n{diagnostics}\n```"
+      },
+      "ouflex_write": {
+        "title": "Ouflex — writable setpoint controls",
+        "description": "Select up to 64 documented numeric holding points and expose them as Home Assistant number controls. Only use on a physically isolated test controller, after independently verifying each selected point's Modbus write behavior, scaling and limits. Values are read back; a failed write triggers a best-effort restore. Clearing Enable disables all Ouflex writes.",
+        "data": {
+          "ouflex_write_enabled": "Enable selected Ouflex setpoint controls",
+          "ouflex_write_keys": "Choose setpoints (multiple selections)",
+          "ouflex_write_isolated": "I confirm this Ouflex is physically disconnected from controlled equipment",
+          "ouflex_write_reviewed": "I independently checked all selected points and their write limits"
+        }
+      },
+      "writes": {
         "title": "Write permission",
         "description": "Setpoint writes are off by default. Enable them only after confirming the values on the physical controller.",
         "data": {
           "allow_writes": "Enable reviewed setpoint writes (off by default; unknown points remain read-only)"
         }
       }
+    },
+    "error": {
+      "invalid_profile": "Select 1–64 verified setpoints and confirm physical isolation and write verification",
+      "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
+      "entry_not_loaded": "Load the integration before using the research tool."
+    },
+    "abort": {
+      "cannot_connect": "Could not read Ouflex XML from local FTP"
     }
   },
   "entity": {
@@ -155,7 +215,7 @@
         "name": "L1 estimated thermal power"
       },
       "diagnostics": {
-        "name": "OpenLVI diagnostics"
+        "name": "Open HVAC diagnostics"
       },
       "derived_water_heating_power_kw": {
         "name": "Water-side heating output"
@@ -174,6 +234,9 @@
       },
       "derived_refrigerant_compressor_heating_cop": {
         "name": "Refrigerant compressor electrical heating COP"
+      },
+      "modbus_connection": {
+        "name": "Modbus connection"
       }
     },
     "number": {

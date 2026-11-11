@@ -3,6 +3,8 @@
 Addresses are *1-based* in Ouman PDF tables. This module deliberately
 does not guess unknown registers, firmware versions or write permissions.
 """
+from __future__ import annotations
+
 from dataclasses import dataclass
 from math import isfinite
 import json
@@ -93,8 +95,10 @@ def parse_profile(raw: str) -> list[Register]:
             raise ValueError("Invalid register name")
         if key in keys or kind not in SUPPORTED_TYPES:
             raise ValueError("Duplicate key or unsupported register type")
-        if type(address) is not int or not 1 <= address <= 65535:
+        if type(address) is not int or not 1 <= address <= 65536:
             raise ValueError("Invalid 1-based address")
+        if address - 1 + (2 if kind in ("s32", "u32") else 1) > 65536:
+            raise ValueError("Register extends past Modbus address space")
         if type(decimals) is not int or not 0 <= decimals <= 5:
             raise ValueError("Decimals must be between 0 and 5")
         offset = item.get("offset", 0)
@@ -264,8 +268,10 @@ def tosibox_firmware_tuple(value: str) -> tuple[int, int, int]:
 
 _ouman_profile_for = profile_for
 
-def profile_for(model: str, firmware: str, profile_json: str, application_key: str = "") -> list[Register]:
-    """Select only matching vendor registers; custom JSON stays read-only."""
+def profile_for(model: str, firmware: str, profile_json: str, application_key: str = "", *, discovery_mode: bool = False) -> list[Register]:
+    """Select only matching vendor registers; discovery has no inferred points."""
+    if discovery_mode:
+        return []
     if profile_json.strip():
         return parse_profile(profile_json)
     if model in PROFILE_MAPS:
@@ -299,3 +305,4 @@ def profile_for(model: str, firmware: str, profile_json: str, application_key: s
             raise ValueError("Corrigo E ventilation requires confirmed 3.2 firmware")
         return list(REGIN_CORRIGO_E)
     raise ValueError("This controller requires an exact read-only JSON Modbus register map")
+

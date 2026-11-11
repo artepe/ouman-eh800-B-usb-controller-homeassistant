@@ -1,0 +1,25 @@
+{
+  "commit": "1fc83762e318cd5bc46ef3553e2e41879f11e081",
+  "laboratory_run": 43069737049,
+  "package_run": 43069737255,
+  "portable": [
+    {
+      "python": "3.9",
+      "passed": 30,
+      "skipped": 0
+    },
+    {
+      "python": "3.13",
+      "passed": 30,
+      "skipped": 0
+    }
+  ],
+  "home_assistant": {
+    "python": "3.14.10",
+    "core": "2026.11.1",
+    "test_framework": "pytest-homeassistant==2026.11.1",
+    "passed": 4,
+    "transport": "mocked device"
+  },
+  "physical_device_tested": false
+}

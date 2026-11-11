@@ -26,7 +26,7 @@ SENSOR_KEYS = (
     "derived_refrigerant_cycle_heating_cop_estimate",
     "derived_refrigerant_heating_power_kw",
     "derived_refrigerant_compressor_heating_cop",
-    "diagnostics",
+    "diagnostics", "modbus_connection",
 )
 NUMBER_KEYS = tuple("eh800b_" + x for x in SETPOINT_KEYS)
 
@@ -94,3 +94,4 @@ class LocaleTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
