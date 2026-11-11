@@ -16,11 +16,22 @@ class MangoTuyaBundleTests(unittest.TestCase):
         profile = json.loads((COMPONENT / "profile.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["domain"], "mango_tuya_local")
         self.assertEqual(manifest["iot_class"], "local_polling")
+        self.assertEqual(manifest["version"], "0.2.2")
         self.assertTrue(any("tinytuya" in req for req in manifest["requirements"]))
         self.assertEqual(profile["parameter_count"], 770)
         self.assertEqual(profile["section_count"], 17)
         self.assertEqual(len(profile["routes"]), 770)
         self.assertEqual(len(profile["sections"]), 17)
+
+    def test_write_permission_is_explicit_and_backed_by_driver_guard(self):
+        constants = (COMPONENT / "const.py").read_text(encoding="utf-8")
+        options = (COMPONENT / "config_flow.py").read_text(encoding="utf-8")
+        coordinator = (COMPONENT / "coordinator.py").read_text(encoding="utf-8")
+        dashboard = (COMPONENT / "dashboard.py").read_text(encoding="utf-8")
+        self.assertIn('CONF_ALLOW_WRITES = "allow_writes"', constants)
+        self.assertIn("default=self.config_entry.options.get(CONF_ALLOW_WRITES, False)", options)
+        self.assertIn("if not self.writes_enabled:", coordinator)
+        self.assertIn('"can_control": coordinator.writes_enabled and', dashboard)
 
     def test_bundled_resources(self):
         for relative in (
