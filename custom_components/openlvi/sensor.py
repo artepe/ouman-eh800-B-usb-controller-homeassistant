@@ -9,7 +9,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     if getattr(coordinator.driver, "discovery", False):
         async_add_entities([ModbusConnectionSensor(coordinator)])
         return
-    editable = (entry.data.get(CONF_ALLOW_WRITES, False) or
+    editable = (coordinator.driver.data.get(CONF_ALLOW_WRITES, False) or
                 (entry.data.get(CONF_MODEL) == "EH-800B"
                  and entry.data.get("transport") == "usb"))
     entities = [
