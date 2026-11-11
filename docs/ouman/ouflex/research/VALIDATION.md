@@ -20,16 +20,18 @@ HA-sopimustestit kattavat oletusarvoisen lukutilan, entiteettien valinnan, numbe
 
 **Ei onnistunutta TCP-/Modbus-/FTP-yhteyttä eikä laitekirjoituksia.** Neljä CLI-yhteysyritystä tallennettiin environment-probe.jsoniin; käyttöympäristö palautti Operation not permitted ennen TCP:tä. Tämä ei ole laitteen virhe tai osoitus rekisterien puuttumisesta. Unit ID:tä, sovellusta, firmwarea, pisteitä tai todellista kirjoitettavuutta ei ole tunnistettu.
 
-## CI:lle lisätty, ei paikallisesti suoritettu
+## GitHub CI:ssä suoritettu
+
+[Hyväksytty CI-ajo 43069737049](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/runs/43069737049), commit `1fc83762e318cd5bc46ef3553e2e41879f11e081`:
 
 `.github/workflows/ouflex.yml` ajaa:
 
-1. Python 3.9- ja 3.13-yksikkö-/sopimustestit ja oikean loopback TCP -palvelimen testit. `OUFLEX_REQUIRE_TCP=1` muuttaa ympäristön verkkokiellon CI-virheeksi, jotta verkkotestejä ei ohiteta hiljaa.
-2. Python 3.14 ja virallinen `pytest-homeassistant`-testipaketti sekä sen valitsema HA Core. `tests/ha/test_ouflex_runtime.py` sisältää oikean HA-kehyksen setup/unload-, read-only-, konfigurointivirta-, number/select/switch-palvelu- ja lukuvirhetestit. Laiteyhteys on tässä testissä mockattu.
+1. Python 3.9- ja 3.13-yksikkö-/sopimustestit ja oikean loopback TCP -palvelimen testit: **30/30 läpäisi kummassakin versiossa, ei ohituksia**. `OUFLEX_REQUIRE_TCP=1` muuttaa ympäristön verkkokiellon CI-virheeksi, jotta verkkotestejä ei ohiteta hiljaa.
+2. Python 3.14.10, `pytest-homeassistant==2026.11.1` ja Home Assistant Core 2026.11.1: **4/4 läpäisi**. `tests/ha/test_ouflex_runtime.py` sisältää oikean HA-kehyksen setup/unload-, read-only-, konfigurointivirta-, number/select/switch-palvelu- ja lukuvirhetestit. Laiteyhteys on tässä testissä mockattu.
 
 Virallisen HA-testipaketin [oma ohje](https://github.com/home-assistant/core/tree/dev/packages/pytest-homeassistant) kuvaa fixturet ja yhteensopivan Core-version. Nämä testit ajetaan erillisessä prosessissa sopimustesteistä. Vanhaa pytest-homeassistant-custom-component-pakettia ei käytetä.
 
-CI-tulokset tarkistetaan pull requestista. CI-onnistuminenkaan ei varmista fyysisen Ouflexin toimintaa, sen karttaa tai sen palautettavuutta.
+Myös [moduulien paketointiajo 43069737255](https://github.com/artepe/Open-HVACBridge-homeassistant/actions/runs/43069737255) läpäisi. Ensimmäisellä CI-kierroksella löytynyt peräkkäisten HA-ohjausten vanhaksi jäävä UI-tila korjattiin: laitteelta takaisinluettu arvo julkaistaan heti ennen mahdollisesti lykättyä koko laitteen päivitystä. Testikirjasto on nyt lukittu läpäisseeseen versioon. CI-onnistuminen ei varmista fyysisen Ouflexin toimintaa, sen karttaa tai sen palautettavuutta.
 
 ## Uusinta
 

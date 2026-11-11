@@ -99,6 +99,6 @@ test_unknown_fw_requires_profile (test_ouman_universal_profiles.ProfileTests.tes
 test_verified_write_scale (test_ouman_universal_profiles.ProfileTests.test_verified_write_scale) ... ok
 
 ----------------------------------------------------------------------
-Ran 98 tests in 1.057s
+Ran 98 tests in 1.050s
 
 OK (skipped=1)

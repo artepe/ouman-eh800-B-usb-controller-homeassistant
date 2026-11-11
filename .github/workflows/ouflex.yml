@@ -36,6 +36,6 @@ jobs:
         with:
           python-version: '3.14'
       - name: Install official HA test framework and matching core
-        run: python -m pip install pytest-homeassistant
+        run: python -m pip install pytest-homeassistant==2026.11.1
       - name: Full HA config flow, setup, entity services and disconnect tests
         run: python -m pytest -c tests/ha/pytest.ini tests/ha -v
