@@ -14,6 +14,7 @@ from homeassistant.helpers.selector import TextSelector, TextSelectorConfig, Tex
 from .client import MangoClient
 from .const import (
     CONF_DEVICE_ID,
+    CONF_ALLOW_WRITES,
     CONF_LOCAL_KEY,
     CONF_POLL_INTERVAL,
     DEFAULT_POLL_INTERVAL,
@@ -155,6 +156,10 @@ class MangoOptionsFlow(config_entries.OptionsFlow):
                     ): schema.All(
                         schema.Coerce(int), schema.Range(min=MIN_POLL_INTERVAL, max=MAX_POLL_INTERVAL)
                     ),
+                    schema.Optional(
+                        CONF_ALLOW_WRITES,
+                        default=self.config_entry.options.get(CONF_ALLOW_WRITES, False),
+                    ): bool,
                 }
             ),
         )
