@@ -26,7 +26,7 @@
       },
       "connection": {
         "title": "Paikallinen yhteys",
-        "description": "Kohteessa ohjelmoidut säätimet vaativat tarkistetun vain luku -rekisterikartan. Tuntemattomia pisteitä ei arvata.",
+        "description": "Ouflex voidaan lisätä Discovery Mode -tilassa ilman firmware-tunnusta tai JSON-karttaa. Tällöin tarkistetaan TCP ja kysytään Modbus-perustunniste; rekisterilukua ei vaadita. Diagnostiikka: {diagnostics}",
         "data": {
           "host": "Kohdelaitteen IP-osoite",
           "port": "Sarjaportti tai TCP-portti",
@@ -39,13 +39,20 @@
           "password": "Salasana",
           "bacnet_device_id": "BACnet-kohdelaitteen instanssi",
           "bacnet_local_address": "Paikallinen BACnet IP/CIDR",
-          "bacnet_local_instance": "BACnet-asiakkaan instanssi"
+          "bacnet_local_instance": "BACnet-asiakkaan instanssi",
+          "discovery_mode": "Discovery Mode — lisää ilman rekisterikarttaa",
+          "profile_confirmed": "Olen vahvistanut rekisterien osoitteet, tyypit ja tulkinnan"
         }
+      },
+      "discovery_result": {
+        "title": "Discovery Mode — yhteysdiagnostiikka",
+        "description": "TCP-yhteys onnistui. Modbus-tunnistuksen epäonnistuminen tai poikkeus ei estä lisäämistä. Mittaus- tai ohjauspisteitä ei luoda. Jatka tallentaaksesi laitteen.\n\n```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_profile": "Ohjelmistoversio, sovellusavain tai rekisterikartta on virheellinen",
-      "cannot_connect": "Yhteys tai mittausten luku epäonnistui"
+      "invalid_profile": "Rekisterikartta tai sen vahvistus puuttuu tai on virheellinen. Voit lisätä Ouflexin ilman karttaa valitsemalla Discovery Mode.",
+      "cannot_connect": "Yhteyttä tai kartan mittausten lukua ei voitu vahvistaa.",
+      "cannot_connect_tcp": "TCP-yhteys epäonnistui. Tarkista osoite, portti ja HA:n verkkoyhteys."
     },
     "abort": {
       "already_configured": "Jo määritetty"
@@ -53,7 +60,7 @@
   },
   "options": {
     "step": {
-      "init": {
+      "advisor": {
         "title": "Paikallinen englanninkielinen AI-opas",
         "description": "Valinnainen paikallisverkon Ollama. Englanninkielinen perusopas toimii ilmankin. AI ei muuta säätimen asetuksia.",
         "data": {
@@ -62,10 +69,47 @@
           "ai_auto_review": "Tarkista mittaukset käynnistyksessä ja noin kuuden tunnin välein",
           "allow_writes": "Salli tarkistetut asetusarvokirjoitukset (oletuksena pois, tuntemattomat pisteet vain luettavia)"
         }
+      },
+      "init": {
+        "title": "OpenLVI — asetukset ja tutkimus",
+        "menu_options": {
+          "register_map": "Rekisterikartta ja Unit ID",
+          "research": "Modbus-rekisterien tutkimustyökalu",
+          "advisor": "Paikallinen AI-avustaja"
+        }
+      },
+      "register_map": {
+        "title": "Rekisterikartta",
+        "description": "Lisää vahvistettu JSON-kartta ja poista Discovery Mode käytöstä mittausentiteettien luomiseksi. Kartan osoitteet ovat 1-alkuisia. Kartan tallennus ei kirjoita laitteeseen.",
+        "data": {
+          "discovery_mode": "Discovery Mode — lisää ilman rekisterikarttaa",
+          "profile_json": "Modbus-rekisterikartta / BACnet-objektit (JSON)",
+          "profile_confirmed": "Olen vahvistanut rekisterien osoitteet, tyypit ja tulkinnan",
+          "unit_id": "Modbus- tai M-Bus-laiteosoite"
+        }
+      },
+      "research": {
+        "title": "Modbus-tutkimus — vain luku",
+        "description": "Kokeile 1–8 Unit ID:tä pilkuilla erotettuna. Tunnistus 43/14 ei tarvitse rekisteriosoitetta. FC03/04 edellyttää dokumentoitua osoitetta ja sen osoitepohjan valintaa. Tuloksia ei muuteta automaattisesti entiteeteiksi.",
+        "data": {
+          "unit_ids": "Unit ID:t, esim. 1,2,10",
+          "function": "Modbus-toiminto",
+          "address": "Rekisteriosoite",
+          "address_base": "Osoitepohja",
+          "count": "Rekisterien määrä (1–32)",
+          "documented": "Osoite perustuu tunnistettuun dokumenttiin"
+        }
+      },
+      "research_result": {
+        "title": "Tutkimustulokset",
+        "description": "```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_ai_connection": "Vain paikallisverkon http://IPv4:11434 sallitaan"
+      "invalid_ai_connection": "Vain paikallisverkon http://IPv4:11434 sallitaan",
+      "invalid_profile": "Rekisterikartta tai sen vahvistus puuttuu tai on virheellinen. Voit lisätä Ouflexin ilman karttaa valitsemalla Discovery Mode.",
+      "invalid_research": "Tarkista Unit ID:t, osoitepohja, rekisterimäärä ja osoitteen lähteen vahvistus.",
+      "entry_not_loaded": "Lataa integraatio ennen tutkimustyökalun käyttöä."
     }
   },
   "entity": {
@@ -183,6 +227,9 @@
       },
       "derived_refrigerant_compressor_heating_cop": {
         "name": "Kylmäainepuolen kompressorin sähköinen lämmitys-COP"
+      },
+      "modbus_connection": {
+        "name": "Modbus-yhteys"
       }
     },
     "number": {

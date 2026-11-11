@@ -26,7 +26,7 @@
       },
       "connection": {
         "title": "Local connection",
-        "description": "Site-programmed controllers require a verified read-only register/object map. Unknown points are never guessed.",
+        "description": "Ouflex can be added in Discovery Mode without firmware or JSON. Checks TCP and requests basic Modbus identification; no successful register read is required. Diagnostics: {diagnostics}",
         "data": {
           "host": "Remote IP address",
           "port": "Serial path or TCP port",
@@ -39,13 +39,20 @@
           "password": "Password",
           "bacnet_device_id": "Remote BACnet device instance",
           "bacnet_local_address": "Local BACnet IP/CIDR (e.g. 192.168.1.50/24)",
-          "bacnet_local_instance": "Local BACnet client instance"
+          "bacnet_local_instance": "Local BACnet client instance",
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation"
         }
+      },
+      "discovery_result": {
+        "title": "Discovery Mode — connection diagnostics",
+        "description": "TCP connected. Unsupported Modbus identification, exceptions or timeouts do not prevent adding the entry. No measurement or control entities will be created. Continue to save.\n\n```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_profile": "Firmware, application key or register map is missing or invalid",
-      "cannot_connect": "Could not connect or read measurements"
+      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "cannot_connect": "Could not connect or read measurements from the selected map.",
+      "cannot_connect_tcp": "TCP connection failed. Check the host, port and the network route from Home Assistant."
     },
     "abort": {
       "already_configured": "Already configured"
@@ -53,7 +60,7 @@
   },
   "options": {
     "step": {
-      "init": {
+      "advisor": {
         "title": "Local English AI advisor",
         "description": "Optional private-LAN Ollama model. An English rule-based guide works without Ollama. AI never changes controller settings.",
         "data": {
@@ -62,10 +69,47 @@
           "ai_auto_review": "Review measurements at startup and about every six hours",
           "allow_writes": "Enable reviewed setpoint writes (off by default; unknown points remain read-only)"
         }
+      },
+      "init": {
+        "title": "OpenLVI — settings and research",
+        "menu_options": {
+          "register_map": "Register map and Unit ID",
+          "research": "Modbus register research tool",
+          "advisor": "Local AI advisor"
+        }
+      },
+      "register_map": {
+        "title": "Register map",
+        "description": "Add a confirmed JSON map and turn off Discovery Mode to create measurement entities. Map addresses are one-based. Saving does not write to the controller.",
+        "data": {
+          "discovery_mode": "Discovery Mode — add without a register map",
+          "profile_json": "Modbus register map / BACnet object list (JSON)",
+          "profile_confirmed": "I have confirmed the register addresses, types and interpretation",
+          "unit_id": "Modbus unit or M-Bus primary address"
+        }
+      },
+      "research": {
+        "title": "Modbus research — read only",
+        "description": "Try 1–8 comma-separated Unit IDs. Identification 43/14 needs no register address. FC03/04 requires an address from an identified source and its address base. Results never automatically become entities.",
+        "data": {
+          "unit_ids": "Unit IDs, e.g. 1,2,10",
+          "function": "Modbus function",
+          "address": "Register address",
+          "address_base": "Address base",
+          "count": "Register count (1–32)",
+          "documented": "The address comes from an identified document"
+        }
+      },
+      "research_result": {
+        "title": "Research results",
+        "description": "```json\n{diagnostics}\n```"
       }
     },
     "error": {
-      "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported"
+      "invalid_ai_connection": "Only a private LAN http://IPv4:11434 endpoint is supported",
+      "invalid_profile": "Register map, confirmation or firmware is missing or invalid. To add Ouflex without a map, enable Discovery Mode.",
+      "invalid_research": "Check Unit IDs, address base, count and confirmation of the address source.",
+      "entry_not_loaded": "Load the integration before using the research tool."
     }
   },
   "entity": {
@@ -183,6 +227,9 @@
       },
       "derived_refrigerant_compressor_heating_cop": {
         "name": "Refrigerant compressor electrical heating COP"
+      },
+      "modbus_connection": {
+        "name": "Modbus connection"
       }
     },
     "number": {

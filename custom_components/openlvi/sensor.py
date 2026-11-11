@@ -5,6 +5,9 @@ from .const import DOMAIN, CONF_MODEL, CONF_VENDOR, CONF_ALLOW_WRITES
 
 async def async_setup_entry(hass, entry, async_add_entities):
     coordinator = entry.runtime_data
+    if getattr(coordinator.driver, "discovery", False):
+        async_add_entities([ModbusConnectionSensor(coordinator)])
+        return
     editable = (entry.data.get(CONF_ALLOW_WRITES, False) or
                 (entry.data.get(CONF_MODEL) == "EH-800B"
                  and entry.data.get("transport") == "usb"))
@@ -140,3 +143,37 @@ class AIGuideSensor(CoordinatorEntity, SensorEntity):
                 "name": f"{entry.data[CONF_VENDOR]} {entry.data[CONF_MODEL]}",
                 "manufacturer": entry.data[CONF_VENDOR],
                 "model": entry.data[CONF_MODEL]}
+
+
+
+class ModbusConnectionSensor(CoordinatorEntity, SensorEntity):
+    """Expose connectivity, never invented measurements or confirmed identity."""
+
+    _attr_has_entity_name = True
+    _attr_translation_key = "modbus_connection"
+    _attr_icon = "mdi:lan-connect"
+    _attr_entity_category = "diagnostic"
+
+    def __init__(self, coordinator):
+        super().__init__(coordinator)
+        self._attr_unique_id = f"{coordinator.config_entry.entry_id}_modbus_connection"
+
+    @property
+    def native_value(self):
+        return "tcp_connected" if (self.coordinator.data or {}).get('discovery_tcp_connected') else "tcp_disconnected"
+
+    @property
+    def extra_state_attributes(self):
+        driver = self.coordinator.driver
+        return {'discovery_mode': True, 'identity_confirmed': False,
+                'unit_id': driver.data['unit_id'],
+                'diagnostics': driver.last_diagnostics,
+                'last_research': driver.last_research,
+                'register_entities': 0, 'writes_enabled': False}
+
+    @property
+    def device_info(self):
+        entry = self.coordinator.config_entry
+        return {'identifiers': {(DOMAIN, entry.entry_id)},
+                'name': f"{entry.data[CONF_VENDOR]} {entry.data[CONF_MODEL]}",
+                'manufacturer': entry.data[CONF_VENDOR], 'model': entry.data[CONF_MODEL]}
