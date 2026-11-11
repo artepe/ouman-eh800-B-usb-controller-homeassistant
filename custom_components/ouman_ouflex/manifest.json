@@ -1,6 +1,6 @@
 {
   "domain": "ouman_ouflex",
-  "name": "Ouman Ouflex (experimental)",
+  "name": "Open HVAC – Ouman Ouflex (experimental)",
   "version": "0.2.0",
   "documentation": "https://github.com/artepe/Open-HVACBridge-homeassistant/blob/main/docs/ouman/ouflex/research/README.md",
   "issue_tracker": "https://github.com/artepe/Open-HVACBridge-homeassistant/issues",
