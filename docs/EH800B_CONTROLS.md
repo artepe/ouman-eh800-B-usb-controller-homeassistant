@@ -1,4 +1,4 @@
-# EH-800B USB — L1 controls automatically in OpenLVI Bridge
+# EH-800B USB — optional L1 setpoint controls in OpenLVI Bridge
 
 **Version:** OpenLVI Bridge 0.4.0-beta.1 (experimental).
 The legacy Ouman EH-800B v0.1.2 remains unchanged and was the last
@@ -14,10 +14,11 @@ OpenLVI imports its proven serial hub. Do **not** configure both
 against the same serial port: use **one polling owner**.
 
 Restart Home Assistant. Open **Settings → Devices & services → OpenLVI
-Bridge → Ouman EH-800B**. The device now gets 28 measurement entities
-and **11 Number controls** without a separate `number:` YAML setup.
-Existing OpenLVI EH-800B entries also gain these Number entities after
-updating and restarting; no need to delete the configuration entry.
+Bridge → Configure**, enable **Allow reviewed writes**, and save.
+The selected EH-800B gets 28 measurement entities in read-only mode.
+Only after the user explicitly enables writing do the **11 Number controls**
+appear; no separate `number:` YAML setup is needed. Existing entries can
+enable and disable writes through Configure without being deleted.
 
 ## Which controls appear?
 
