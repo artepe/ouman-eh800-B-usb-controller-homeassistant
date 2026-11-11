@@ -58,6 +58,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry):
             effective_config[key] = entry.options[key]
     effective_config[CONF_ALLOW_WRITES] = bool(entry.options.get(
         CONF_ALLOW_WRITES, entry.data.get(CONF_ALLOW_WRITES, False)))
+    # Retain per-device Ouflex write review settings in the existing bridge.
+    for key in ("ouflex_write_enabled", "ouflex_write_isolated",
+                "ouflex_write_reviewed", "ouflex_write_digest",
+                "ouflex_write_key"):
+        if key in entry.options:
+            effective_config[key] = entry.options[key]
     driver = make_transport(hass, effective_config)
     try:
         await driver.async_connect()
