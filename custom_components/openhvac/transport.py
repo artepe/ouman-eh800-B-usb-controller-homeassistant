@@ -1,5 +1,6 @@
 """Local HTTP, USB and Modbus drivers. No writes occur during discovery."""
 from __future__ import annotations
+import asyncio
 import logging
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
@@ -36,6 +37,9 @@ class ModbusDriver:
         )
         self.client = None
         self._last_failed: frozenset[str] = frozenset()
+        # A Modbus request and the associated write read-back must not
+        # interleave with coordinator polling on the same serial/TCP client.
+        self._io_lock = asyncio.Lock()
 
     async def async_connect(self):
         from pymodbus.client import AsyncModbusTcpClient, AsyncModbusSerialClient
@@ -67,6 +71,19 @@ class ModbusDriver:
         return decode(result.registers, point)
 
     async def async_read(self):
+        # A remote gateway may restart while Home Assistant stays up.
+        # Reconnect READS once per polling cycle; never automatically
+        # reconnect-and-repeat a physical WRITE after an uncertain reply.
+        async with self._io_lock:
+            if self.client is None:
+                raise ConnectionError("Modbus client is not initialized")
+            if not self.client.connected:
+                await self.client.connect()
+                if not self.client.connected:
+                    raise ConnectionError("Modbus reconnection failed")
+            return await self._read_points()
+
+    async def _read_points(self):
         values = {}
         failed = []
         silent = 0
@@ -113,26 +130,33 @@ class ModbusDriver:
             raise ValueError("Input registers cannot be written")
         # encode enforces the fixed, model-verified register write allowlist.
         raw = encode(float(value), point)
-        if self.client is None or not self.client.connected:
-            raise ConnectionError("Modbus disconnected")
-        if len(raw) == 1:
-            response = await self.client.write_register(
-                point.address - 1, raw[0], device_id=self.data[CONF_UNIT_ID]
-            )
-        else:
-            response = await self.client.write_registers(
-                point.address - 1, raw, device_id=self.data[CONF_UNIT_ID]
-            )
-        if response.isError():
-            raise ValueError("Modbus write returned exception")
-        actual = await self._read_point(point)
-        if abs(actual - float(value)) > (0.5 / 10 ** point.decimals + 1e-6):
-            raise ValueError(f"Setpoint read-back mismatch: {actual!r}")
+        async with self._io_lock:
+            if self.client is None or not self.client.connected:
+                raise ConnectionError(
+                    "Modbus disconnected; the write was NOT sent. "
+                    "Reconnect with a read before attempting an operator command."
+                )
+            if len(raw) == 1:
+                response = await self.client.write_register(
+                    point.address - 1, raw[0], device_id=self.data[CONF_UNIT_ID]
+                )
+            else:
+                response = await self.client.write_registers(
+                    point.address - 1, raw, device_id=self.data[CONF_UNIT_ID]
+                )
+            if response.isError():
+                raise ValueError("Modbus write returned exception")
+            actual = await self._read_point(point)
+            if actual is None:
+                raise ValueError("Modbus write response received, but read-back unavailable")
+            if abs(actual - float(value)) > (0.5 / 10 ** point.decimals + 1e-6):
+                raise ValueError(f"Setpoint read-back mismatch: {actual!r}")
 
     async def async_close(self):
-        if self.client is not None:
-            self.client.close()
-            self.client = None
+        async with self._io_lock:
+            if self.client is not None:
+                self.client.close()
+                self.client = None
 
 class HttpDriver:
     """EH-800 HTTP via the same verified library as HA core's integration."""

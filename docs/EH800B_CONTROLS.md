@@ -57,7 +57,10 @@ value, presented as an input box rather than a slider. Enter the
 desired exact value **only when you intend to adjust the controller**.
 If a matching PROPERTY response is received, the value becomes
 the *last acknowledged user command* in Home Assistant.
-It **does not** prove an independent live read. Rebooting HA returns
+It **does not** prove an independent live read. A separate
+`MEASUREMENTS` request is not needed to report a confirmed command:
+if that unrelated sensor poll is temporarily unavailable, the
+acknowledged write must not be incorrectly shown as a failed SET. Rebooting HA returns
 those Number values to unknown, not invented/stale defaults.
 
 Confirm results on the physical controller; its current open screen

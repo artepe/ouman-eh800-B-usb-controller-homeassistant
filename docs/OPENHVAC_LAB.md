@@ -4,8 +4,9 @@ Primary language: English. This is an experimental, read-only-first
 engineering companion toolkit, NOT a certified BMS, fully autonomous
 controller, commercial cloud service, or complete universal driver.
 
-The existing OpenHVAC 0.4.3-beta.1 driver and the stable legacy
-Ouman EH-800B USB driver are unchanged in this development branch.
+This draft is stacked on the OpenHVAC 0.5.1-beta.1 repair branch. The
+hardware-tested `stable/v0.1.2` Ouman source is retained separately;
+nothing in the Lab represents a production certification.
 
 ## Feature matrix
 
@@ -158,3 +159,15 @@ already-captured local sensor data is normalized.
 
 Do **not** clone Zigbee2MQTT/ZHA as a second stack. Add upstream quirks
 and external converters by exact fingerprint, and reuse their HA entities.
+
+## Timestamp and concurrent site-collector reliability
+
+The experimental multi-site SQLite store now accepts ISO8601 timestamps
+with explicit timezone, rejects snapshots over 120 seconds in the future
+and uses a conditional atomic upsert to keep older collectors from
+overwriting a newer device report. Clock synchronization remains the
+responsibility of the local gateways. Data older than the current
+snapshot is rejected rather than silently replacing live status.
+
+This is still a localhost-only prototype, not multi-tenant production
+storage, a building emergency-alarm server or an owner-access service.
